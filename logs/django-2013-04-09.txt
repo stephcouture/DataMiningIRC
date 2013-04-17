@@ -1,0 +1,1669 @@
+# 00:00 <w00tner> hello
+# 00:00 <w00tner> good monday for everyone
+# 00:00 <w00tner> q: if i want to use css styles in my django template do i have to register the directory ? i set it in the same folder "templates" is and call it "static" (inside css,js,img). but in console im getting "no style for this element" ... my code: http://pastie.org/7376601
+# 00:00 <sigpipe> w00tner: you need to serve your css as a static file. see the static files app for help with that
+# 00:00 <w00tner> ok
+# 00:00 <w00tner> thanks
+# 00:00 <graingert> jezdez: the only failing test cases are now non-trivial
+# 00:00 <graingert> jezdez: also there seems to be a problem wrt the django 1.5 user model
+# 00:00 <aberrant> I think I may have found a bug in templates.
+# 00:00 <lduros> anyone knows if it's possible to expand the first "inline" by default in the admin form?
+# 00:00 <aberrant> I have a model with a @property foo that returns self._foo()
+# 00:00 <aberrant> if I try to reference {{mymodel.foo}} it comes back with None
+# 00:00 <aberrant> but mymodel.foo in a shell comes back with the expected value
+# 00:00 <aberrant> hm, n/m :)
+# 00:15 <gp> Any idea what is going on with IOErrors on large file uploads? http://dpaste.org/ubRMN/ I am using apache2+mod_wsgi and default file upload handlers
+# 00:15 <GrahamDumpleton> gp: Client closed connection.
+# 00:15 <bed777> Hey guys http://stackoverflow.com/questions/15889782/delayed-subtask-in-django-celery ideas'
+# 00:15 <jamescarr> lxml sucks
+# 00:15 <jamescarr> I mean, installing it via pip
+# 00:15 <jamescarr> man
+# 00:15 <gp> GrahamDumpleton: I'll try another browser and see what happens I guess
+# 00:15 <GrahamDumpleton> gp: Also depends a bit on whether mod_wsgi daemon mode or not as well.
+# 00:15 <GrahamDumpleton> If you were, can be because the Apache child worker proxying the request is being killed off.
+# 00:15 <gp> GrahamDumpleton: I will look into that. I did notice that my memory usage was growing steady instead of streaming to disk
+# 00:15 <cdunklau> jamescarr: ???
+# 00:15 <cdunklau> jamescarr: only problem i've ever had installing lxml was forgetting to get the dev headers for libxml2 and libxslt
+# 00:30 <bed777> mmm
+# 00:30 <bed777> any hints about my link on celery?
+# 00:30 <gp> hrm no idea what is going on. looks like it is getting killed at 170M. I was watching /tmp
+# 00:30 <gp> happened in firefox and chrome
+# 00:30 <gp> bed777: not sure but I would check in the celery channel or user group
+# 00:30 <gp> bed777: http://celery.github.io/celery/userguide/tasksets.html
+# 00:30 <gp> did you check in there? It talks about different ways to call subtasks
+# 00:30 <bed777> thx gp i'l take a look on #celery
+# 00:30 <bed777> btw gp, I want to know if is possible with that syntax
+# 00:45 <gp> bed777: ah gotcha
+# 00:45 <bed777> ok solved :)
+# 01:00 <dimadima> does anyone have any recommendations for nice image uploads? i'm thinking (i) multiples files (2) drag-n-drop
+# 01:00 <mattmcc> Uploadify?
+# 01:00 <dimadima> mattmcc: googling
+# 01:00 <snuggl> uploadify was a bit ugly code iirc
+# 01:00 <snuggl> look at fine uploader (.com)
+# 01:00 <snuggl> you need to compile it yourself, but it works fine
+# 01:00 <snuggl> it has django examples
+# 01:00 <dimadima> fwiw, uploadify.com seems to not be working
+# 01:00 <dimadima> "uploader django" is not a great google search
+# 01:00 <dimadima> uploaders.com is a parked domain
+# 01:00 <dimadima> uploader.com*
+# 01:00 <snuggl> fineupload.com is nice
+# 01:00 <mattmcc> File uploading helpers don't have to have anything specific to Django at all.
+# 01:00 <snuggl> fineuploader.com even
+# 01:15 <snuggl> with django examples
+# 01:15 <dimadima> oh okay i'm totally there
+# 01:15 <dimadima> https://github.com/Widen/fine-uploader
+# 01:15 <dimadima> thanks snuggl
+# 01:15 <dimadima> mattmc
+# 01:15 <snuggl> i got it compiled if you want
+# 01:15 <snuggl> but it was a easy 3-step procedure
+# 01:15 <dimadima> snuggl: oh i'm cool js build processes, but thank you!
+# 01:15 <dimadima> does anyone know if apps like `django-imagekit` generate thumbs lazily?
+# 01:15 <snuggl> hard to say generally, have to look at them
+# 01:15 <mattmcc> Typically, yes.
+# 01:15 <snuggl> some do for sure
+# 01:15 <dimadima> any recommends for any such app?
+# 01:15 <mattmcc> easy-thumbnails
+# 01:15 <Joestar79> hi all
+# 01:15 <dimadima> i've looked at imagekit and photologue. i like imagekit so far
+# 01:15 <dimadima> thanks mattmcc will take a look
+# 01:15 <dimadima> haven't seen that one yet
+# 01:15 <Joestar79> I'm having an issue with django 1.5.1 using makemessages
+# 01:15 <Joestar79> I'm getting: DjangoUnicodeDecodeError: 'utf8' codec can't decode byte 0xf6 in position 56464: invalid start byte. You passed in 'Version 3.4.5 (2011-09-06)\n (a lot more text follows)
+# 01:15 <Joestar79> if I run the same command from another venv with Django 1.4, everything is fine
+# 01:15 <Joestar79> anyone know what might be wrong?
+# 01:15 <Joestar79> could this be a 1.5.1 bug?
+# 01:15 <FunkyBob> or a 1.5.1 fix
+# 01:15 <al1o> found the problem why the SQL file (to pre-populate the DB with test data) was not loaded correctly into the database; I didn't notice that django does not delete tables. Once I deleted and rebuild the entire sqlite database, the SQL script was executed properly
+# 01:15 <Joestar79> FunkyBob: u r often enigmatic ;-)
+# 01:15 <Joestar79> I can't understand what's wrong though
+# 01:15 <Joestar79> and how am I supposed to fix that using 1.5.1
+# 01:15 <Joestar79> why is makemessages catching the content of Grapelli changelog.txt ??
+# 01:15 <Joestar79> grapelli/tinymce, that's it
+# 01:15 <FunkyBob> ah, tinymce... eternal thorn in out sides
+# 01:15 <Joestar79> django-admin.py makemessages -l it that's the command I'm running from my project's root
+# 01:15 <FunkyBob> never used it
+# 01:15 <Joestar79> I'm also using latest Mezzanine
+# 01:15 <FunkyBob> but I'm betting one of hte files is improperly encoded
+# 01:30 <Joestar79> this afternoon I had a nice bar at the bottom of PyCharm telling me the Encoding of the currently open and selected file
+# 01:30 <Joestar79> now it's gone :(
+# 01:30 <snuggl> Joestar79: view > status bar
+# 01:30 <Joestar79> snuggl: it's already selected
+# 01:30 <Joestar79> I'm currently viewing template/index.html and I can't see UTf-8 encoding at the bottom anymore
+# 01:30 <Joestar79> this afternoon I could even click on that and change the encoding
+# 01:30 <Joestar79> anyway I still can't understand why django 1.5.1 makemessages outputs error concenrning changelog.txt of grapelli/tinymce
+# 01:30 <Joestar79> snuggl: well, this is funny. I have 3 PyCharm instances opened and in one of them I can see the status bar at the bottom
+# 01:30 <Joestar79> does that mean I should only open one instance of PyCharm at a time?
+# 01:30 <snuggl> i tried open another project in a new window and both have status bars
+# 01:30 <Joestar79> weird, because I just closed the 2 other windows and eventually the statusbar showed up in the project where it was missing. This is just crazy and make no sense
+# 01:30 <Joestar79> anyway, thx, for the help, now I can check the encoding of that changelog.txt
+# 01:30 <Joestar79> it says UTF-8
+# 01:30 <Joestar79> really no one else used makemessages with 1.5 yet?
+# 01:30 <snuggl> Joestar79: what OS are you on?
+# 01:30 <snuggl> the "file" command is quite great for stuff like that
+# 01:30 <Joestar79> ML 10.8.3
+# 01:30 <Joestar79> I just tried to delete changelog.txt content
+# 01:30 <Joestar79> and ran makemessages with 1.5.1 and it worked
+# 01:30 <Joestar79> now, can anyone explain me why django-admin.py makemessages -l it catches the content or complain because changelog.txt in the grapelli/tinymce dir has some characters it doesn't like plz?
+# 01:30 <Joestar79> doesn't make sense to me
+# 01:30 <Joestar79> shouldn't makemessages only look in settings/templates and .py?
+# 01:45 <Joestar79> well, thx everyone and good night
+# 02:30 <foist> If I add the same object twice to a model's m2m field, what happens? In docs it says "Adding a second time is OK", but what does that mean? If I have a1 and b1, and I do a1.bs.add(b1) two times, what's the result in the DB?
+# 02:30 <mattmcc> Nothing.
+# 02:30 <FunkyBob> it adds it once
+# 02:30 <foist> Nice, thanks.
+# 02:45 <mstrcnvs> I'm trying to have a class decorator that atach signals on the fly, is this even possible? I'm doing this way: http://dpaste.de/9gj4j/
+# 03:00 <FunkyBob> mstrcnvs: "on the fly" ?
+# 03:00 <mstrcnvs> FunkyBob: already got it! want to see the solution? :D
+# 03:00 <FunkyBob> go on
+# 03:00 <graingert> jezdez: I don't think debug_toolbar.utils.tracking._replace_function can ever work
+# 03:00 <graingert> jezdez: because im_self and im_class got removed
+# 03:15 <foist> If I have one model with two m2m fields through the same model, how do I handle the creation of a new record, considering I basically want a 3-way join out of the 'through' model.
+# 03:15 <foist> Ah, I have to manually create the records in the 'through' model rather than using add(). I think I've got it.
+# 03:30 <foist> I have Project, Company, and User models. Company has an m2m field to User, and Project has an FK to Company. How can I find the Project that has a certain pk and the User belongs to the Project's Company? Looking for something along the lines of get_object_or_404(Project, pk=1, company__users=request.user)
+# 03:30 <swills> can anyone point me at docs on differences between 1.3.x and 1.4.x? and if i'm really lucky, notes on migrating?
+# 03:30 <swills> i have to convince $coworker to upgrade, and 1.4 is only a year old...
+# 03:30 <schinckel> https://docs.djangoproject.com/en/dev/releases/1.4/
+# 03:30 <ticketbot> https://docs.djangoproject.com/en/stable/releases/1.4/
+# 03:30 <schinckel> ACTION thanks ticketbot
+# 03:30 <FunkyBob> ACTION slaps schinckel with a rotten turnip
+# 03:30 <schinckel> ACTION blames google.
+# 03:30 <FunkyBob> oh, balderdash!
+# 03:30 <InvidFlower> Anyone mess with json serialization of a nested model?
+# 03:30 <FunkyBob> you've been using django for long enough to know google returns dev links
+# 03:30 <FunkyBob> InvidFlower: frequently
+# 03:30 <schinckel> swills: Specifically: https://docs.djangoproject.com/en/1.5/releases/1.4/#features-deprecated-in-1-4
+# 03:30 <swills> thanks
+# 03:30 <schinckel> FunkyBob: I know. I was just too lazy, and I knew ticketbot would save me.
+# 03:30 <swills> i guess https://docs.djangoproject.com/en/dev/releases/1.4/#backwards-incompatible-changes-in-1-4 is the main concern...
+# 03:30 <ticketbot> https://docs.djangoproject.com/en/stable/releases/1.4/#backwards-incompatible-changes-in-1-4
+# 03:30 <InvidFlower> FunkyBob: Right now it is working but the solution seems a bit clunky to me. Basically in the view it gets the root, then recursively transforms each node into a dict with a custom serializer. Then add 'items' to each node with the children and continue. Then at the very end convert it to json
+# 03:45 <FunkyBob> InvidFlower: If you want tosee how I'd do it... look at django-nap
+# 03:45 <InvidFlower> FunkyBob: Thanks.. I'll take a look
+# 03:45 <InvidFlower> I also tried jsonpickle which worked ok but even with unpicklable=False, still had some extra fields in it that weren't necessary and didn't see an easy way to exclude
+# 03:45 <FunkyBob> InvidFlower: wait... what is it you're trying to do, exactly?
+# 03:45 <InvidFlower> FunkyBob: Well, there is a menu structure in the database. The model has parent [of ForeignKey('self')], url, etc. Basically I want to go first from flat result to nested objs, then from that to json. In the most elegant way possible..
+# 03:45 <FunkyBob> ah
+# 03:45 <InvidFlower> Right now it starts with the root, and first filter all menu items by it to find children. Use a custom ModelSerializer to turn the root to a dict, add a children field as an empty list. Then recurse the children and serialize each of those. In the end is a big nested dict which then can turn to json
+# 03:45 <InvidFlower> I guess to me it'd seem nicer to have regular nested objects until the very end without having to mess with the dicts so much..
+# 03:45 <mattmcc> You've seen django-fullserializers, right?
+# 04:00 <InvidFlower> mattmcc: Nope.. I'm still a newbie at django (and python) and seems like there's a million ways to do everything
+# 04:00 <FunkyBob> mattmcc: no?
+# 04:00 <InvidFlower> mattmcc: That does seem helpful.. especially the "extras" part in my case..
+# 04:00 <FunkyBob> great... upgrading nose broe stuffs
+# 04:00 <InvidFlower> BTW, on a related not to all this. If you specify a parent in the model via the foreignkey('self'), is it possible to have it automatically have another field of children?
+# 04:00 <FunkyBob> it already does
+# 04:00 <FunkyBob> all fkeys have a reverse related manager attached to their target, remember?
+# 04:00 <FunkyBob> if you want it called children, just add related_name='children' to the fkey declaration
+# 04:00 <InvidFlower> Oooh, wasn't sure if it'd work the same way. Lemme try. Thanks
+# 04:00 <FunkyBob> why wouldn't it? it's how all fkeys work
+# 04:00 <FunkyBob> all relation fields, in fact
+# 04:15 <FunkyBob> hmm... now that I get a chance to read the DRF docs well... I like how their serialisers work
+# 04:30 <nirizr> HI, i've been using django as a web platform and i want to select the template path according to user input. as to let the user choose the template on page basis. how am i supposed to do that?
+# 04:30 <FunkyBob> templates are generally thought to have names, not paths
+# 04:30 <FunkyBob> nirizr: bit of a CMS sort of case?
+# 04:30 <nirizr> i guess... let the user select the site's colors etc
+# 04:30 <FunkyBob> hmm
+# 04:30 <FunkyBob> so, just for theming?
+# 04:30 <FunkyBob> you can play games with {% extends %} to affect theming....
+# 04:30 <FunkyBob> but otherwise, you'll need a way to discover all the templates
+# 04:30 <FunkyBob> for salsa [my next cms] I was just going to os.listdir the first TEMPLATE_DIRS entry
+# 04:30 <mattmcc> If it was just theming, I wouldn't use different templates; just different stylesheets.
+# 04:30 <nirizr> yeah but i want to also change the structure... lets say i can list all templates. is there a simple way to change the template's dir (but keep individual file names)?
+# 04:30 <FunkyBob> {% extends theme|add:"/sometemplate.html" %}
+# 04:30 <nirizr> what does the pipe sign's meaning?
+# 04:30 <nirizr> *is
+# 04:45 <w00tner> hello, why do i get Access to restricted URI denied. when i try to access my static files ?
+# 04:45 <cdunklau> nanonyme: it's a filter
+# 04:45 <cdunklau> err
+# 04:45 <cdunklau> nanonyme: sorry, mistag
+# 04:45 <cdunklau> w00tner: with runserver? or in production?
+# 04:45 <w00tner> runserver
+# 04:45 <cdunklau> w00tner: i'm seeing a lot about javascript. do you have a minimal reproduction?
+# 04:45 <Plouj> hi
+# 04:45 <Plouj> can someone suggest to me (a noob at dojango) how make the style of div's created with this: https://github.com/freenas/freenas/blob/master/gui/templates/reporting/index.html?
+# 04:45 <cdunklau> FunkyBob: i see you took the partial stuff out of nap/http.py. any particular reason? :D
+# 05:00 <FunkyBob> cdunklau: I replaced it with schinckel's exceptional responses
+# 05:00 <k_sze[work]> (Not strictly Django) I'm about to deploy a few instances of an project (dev, staging, and production), using Ubuntu server + apache2 + wsgi. What should I know about setting up the ownership and permissions of the directories. I suppose I should create a dedicated linux user for my project?
+# 05:00 <FunkyBob> k_sze[work]: that's probably best, yes
+# 05:00 <FunkyBob> don't forget to add your project workspace to PYTHONPATH... go over the mod_wsgi docs again [and again]
+# 05:15 <jimfmunro> I cannot seem to find a way to get access to environment variables from my django app (using apache/mod_wsgi)
+# 05:15 <jimfmunro> I'm trying to store passwords/keys etc in env variables and access them with os.environ['key'] but they are never set and KeyError
+# 05:15 <FunkyBob> jimfmunro: sys.environ isn't it? or is it os.environ ?
+# 05:15 <FunkyBob> jimfmunro: wait, you're not confusing Apache env with OS env are you?
+# 05:15 <jimfmunro> os.environ
+# 05:15 <jimfmunro> to be honest I'm not sure.
+# 05:15 <jimfmunro> I'm not sure where those will be available. I am following that 2 Scoops book suggestion to store secret keys, etc in environment variables and they should be (if I follow their examples) available from os.environ['my key']
+# 05:15 <jimfmunro> I've set them in .bashrc
+# 05:15 <jimfmunro> If I load up the shell with production settings, those variables are accessible just fine, but hitting with a browser gives me KeyError
+# 05:15 <jimfmunro> not sure why they'd differ, other than how mod_wsgi gets it's environment
+# 05:30 <FunkyBob> well, how are you setting the envs you want to read?
+# 05:30 <FunkyBob> .bashrc? no wonder
+# 05:30 <FunkyBob> apache won't be using that
+# 05:30 <jimfmunro> I wondered ago that. So I've tried using SetEnv in apache virtual host blocks
+# 05:30 <jimfmunro> still nuttin.
+# 05:30 <jimfmunro> nothing.
+# 05:30 <FunkyBob> no, that's a different env
+# 05:30 <dross> ACTION yawns
+# 05:30 <dross> ACTION yawns at FunkyBob 
+# 05:30 <FunkyBob> ACTION farts at Draggor 
+# 05:30 <FunkyBob> dross even
+# 05:30 <dross> :V
+# 05:30 <dross> :3 I'm at Yahoo!
+# 05:30 <dross> now if they only had kangaroo meat in the cafeteria, I'd be one happy kangaroo
+# 05:30 <dross> FunkyBob: :D I finally caught up to your LinkedIn connection count
+# 05:30 <dross> when we sold Summly yo Yahoo! for 30M, I started getting lots of new connections
+# 05:30 <dross> *to Yahoo!
+# 05:30 <Draggor> thanks a lot FunkyBob
+# 05:45 <FunkyBob> Draggor: sorry... silly autocorrect and nicks with insufficient hamming distances :/
+# 05:45 <FunkyBob> dross: lot of iron in roo meat... very low in fat, too
+# 05:45 <FunkyBob> quite tasty, also
+# 05:45 <SmileyChris> FunkyBob: we going for Roo steak in Hobart? :)
+# 05:45 <FunkyBob> no
+# 05:45 <FunkyBob> you're welcome to have one
+# 05:45 <dross> D: I want
+# 05:45 <jimfmunro> thanks for the help FunkyBob
+# 05:45 <FunkyBob> np
+# 06:15 <pupil> good afternoon
+# 06:15 <FunkyBob> morning
+# 06:15 <pupil> execuse me, i have a question
+# 06:15 <pupil> i have a legacy database, the i use syncdb to create model
+# 06:15 <FunkyBob> not inspectdb?
+# 06:15 <FunkyBob> syncdb doesn't create models
+# 06:15 <pupil> ah yes, sorry. i mean inspectdb
+# 06:15 <FunkyBob> go on...
+# 06:15 <pupil> after inspectdb, i use syncdb to create another tables needed for django
+# 06:15 <pupil> then few more tables were created in my db
+# 06:30 <pupil> i want to make a login, then i read: https://docs.djangoproject.com/en/1.4/topics/auth/
+# 06:30 <pupil> in the link above, the name of the table (model class) is user
+# 06:30 <FunkyBob> are you using django 1.4?
+# 06:30 <FunkyBob> 1.5.1 is the latest release
+# 06:30 <pupil> but in my DB, the table with almost same atribute is authuser
+# 06:30 <pupil> yes, i'm still in 1.4
+# 06:30 <FunkyBob> in your existing DB?
+# 06:30 <FunkyBob> or after syncdb?
+# 06:30 <FunkyBob> because Django will create "auth_user"
+# 06:30 <pupil> so, table auth_user is the table for user?
+# 06:30 <pupil> because i already have table user in my db before inspectdb
+# 06:30 <pupil> i didn't say my clearly, do i?
+# 06:30 <pupil> *my question
+# 06:30 <FunkyBob> pupil: you'd probably be better off using Django 1.5 ... as it lets you provide your own User model
+# 06:30 <FunkyBob> (and yes, tables names are built from {app_label}_{model_name}
+# 06:30 <FunkyBob> )
+# 06:30 <pupil> well actually, i'm upgrading django now :)
+# 06:30 <pupil> i prefer creating db from mysql first, then using inspectdb to make models
+# 06:30 <pupil> is there any special tips or trick for my method?
+# 06:30 <FunkyBob> eww... mysql
+# 06:30 <FunkyBob> why do you have your own user model, then?
+# 06:45 <pupil> execuse me, could you simplify the last line?
+# 06:45 <FunkyBob> you said you've defined your own User table
+# 06:45 <pupil> yes
+# 06:45 <FunkyBob> and that you're not actually using an established schema, you just prefer to build it that way and "inspectdb" your way to models
+# 06:45 <pupil> ok, i still understand here
+# 06:45 <FunkyBob> so... why are you defining your own User table... instead of using the one Django will create for you?
+# 06:45 <pupil> oh, i get it
+# 06:45 <FunkyBob> I mean, I'll skip the "why the fuck would you manually construct a schema, _then_ spend all the time cleaining up inspectdbs output" argument
+# 06:45 <FunkyBob> and just assume you're a masochist
+# 06:45 <pupil> it's because not every atribute in the default User model is needed in my aplication
+# 06:45 <FunkyBob> pupil: so?
+# 06:45 <FunkyBob> I think it's time you read up on Django 1.5's custom User model support
+# 06:45 <pupil> ok, i'll read about that
+# 06:45 <pupil> but if i use the default schema, it would be a waste of memory
+# 06:45 <FunkyBob> BWAHAHAHAHA
+# 06:45 <pupil> am i wrong?
+# 06:45 <FunkyBob> you use mysql, yet quibble over bytes?
+# 06:45 <FunkyBob> I really think you're incredibly guilty of premature optimisation
+# 06:45 <pupil> well, i don't need the atribute(field) so why i should i keep it in my db
+# 06:45 <pupil> ?
+# 06:45 <FunkyBob> because it costs you fuck all to leave it alone, but a LOT of work to take it out
+# 06:45 <FunkyBob> when you can _measure_ the difference it makes.... _then_ you can decide how much work to put into removing it
+# 06:45 <pupil> ok,
+# 06:45 <pupil> it make my sense
+# 06:45 <pupil> but then i thought, cleaning the inspectdb result is a one time job isn't it
+# 06:45 <FunkyBob> pupil: do you seriously manually create the DB schema first?
+# 06:45 <pupil> yes
+# 06:45 <FunkyBob> why?
+# 06:45 <pupil> id serious
+# 06:45 <pupil> i'm considering about the data type
+# 06:45 <FunkyBob> you control that with the Fields in your Models
+# 06:45 <pupil> i'm googling the field and model data type mapping right now
+# 06:45 <FunkyBob> don't google it
+# 06:45 <FunkyBob> find it logically in the docs!
+# 06:45 <pupil> i'm reading this: https://docs.djangoproject.com/en/1.5/ref/models/fields/
+# 06:45 <FunkyBob> good
+# 07:00 <jjrambo> What is the best way to make Django use Postgre's interval type?
+# 07:00 <jjrambo> Best option I've found is http://code.google.com/p/django-pgsql-interval-field/
+# 07:00 <pupil> silly me, django already have all the field data type
+# 07:00 <achiang> hi, using django 1.5 here and i have a custom user model. is there any way to actually force django to run the built-in user model tests? i basically want to override @skipIfCustomUser
+# 07:00 <FunkyBob> jjrambo: django-timedeltafield
+# 07:00 <FunkyBob> pupil: well, yes.... no, not quite all.. but many...
+# 07:00 <FunkyBob> pupil: have you at least done the tutorial?
+# 07:00 <pupil> not this part
+# 07:00 <FunkyBob> that's the docs, not the tutorial
+# 07:00 <achiang> my custom user model is pretty simple; only extends the email field to be 254 chars; everything else should be the same, so my goal is to ensure i did it properly and didn't break anything else...
+# 07:00 <FunkyBob> the tutorial is _part_ of the docs
+# 07:00 <pupil> FunkyBob: do you mean tutorial starting from https://docs.djangoproject.com/en/1.5/intro/tutorial01/ ?
+# 07:00 <jjrambo> :FunkyBob, is that part of importing models?
+# 07:00 <jjrambo> :mattmcc Thanks for all your help last week. You really got me headed in the right direction.
+# 07:00 <FunkyBob> pupil: I do
+# 07:00 <FunkyBob> jjrambo: why do youput the : before the name?
+# 07:00 <jjrambo> Does it go after?
+# 07:00 <FunkyBob> jjrambo: django-timedeltafield is a 3rd party app [by schinckel ] that adds a new field type
+# 07:00 <jjrambo> I've been using irc for about a week. Not very familiar with it.
+# 07:00 <FunkyBob> jjrambo: type "funk" and hit tab
+# 07:00 <jjrambo> Aha.
+# 07:00 <twoolie> jjrambo: the colon is optional, but is convention
+# 07:00 <jjrambo> Got it.
+# 07:00 <mussumgrafix> Yo
+# 07:00 <twoolie> jjrambo: what program are you using for IRC?
+# 07:00 <FunkyBob> hitting tab repeatedly will cycle through nicks starting with what you've typed
+# 07:00 <jjrambo> irssi
+# 07:00 <FunkyBob> twoolie: irssi
+# 07:00 <FunkyBob> jjrambo: in mid line it won't add the colon
+# 07:00 <jjrambo> Got it.
+# 07:00 <jjrambo> Most helpful.
+# 07:00 <mussumgrafix> Can anyone explain to me how ImageField/FileField actually serve a URL ?
+# 07:00 <FunkyBob> mussumgrafix: they don't
+# 07:00 <mussumgrafix> FunkyBob: I know it's FieldFile underneath right?
+# 07:00 <FunkyBob> they store a filename...
+# 07:00 <mussumgrafix> gotcha
+# 07:00 <FunkyBob> that is meaningful to whatever storage engine they're configured to use
+# 07:00 <mussumgrafix> FunkyBob: I'm trying to re-create FileField on Mongoengine
+# 07:00 <FunkyBob> oh wow
+# 07:00 <mussumgrafix> FunkyBob: have u ever used mongoengine?
+# 07:00 <FunkyBob> I wonder if I'll ever find why people want to wrap NonRel DBs with the ORM
+# 07:00 <twoolie> irssi is pretty awesom.
+# 07:00 <mussumgrafix> FunkyBob: haha well it uses its own orm
+# 07:00 <FunkyBob> "I know, I'll create a layer on top to make it sort of Relationaly... so I can put an ORM on it so it isn't quite so relationaly..."
+# 07:00 <FunkyBob> mussumgrafix: no, it uses its own API...
+# 07:00 <FunkyBob> it's a Non-Relational store, so it doesn't _need_ an ORM
+# 07:00 <mussumgrafix> FunkyBob: don't knock it till u try it!
+# 07:00 <mussumgrafix> FunkyBob: call it orm, or odm it doesn't matter, its an abstraction to the database.
+# 07:00 <FunkyBob> mussumgrafix: .. ORM == Object _Relational_ Mapper....
+# 07:00 <twoolie> FunkyBob: Non-rel datastores can still benefit from an ORM
+# 07:00 <FunkyBob> fuck me
+# 07:00 <mussumgrafix> FunkyBob: yes I know what it means, who cares, that's not what I want to discuss
+# 07:00 <FunkyBob> twoolie: no, they can't... because they're Non Relational
+# 07:00 <mussumgrafix> ffs
+# 07:00 <FunkyBob> mussumgrafix: FileFields store a part of a file path
+# 07:15 <mussumgrafix> FunkyBob: tell me something I don't know
+# 07:15 <mussumgrafix> FunkyBob: like how the URL gets generated
+# 07:15 <mussumgrafix> FunkyBob: and whether it matters
+# 07:15 <twoolie> FunkyBob: the _data store_ is non-relational (JBODocuments) but the _schema_ on top can be relational
+# 07:15 <mattmcc> mussumgrafix: By the file storage backend.
+# 07:15 <FunkyBob> NoSQL was a relational database project long before the modern NonRel movement misappropriated it
+# 07:15 <FunkyBob> [is that something you didn't know?]
+# 07:15 <mussumgrafix> FunkyBob: Kinda, thanks for that.
+# 07:15 <twoolie> mussumgrafix: when you query out the object, for that field you will have a `FieldFile` object
+# 07:15 <FunkyBob> mussumgrafix: as mattmcc said... it's determined by the storage engine
+# 07:15 <mussumgrafix> mattmcc: twoolie: thanks, what's the purpose of having the proxy class and the descriptor class ?
+# 07:15 <mussumgrafix> So FileField contains FieldFile(File) and FileDescriptor(object)
+# 07:15 <jtiai> Frosty morning my fellow djangonauts!
+# 07:15 <twoolie> mussumgrafix: the descriptor class describes the field (DB wise) and the proxy class is a representation of the data
+# 07:15 <mussumgrafix> twoolie: now we're getting somewhere
+# 07:15 <twoolie> FieldFile has a property called url
+# 07:15 <mussumgrafix> twoolie: gotcha, I knew that.
+# 07:15 <twoolie> when you read this property, it asks the storage engine for the url that will get you to the file that the storage engine is storing
+# 07:15 <mussumgrafix> twoolie: what would u suggest if I want to recreate that behaviour but instead save the metadata in mongo
+# 07:15 <twoolie> mussumgrafix: what metadata?
+# 07:15 <mussumgrafix> twoolie: I'm concerned with some of the "get_prep_value" and "pre_save" methods in FileField. I don't think mongoengine does that...
+# 07:15 <twoolie> like, where it's stored?
+# 07:15 <mussumgrafix> twoolie: sorry but metadata I meant like, path, url, etc
+# 07:15 <mussumgrafix> twoolie: any experience with mongoengine?
+# 07:15 <mussumgrafix> twoolie: by*
+# 07:15 <twoolie> only path is stored in the DB backend (mongo in your case). the field looks like anormal string
+# 07:15 <twoolie> blah, TextField
+# 07:15 <mussumgrafix> twoolie: but there is some funny business in generating a File object yadda yadda
+# 07:15 <mussumgrafix> twoolie: there seems to be A LOT that gets done in Django..
+# 07:15 <twoolie> mussumgrafix: A stored file in django is identified buy a Storage Engine, and a unique piece of text that means something to that storage engine
+# 07:15 <mussumgrafix> twoolie: what I'm thinking is creating a new mongoengine field, either subclassing the existing FileField (which works by using a proxy class that saves things in Gridfs).
+# 07:15 <twoolie> mussumgrafix: in the case of the default storage engine (django.contrib.staticfiles.storage.StaticFilesStorage) that unique piece of text is the relative path of the file from the root of that storage area.
+# 07:15 <mussumgrafix> twoolie: Or a "blank" new field, subclassing straight from the BaseField and then use FileField and FileDescriptor
+# 07:15 <twoolie> the ONLY thing that gets stored in the backend of the database is a simple string. mongo can handle this
+# 07:15 <mussumgrafix> twoolie: thanks mate, that already helped me a lot
+# 07:15 <mussumgrafix> yes it can, I'm not concerned about that
+# 07:15 <twoolie> mussumgrafix: If you want GridFS, you want to create a custom StorageEngine, not a custom field.
+# 07:15 <twoolie> you can tell the default django FileField to use whatever storage engine you want
+# 07:15 <mussumgrafix> twoolie: def do not want GridFS, mongoengine already has that
+# 07:15 <twoolie> or you can set it globally
+# 07:15 <twoolie> are you saying that you want to store the file itself into mongo?
+# 07:15 <mussumgrafix> twoolie: actually my problem is that mongoengine ONLY has a FileField which saves to GridFS and doesn't allow me to point it to an alternative storage
+# 07:15 <mussumgrafix> no not at all. I want what vanilla Django has = FileField backed up by a swappable storage
+# 07:15 <mussumgrafix> so that I can chose to pop it onto S3 if I want
+# 07:15 <mussumgrafix> hope that made sense.
+# 07:15 <twoolie> so, are you making raw mongoengine calls everywhere, not using the ORM?
+# 07:15 <twoolie> (django-NonRel?)
+# 07:15 <mussumgrafix> twoolie: well sorta, mongoengine is an ORM/ODM so it's not exactly raw. It's very Djangoish.
+# 07:15 <FunkyBob> I think the common term is "Djangonic"
+# 07:15 <mussumgrafix> FunkyBob: Djangonic it is
+# 07:15 <mussumgrafix> 3 main reasons for using mongodb: One equivalent to a "table" to store multiple types of objects (goods and services)
+# 07:15 <mussumgrafix> De-normalisation of documents (embedding)
+# 07:15 <mussumgrafix> geo querying built in
+# 07:30 <twoolie> Errr,,,,,
+# 07:30 <mussumgrafix> trust me, I'm not doing it just because I think it's cool / I can
+# 07:30 <twoolie> 3 points for why you should be using postgres:
+# 07:30 <FunkyBob> hehe
+# 07:30 <twoolie> 1: why try to immitate tables when you can HAVE TABLES
+# 07:30 <mussumgrafix> God here we go the SQL vs NOSQL debate again
+# 07:30 <FunkyBob> it's Non-Rel, not NoSQL
+# 07:30 <twoolie> 2: Normalisation of documents - why save the same data in many places?
+# 07:30 <twoolie> 3: Geo Querying Builtin (contrib)
+# 07:30 <FunkyBob> the NoSQL debate is "by the gods, why can't we have a GOOD query language for our relational stores?"
+# 07:30 <twoolie> kekeke
+# 07:30 <twoolie> Flamewar begin!
+# 07:30 <mussumgrafix> fine call it non-rel ! lol
+# 07:30 <twoolie> mussumgrafix: besides that... lets help with your problem.
+# 07:30 <FunkyBob> I mean, the ORM would be SO much easier to write/use/maintain if we had a decent query language
+# 07:30 <FunkyBob> mmm... wonder how sqlite4 is coming
+# 07:30 <twoolie> FunkyBob: Isn't that what Datomic does? It makese the querylanguage into a normal freaking API?
+# 07:30 <mussumgrafix> twoolie: thanks mate
+# 07:30 <mussumgrafix> and u FunkyBob
+# 07:30 <FunkyBob> twoolie: never heard of it
+# 07:30 <FunkyBob> mussumgrafix: soon I'll be building a system that updates a non-rel store from our fully denormalised postgres store
+# 07:30 <twoolie> mussumgrafix: It's a pretty awesome datastore, but it's different enough from everything else that it will take some time for adoption to hit critical mass
+# 07:30 <FunkyBob> because I _want_ all the enforced correctness a relational store brings... without having to write it into my codebase
+# 07:30 <mussumgrafix> FunkyBob fully understand that
+# 07:30 <twoolie> FunkyBob: wtf....
+# 07:30 <FunkyBob> twoolie: ?
+# 07:30 <twoolie> FunkyBob: Why U No Use https://github.com/jprante/elasticsearch-river-jdbc?
+# 07:30 <FunkyBob> twoolie: store the denormalised forms in, say, ElasticSearch...
+# 07:30 <FunkyBob> twoolie: cheers :)
+# 07:30 <twoolie> FunkyBob: isn't that what haystack does?
+# 07:30 <mussumgrafix> guys brb
+# 07:30 <FunkyBob> twoolie: not exactly, no
+# 07:30 <FunkyBob> haystack indexes documents in a FTS index
+# 07:30 <FunkyBob> we'll be using django-nap to serialise into the formats we want... so we can do fast read-only queries
+# 07:30 <FunkyBob> in the denormalised format our JS needs
+# 07:30 <twoolie> FunkyBob: I guess you need superfast searches at scale or something
+# 07:30 <twoolie> "web-scale"
+# 07:30 <FunkyBob> heh
+# 07:30 <FunkyBob> twoolie: well, searches have been a sore point for our site performance
+# 07:30 <twoolie> FunkyBob: this is kogan were talking about?
+# 07:45 <FunkyBob> twoolie: yes
+# 07:45 <JustSighDudes> Why would I want to use direct_to_template?
+# 07:45 <twoolie> I've never noticed it being slow. Now i must compulsively check
+# 07:45 <JustSighDudes> Is it for what's basically a static template?
+# 07:45 <twoolie> JustSighDudes: jup
+# 07:45 <twoolie> JustSighDudes: does what it says on the can
+# 07:45 <JustSighDudes> Huh. Doesn't seem that useful to me.
+# 07:45 <cdunklau> FunkyBob: why not use Mango-DB?
+# 07:45 <cdunklau> FunkyBob: it's SUPERFAST
+# 07:45 <cdunklau> CLOUD SCALE, and ANY KIND OF DATA
+# 07:45 <cdunklau> https://github.com/dcramer/mangodb
+# 07:45 <cdunklau> also, look at the pull requests, they're hilarious
+# 07:45 <cdunklau> s/pull requests/issues/
+# 07:45 <twoolie> JustSighDudes: A page full of legalese that will never change. {% extend "base.html" %} and chuck it all in there
+# 07:45 <twoolie> JustSighDudes: A robots.txt with a couple of entries. direct_to_template and all the template needs to do is check the current domain
+# 07:45 <twoolie> JustSighDudes: lots of uses. not everything needs to be in flatpages.
+# 07:45 <FunkyBob> cdunklau: does it provide FTS?
+# 07:45 <FunkyBob> JustSighDudes: it doesn't exist any more...
+# 07:45 <cdunklau> FunkyBob: FTS?
+# 07:45 <FunkyBob> JustSighDudes: it's been replaced with render
+# 07:45 <FunkyBob> cdunklau: Full Text Search
+# 07:45 <cdunklau> FunkyBob: no. but it doesn't need it! "We'll instantly map all of your existing data without ANY EFFORT with a new and improved AUTO SHARTING ALGORITHM."
+# 07:45 <FunkyBob> JustSighDudes: and no, it's not quite a static page. it still renders a template, so it can be influenced by a lot of different factors
+# 07:45 <cdunklau> FunkyBob: the server is super small too, only 35 lines: https://github.com/dcramer/mangodb/blob/master/server.py
+# 07:45 <FunkyBob> cdunklau: oh, you really were talking about Mangodb... not mongo
+# 07:45 <cdunklau> FunkyBob: yeah. i found out about it last week and almost pissed myself laughing
+# 07:45 <FunkyBob> :)
+# 07:45 <sprezzatura> someone commented yday that uwsgi+nginx cannot be used in heroku. any reason why?
+# 07:45 <unbit> sprezzatura: https://github.com/unbit/uwsgi-docs/blob/master/tutorials/heroku_python.rst
+# 07:45 <cdunklau> FunkyBob: the `curl | sudo bash` installer is probably my favorite: https://github.com/dcramer/mangodb/issues/23
+# 07:45 <sprezzatura> unbit: does this mean i can use the free worker to deploy a django app in this stack?
+# 07:45 <sprezzatura> and obviously, am ref to a django app
+# 07:45 <mattmcc> sprezzatura: Heroku is a platform service, not a VPS.
+# 07:45 <unbit> sprezzatura: yes for sure, but read the whole tutorial it covers aspect on which the heroku docs are pretty "obscure"
+# 08:00 <sprezzatura> ok. am slightly confused between webfaction and heroku. though i do not expect my app to get a million hits, but am expecting around 10k hits daily. not sure whether the FREE worker from heroku would suffice or is it better to stick with tried and tested webfaction
+# 08:00 <sprezzatura> mattmcc: so more like GAE?
+# 08:00 <dodobas> yello
+# 08:00 <mattmcc> sprezzatura: Kinda, yeah.
+# 08:00 <sprezzatura> mattmcc: does it require massive code refactoring, like in GAE?
+# 08:00 <mattmcc> No, it runs actual Django.
+# 08:00 <mattmcc> It's not a walled garden.
+# 08:00 <FunkyBob> sprezzatura: how many hits your server can support really depends heavily on how much work your views do
+# 08:00 <FunkyBob> we have some views that take 75ms... and others that take 3 minutes
+# 08:00 <sprezzatura> i generally design views so that response is less than a sec. and anything more than that is presented as a feature that is done in the background(scheduled job). so i do not expect more 2s latencies, at worst
+# 08:00 <cdunklau> sprezzatura: heroku's free dyno idles after a while, it takes about 5 seconds to warm back up
+# 08:00 <sprezzatura> define 'a while' please :)
+# 08:00 <cdunklau> sprezzatura: looks like about an hour https://devcenter.heroku.com/articles/dynos#dyno-idling
+# 08:00 <sprezzatura> phew. then i will rule it out for sure. looks like it is webfaction then.
+# 08:00 <cdunklau> sprezzatura: well hold up
+# 08:00 <cdunklau> sprezzatura: that only applies if you're using the one free dyno
+# 08:00 <cdunklau> sprezzatura: use more than one, and the dynos don't idle out
+# 08:00 <sprezzatura> cdunklau: well, i do not intend to buy anything more as it costs more when compared to webfaction
+# 08:00 <sprezzatura> and webfaction works fine almost all the time. not sure how DigitalOcean spans.
+# 08:00 <cdunklau> sprezzatura: it's 5 seconds though... not bad at all
+# 08:00 <sprezzatura> its kind of funny. i havent found a 'single' post on using django+nginx+uwsgi that explains everything in detail. am doing some research, should post something by the weekend for sure
+# 08:00 <sprezzatura> though on benchmarks, this link beats the shit out of it : http://nichol.as/benchmark-of-python-web-servers
+# 08:00 <unbit> sprezzatura: only recently uWSGI can be used in heroku without headaches
+# 08:00 <unbit> they decided to not build python shared libraries
+# 08:00 <unbit> so uWSGI build system had to be adapted to use static linking
+# 08:00 <sprezzatura> unbit: i think i will stick with webfaction or aws for now.
+# 08:00 <unbit> this is the reason why you cannot run apache+mod_wsgi on heroku
+# 08:15 <twoolie> sprezzatura: you can use uwsgi on heroku, but the part that you would need nginx for is handled by heroku.
+# 08:15 <haukur> Can you recommend a good django book for the most recent versions?
+# 08:15 <sprezzatura> haukur: docs.
+# 08:15 <FunkyBob> haukur: no... the Docs are too good, publishers don't think books will sell
+# 08:15 <haukur> hahaha
+# 08:15 <haukur> alright
+# 08:15 <haukur> thanks
+# 08:15 <twoolie> sprezzatura: heroku is more expensive but will let you scale up a lot easier, and their database forking/snapshotting features are absolutely killer
+# 08:15 <sprezzatura> twoolie: but looks like a pain setting it all up and getting upto speed with their nomenclatures.
+# 08:15 <twoolie> haukur: https://django.2scoops.org/ :: Two Scoops of Django: Best Practices for Django 1.5
+# 08:15 <sprezzatura> and if i have to move out of heroku, then all the more expensive
+# 08:15 <sprezzatura> haukur: 2scoops is when you know what django is. not meant for beginners.
+# 08:15 <twoolie> sprezzatura: read this tutorial: https://devcenter.heroku.com/articles/django
+# 08:15 <twoolie> sprezzatura: It's actually pretty simple. and deployment is just a git push
+# 08:15 <twoolie> haukur only asked for a good book, not a good beginner's book.
+# 08:15 <twoolie> sprezzatura: I actually love webfaction. They're great hosts and I run a fair few sites on them. but they are not built for redundancy or scaling. Not for if you're _starting_ at 10k hits per day
+# 08:15 <sprezzatura> twoolie: 10k hits per day is more for webfaction?
+# 08:15 <sprezzatura> i was thinking it was pretty nominal.
+# 08:15 <twoolie> sprezzatura: I guess it depends on the complexity of your site
+# 08:15 <sprezzatura> twoolie: can you share your personal experience with webfaction and the complexity of your site
+# 08:15 <twoolie> sprezzatura: we host a number of smaller business/ecommerce sites on webfaction. They're pretty easy to use and give you shell access so that you can configure things pretty easily.
+# 08:15 <sprezzatura> right. i know that, my Q was specific to performance. i mean what kind of problems you see when the requests are more.
+# 08:15 <twoolie> sprezzatura: however our main product is not run on webfaction because It is more complicated, needs more ram/cpu than shared hosting can provide. we currently run it on AWS, but are looking to move to heroku.
+# 08:15 <sprezzatura> heroku is better than AWS? i thought AWS is the beast of all.
+# 08:30 <jayant__> hey where can i get help on dhtmlxgrid??
+# 08:30 <jtiai> jayant__: From dhtmlxgrid documentation..?
+# 08:30 <jayant__> jtiai, ya tried but the grid didnt work out, i got the grid working but it shows only 1 entry
+# 08:30 <mattmcc> sprezzatura: Apples and oranges. Heroku is a platform service, AWS is a quasi-VPS hosting service.
+# 08:30 <mattmcc> sprezzatura: As it happens, Heroku runs on AWS.
+# 08:30 <jtiai> jayant__: I bet you get better answers if you're spesific about your problem and tried solution.
+# 08:30 <sprezzatura> mattmcc: have you tried DigitalOcean by any chance?
+# 08:30 <jayant__> jtiai, ya sure
+# 08:30 <glitch273> DigitalOcean is good but they are starting to increase their prices now
+# 08:30 <glitch273> which was of course predictable
+# 08:30 <mattmcc> sprezzatura: No, I'm fairly content with Linode/Rackspace.
+# 08:30 <sprezzatura> glitch273: from when?
+# 08:30 <mattmcc> glitch273: Right, because their pricing model was obviously unsustainable.
+# 08:30 <mattmcc> It was a bait & switch.
+# 08:30 <glitch273> sprezzatura, they are charging for bandwidth and backups now
+# 08:30 <sprezzatura> sigh!
+# 08:30 <glitch273> but that is how every new company gets started
+# 08:30 <glitch273> not a new tactic
+# 08:30 <sprezzatura> webfaction has been pretty stable on that front
+# 08:30 <mattmcc> Every new company? :P
+# 08:30 <glitch273> most new company :)
+# 08:30 <glitch273> newegg used to have the cheapest prices on the net + free shipping when they started
+# 08:30 <sprezzatura> AWS's free trial for the first year looks interesting. any experiences?
+# 08:30 <glitch273> now they are usually a few dollars more and you pay for shipping
+# 08:30 <jayant__> okay so i have 4 tabs on the grid and the grid is suppose to display images and some data related to the image. So in the view i am forming a dictionary containing rows of data {[image,image_data],[....],[....]} and dumping the data in json format to the template
+# 08:30 <sprezzatura> glitch273: one more problem with DO is that they do not give more than 100gb space!
+# 08:30 <glitch273> sprezzatura, the free trial from aws is good but make sure you dont go over your limit or you'll get charged
+# 08:30 <jayant__> jtiai, this worked for another project but it doesnt function well in this one, i can't figure out what it just displays 1 row
+# 08:30 <jayant__> and also the grid init and paging enable is set in the template
+# 08:30 <jayant__> for all 3 grids
+# 08:30 <jayant__> jtiai, more details??
+# 08:30 <sprezzatura> glitch273: quick Q , if we install DB on DO and the instance goes down, then is the DB persistent or goes away too?
+# 08:30 <glitch273> sprezz: the backups feature should be a snapshot of your entire hard drive so persisent
+# 08:30 <glitch273> sprezz: DO is more like a regular VPS
+# 08:45 <sprezzatura> but need to pay for snapshots - right! sigh
+# 08:45 <glitch273> well if you don't delete your servers, then you won't need to unless you want it
+# 08:45 <sprezzatura> got it
+# 08:45 <b0rsuk> Is there any elegant way to make {% url %} tag accept created_at|date:'Y/m/d/' ? These 2 are equivalent, second is the "right" way and first is the nice way. http://dpaste.org/TtruW/
+# 08:45 <b0rsuk> The first is not future-proof, but second is butt-ugly !
+# 08:45 <glitch273> sprezz: try the code "SSDBEAR20" if you're signing up for DO, $20 free credit
+# 08:45 <sprezzatura> glitch273: thanks. is that like 'FREE'? or do i need to buy soemthing to get that credit?
+# 08:45 <glitch273> i believe you need to give them your CC info first
+# 08:45 <sprezzatura> ok. thanks glitch273
+# 08:45 <sprezzatura> need some advice : my fairly small django app , has only a few pages that work on the form submitted data. i am presently serving the other non-form pages from my django views. these could be served as a html pages too, but since i am using template inheritance, i guess i need to serve it from views. is this fine, or are there any other suggestions?
+# 08:45 <mattmcc> b0rsuk: I'd give your entry model a get_absolute_url method.
+# 08:45 <twoolie> b0rsuk: nope but you can wrap the whole thing in a with to make it a bit neater: http://dpaste.org/xRzO4/
+# 08:45 <sprezzatura> template inheritance affords me to avoid boilerplate code(like header, footer) from my pages. so i like it. but am i trying to over-optimize it? nevertheless,i would like to know if there are any other solutions
+# 08:45 <mattmcc> sprezzatura: If you need to render templates, you need a Django view, even if it's the generic TemplateView. Nothing wrong with that.
+# 08:45 <b0rsuk> twoolie: Did you just post the same snippet ?
+# 08:45 <twoolie> sprezzatura: you can even use JustSighDudes's favorite function, direct_to_template
+# 08:45 <twoolie> b0rsuk: no... I posted a reply to your snippet
+# 08:45 <sprezzatura> glitch273: btw, that promo code has expired :)
+# 08:45 <b0rsuk> twoolie: Okay, my fault.
+# 08:45 <glitch273> sprezz: try SSDBEAR10 its only $10 tho
+# 08:45 <twoolie> b0rsuk: but mattmcc has the best solution. provide a get_absolute_url method on your model if you can.
+# 08:45 <sprezzatura> glitch273: awsum
+# 08:45 <sprezzatura> but they want my cc :(
+# 09:00 <sprezzatura> glitch273: have you used DO?
+# 09:00 <glitch273> yeah I'm using them
+# 09:00 <sprezzatura> how is the performance? you are on the 5$ one?
+# 09:00 <glitch273> I don't have any high traffic sites but the $5 is pretty good value
+# 09:00 <sprezzatura> how much traffic can it see before you run out of stea,
+# 09:00 <sprezzatura> *steam
+# 09:00 <Mindiell> hi there
+# 09:00 <glitch273> the $5 is given 1TB bandwidth for free, then its 0.02 per GB
+# 09:00 <jtiai> Is there way to print paths staticfile finder is trying when locating file?
+# 09:00 <Mindiell> Just a little question about my app. Is it better to put my core app in the project directory or to create a specific core app ?
+# 09:00 <sprezzatura> glitch273: PM'ed you.
+# 09:00 <b0rsuk> mattmcc: But it looks like using this forces me to use reverse(), which ends up using the same ugly thing but pushing it into models.py instead of template. Is that an improvement ? example: return reverse('people.views.details', args=[str(self.id)])
+# 09:00 <twoolie> Mindiell: create a directory for it. It's not necessary but it is convention.
+# 09:00 <mattmcc> b0rsuk: But it's in _one place_ in your model, not in every single template where you link to an entry.
+# 09:00 <Mindiell> twoolie, so I'll have a "myproject" directory and a "core" directory ?
+# 09:00 <Mindiell> twoolie, thx
+# 09:00 <twoolie> Mindiell: yes. that should be the way that django-admin.py startproject lays it out too.
+# 09:00 <Mindiell> twoolie, ok, thanks for the tip. I'm always scared when I start a new project ;o)
+# 09:15 <b0rsuk> mattmcc: Okay, fine, I managed to write the method in an orderly manner. Sometimes I get anal about details.
+# 09:15 <twoolie> b0rsuk: you can use the @permalink decorator. http://dpaste.org/csgpQ/
+# 09:15 <twoolie> b0rsuk: blah, that should be @models.permalink
+# 09:15 <twoolie> b0rsuk: bonus points! by implementing get_absolute_url, you get a handy dandy "view on site" button in your admin interface
+# 09:15 <b0rsuk> twoolie: I read that already.
+# 09:15 <b0rsuk> But all these new things make my head spin.
+# 09:15 <b0rsuk> ...and I thought I'd finish these "Read More" links last week !!
+# 09:15 <twoolie> b0rsuk: tricky things, these "Read More" links. There's always more to read on the subject.
+# 09:15 <b0rsuk> twoolie: You'd think this is something basic and simple.
+# 09:30 <b0rsuk> I'm not 100% sure what changes I can do to models without migration/drop table or syncdb. I just wrote the get_absolute_url method, but it prints "" in template.
+# 09:30 <jtiai> b0rsuk: Changing datatypes, (removing) or adding fields requires migration. renaming field might not require migration but requires definition of correct db column name.
+# 09:30 <twoolie> b0rsuk: what do you get when you call it from ./manage.py shell
+# 09:45 <b0rsuk> twoolie: NoReverseMatch: Reverse for 'news.views.detail' with arguments '('2013', '4', '8', u'raz')' and keyword arguments '{}' not found.
+# 09:45 <Raumkraut> I've renamed a table in a South migration. Is there any harm in removing the stale content type? What foreign-key related tables would I lose data from - more than just auth_permission?
+# 09:45 <twoolie> well, there's your problem
+# 09:45 <DjangoNewBee> what is the use of "from django.utils.translation import ugettext_lazy as _" in our forms.py?
+# 09:45 <twoolie> DjangoNewBee: It makes it easy to internaltionalise text by wrapping strings in _()
+# 09:45 <twoolie> DjangoNewBee: https://docs.djangoproject.com/en/dev/topics/i18n/ . Read the docs. I really can't say this enough
+# 09:45 <ticketbot> https://docs.djangoproject.com/en/stable/topics/i18n/
+# 09:45 <b0rsuk> twoolie: But I get the same error even if I pass kwargs to reverse() !
+# 09:45 <twoolie> b0rsuk: it's probably because reverse() doesn't like using dotted paths to views. try using the named urls
+# 09:45 <b0rsuk> twoolie: named urls ?
+# 09:45 <b0rsuk> Is it the same as named groups ?
+# 09:45 <b0rsuk> Uhh, no, but it's on the same page :-)
+# 09:45 <sprezzatura> is there an overhead if i8n is used?
+# 09:45 <jax> hello
+# 09:45 <jax> I would like to make a time management app to assign certain time slots with google contacts. is there a way to store an ID for a google contact locally in django?
+# 09:45 <jax> i need to store a relation to it in the Appointment object
+# 09:45 <jax> (to the google contact)
+# 10:00 <jax> digi604: thx for closing that!
+# 10:00 <jax> <3
+# 10:00 <jax> will test it
+# 10:00 <mattmcc> jax: Wouldn't that just be their email?
+# 10:00 <jax> mattmcc: likely, didn't see what i'm getting from google yet - will check the docs
+# 10:00 <b0rsuk> Okay, I'm officially confused. I get NoReverseMatch: Reverse for 'news.views.detail' with arguments '()' and keyword arguments '{'year': '2013', 'slug': u'raz', 'day': '8', 'month': '4'}' not found.
+# 10:00 <b0rsuk> My view and get_absolute_url(self) ----> http://dpaste.org/PkQsn/
+# 10:15 <inhghodke> hey how to sort queryset by ascending order alphabetically (A->Z) and special characters and numbers follow come after Z and then blank data
+# 10:15 <inhghodke> any idea?
+# 10:15 <fleetfox> natsort?
+# 10:15 <b0rsuk> I think NoReverseMatch should throw its own exceptions to make it easier to understand what's wrong. It's a complex beast.
+# 10:15 <inhghodke> fleetfox: thank you, let me check natsort
+# 10:30 <dzubre> I have a question: is it possible to load an object to django and have it loaded during the entire time of the website running. e.g. I have a machine learning model that takes about a couple of seconds to load. I would like the site to only load it once and then use it from memory
+# 10:30 <tga> greetings
+# 10:30 <tga> is there a standard way of getting an absolute url, without doing backflips with context processors?
+# 10:30 <kiorky> hi, i m thinking to make a django app acting as a front oauth2 provider but that can logs client users against multiple other sources... So something like an integration like djangosocialauth + django-oauth2-provider
+# 10:30 <tga> ACTION needs an absolute url for a confirmation email
+# 10:30 <bmispelon> tga: personally I use contrib.sites
+# 10:30 <tga> I've seen it suggested as a solution, but it won't work on multiple environments
+# 10:30 <bmispelon> tga: did you check out the RequestSite? https://docs.djangoproject.com/en/1.5/ref/contrib/sites/#requestsite-objects
+# 10:30 <tga> I was just getting to that
+# 10:30 <tga> it seems better than sites
+# 10:30 <kezabelle> requestsite won't work outside of the standard request/response chain though IIRC?
+# 10:30 <kezabelle> ie, if you're sending confirmations sensibly (asyncronously, outside of that), RequestSite won't work without a factory to generate a fake WSGIRequest
+# 10:45 <bmispelon> kezabelle: well it needs a request object to work
+# 10:45 <tga> that should be fine I think
+# 10:45 <Hipikat> kiorky: i installed django-allauth yesterday and it was wonnnderful
+# 10:45 <kiorky> Hipikat: it looks like it isnt an oauth2 provider, isnt it ?
+# 10:45 <tga> mmkay, so sites it is
+# 10:45 <tga> it's annoying that the app won't just work in another environment
+# 10:45 <Hipikat> oh, provider, right, never mind :P
+# 10:45 <kiorky> Hipikat: the idea is to have something like a CAS server, but more pythonnic
+# 10:45 <kiorky> (i mean, jasig cas server)
+# 10:45 <tga> is it me or is it not obvious how to get the full url in the auth password_reset template?
+# 10:45 <bmispelon> tga: the documentation has a helpful example: https://docs.djangoproject.com/en/1.5/topics/auth/default/#django.contrib.auth.views.password_reset
+# 10:45 <tga> hmm nm, got it, it gets into the context as {{protocol}}{{domain}}
+# 10:45 <tga> bmispelon: right, you can see I haven't had my coffee today
+# 11:00 <JustSighDudes> Is there a way I can make a regex or whatever so that site.com/page/1 and /page/1/ are the same thing?
+# 11:00 <JustSighDudes> Or is there somethign wrong with that?
+# 11:15 <airtonix> my sql theorycraft sucks, if i had to check if a user was in one or the other field of a model would this do it? http://dpaste.org/6ozU3/
+# 11:15 <b0rsuk> Okay, I'm confused. when I have a view which starts with def detail(request, year, month, day, slug), are the arguments KEYWORD arguments ?
+# 11:15 <snuggl> airtonix: what are you trying to do?
+# 11:15 <snuggl> check if request.user is owner or in members?
+# 11:15 <airtonix> snuggl: it's a authorization class for tastypie, i need to reduce the queryset down to those organisations which the request.user is either the owner or a member of.
+# 11:15 <snuggl> b0rsuk: you cannot tell from that end
+# 11:15 <snuggl> b0rsuk: it depends on how its called
+# 11:15 <airtonix> snuggl: my other option is to create a user group per organisation and link the org to the group
+# 11:15 <snuggl> b0rsuk: for detail(1, 2, day=4)
+# 11:15 <snuggl> b0rsuk: 1 & 2 are args, days a kwarg
+# 11:15 <snuggl> airtonix: ah
+# 11:15 <snuggl> airtonix: there are some rights management apps if you want a pre made solution
+# 11:15 <snuggl> like django-guardian
+# 11:15 <airtonix> snuggl: unfortunatly they make a mess of the database and models. It's not even clear whether they would solve this very simple problem
+# 11:15 <snuggl> airtonix: it didnt add anything on the models for me, YMMV
+# 11:15 <snuggl> neither do it mess up any databases
+# 11:15 <snuggl> but to your question, can .filter take the kw's in a dict like that?
+# 11:15 <snuggl> oh, nm, that was the actual labels in labels.
+# 11:15 <b0rsuk> I can't figure out why I get NoReverseMatch. My code: http://dpaste.org/om8HC/
+# 11:15 <b0rsuk> NoReverseMatch: Reverse for 'news.views.detail' with arguments '()' and keyword arguments '{'year': '2013', 'slug': u'raz', 'day': '8', 'month': '4'}' not found.
+# 11:15 <b0rsuk> Can anyone please help ?
+# 11:15 <Hipikat> b0rsuk: work with named urls? add a name='news_detail' keyword/parameter to your url() and reverse('news_detail',...) instead?
+# 11:15 <twoface> and perhaps try to make year, day and month integers
+# 11:15 <twoface> you are matching \d, but passing strings
+# 11:15 <snuggl> \d is a string
+# 11:15 <snuggl> the numerical parts
+# 11:30 <b0rsuk> Hipikat: I tried that, and it made no difference. I still get the exception.
+# 11:30 <b0rsuk> Hipikat: Besides, documentation for reverse() uses an example with 'news.views.detail' type format. So it's possible.
+# 11:30 <dotz> Hi. I am writing a reusable application. That application renders a full-page form. My question: how should I write the template? I currently assume, that my reusable application will extend some kind of "base.html" template, with a "content" block inside... but is it the right approach? How do you do that?
+# 11:30 <dotz> Ah, just found http://stackoverflow.com/questions/11637957/how-to-manage-django-reusable-app-templates-that-extend-common-base-templates
+# 11:30 <dotz> Is it the right approach?
+# 11:30 <Hipikat> b0rsuk: and that url's definitely getting included? if you go to a 404 page with debug on and it shows you all the registered urls, it's in there?
+# 11:30 <void> dotz: yes
+# 11:30 <dotz> void: thanks
+# 11:30 <b0rsuk> Hipikat: I can go to http://127.0.0.1:8000/news/2013/04/01/Raz/ (or any other slug) by hand, by typing it in my browser, and it works. Is that what you're asking for ?
+# 11:30 <DjangoNewBee> can anybody say why do we use save() method in forms.py file ???
+# 11:30 <void> dotz: block with name "content" is also quite popular, so this is right also
+# 11:30 <mattmcc> b0rsuk: FWIW, the date generic views expect a month argument as 'apr', not '4'
+# 11:30 <Hipikat> aah, well that's something
+# 11:30 <mattmcc> Unless you change the month_format argument.
+# 11:30 <b0rsuk> mattmcc: But I'm using a hand-crafted view, not a generic view. At least that's not how generic views look in the tutorial.
+# 11:30 <mattmcc> The tutorial doesn't even touch date-based views.
+# 11:30 <b0rsuk> Hipikat: I checked the 404 page too, and my 'news_detail' view is listed there as well.
+# 11:30 <b0rsuk> I also just tried the named views thing again, and still got NoReverseMatch.
+# 11:30 <b0rsuk> I feel like NoReverseMatch should throw its own exceptions to make debugging it easier :(
+# 11:30 <mattmcc> DjangoNewBee: It's a reasonable name for the step after validating a form?
+# 11:30 <mattmcc> b0rsuk: NoReverseMatch already reports exactly what name and arguments it tried to use. What other details do you think would be beneficial?
+# 11:30 <Hipikat> b0rsuk: it's not a situation where you need reverse_lazy() maybe? (probably not?)
+# 11:30 <b0rsuk> Hipikat: I only know that reverse_lazy exists.
+# 11:30 <mattmcc> b0rsuk: What does your urlpattern for news_detail look like?
+# 11:45 <b0rsuk> url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/(?P<slug>[-\w]+)/$', 'detail', name='news_detail'),
+# 11:45 <b0rsuk> (the prefix is news.views., of course
+# 11:45 <mattmcc> Okay, \d{2} isn't going to match '4'
+# 11:45 <Hipikat> ACTION palmfaces. obviously
+# 11:45 <b0rsuk> Uh.
+# 11:45 <b0rsuk> I guess I stopped thinking after my <a href="{% url news.views.detail year month day entry.slug %}">Read More</a>
+# 11:45 <b0rsuk> started matching.
+# 11:45 <DjangoNewBee> suppose if i want to create a signup form and i have validated for the username, email and password and next what should i write in the save() method?
+# 11:45 <mattmcc> DjangoNewBee: Well, first, it should be clear that the pattern of a form class having a save method is specific to ModelForms. How you save a Form instance is entirely up to you.
+# 11:45 <mattmcc> Though you're certainly free to follow the same pattern.
+# 11:45 <jachetto> b0rsuk btw in my opinion slug should contain year month and day
+# 11:45 <DjangoNewBee> yes, i know that cos modelform has a specific save() method
+# 11:45 <DjangoNewBee> can i only write the self.cleaned_data[''] - for usrname, password and email?
+# 11:45 <jachetto> ehrm sorry i said a nonsens
+# 11:45 <jachetto> e
+# 11:45 <mattmcc> cleaned_data will contain whatever fields your form included which passed validation (and didn't raise validation errors)
+# 11:45 <b0rsuk> jachetto: You mean having 2013/04/12/badgers-are-awesome in a single variable ?
+# 11:45 <DjangoNewBee> and also what is the use of writing domain_override=" "?
+# 11:45 <jachetto> bOrsuk in my opinion will be better the publish date in get_absolute_url as permalink
+# 11:45 <jachetto> b0rsuk something like : http://www.snipzone.com/d9ae8516a
+# 11:45 <mussumgrafix> Yo FunkyBob
+# 11:45 <mussumgrafix> I was asking u before about FileField if u remember
+# 11:45 <mussumgrafix> I can tell it uses FieldFile(File) and FileDescriptor to do most of its bidding
+# 11:45 <DjangoNewBee> and also what is the use of writing domain_override=" "?
+# 11:45 <mussumgrafix> Can someone explain to me how that actually works? I can't see any method in FieldFile that returns an object of either class...
+# 11:45 <b0rsuk> jachetto: There's a warning in official docs that "The permalink decorator is no longer recommended" https://docs.djangoproject.com/en/1.5/ref/models/instances/#the-permalink-decorator
+# 11:45 <mussumgrafix> is this python magic that I'm missing?
+# 12:00 <mussumgrafix> anyone familiar with it?
+# 12:00 <mussumgrafix> https://github.com/django/django/blob/master/django/db/models/fields/files.py
+# 12:00 <mattmcc> b0rsuk: The permalink decorator is/was just syntactical sugar. As you probably noticed, it didn't offer much real convenience over simply passing arguments to reverse()
+# 12:00 <jachetto> b0rsuk true, in the last version of framework permalink is not more recommenended, but you can use reverse.
+# 12:00 <mussumgrafix> does attr_class and descriptor_class have some significance in Python? Is it some sort of convention? (google tells me no)
+# 12:00 <mussumgrafix> Or something Django picks up when setting values to Fields in a Model ?
+# 12:00 <jachetto> just i'm sayng that in my opinion is not a good idea to pass the publish date as an {%url parameter
+# 12:00 <b0rsuk> Noooo !! Hipikat left the channel. I wanted to thank him. Could you do that for me ?
+# 12:00 <mattmcc> mussumgrafix: No, they're specific to FileField.
+# 12:00 <b0rsuk> jachetto: Why not a good idea ?
+# 12:00 <mussumgrafix> mattmcc: thanks mate
+# 12:00 <mussumgrafix> mattmcc: any idea how it works then?
+# 12:00 <DjangoNewBee> and also what is the use of writing domain_override=" "?
+# 12:00 <DjangoNewBee> in clean() method
+# 12:00 <b0rsuk> At the moment I actually don't *need* to pass any date arguments, because I was forced to make my slug unique=True (rather than unique_for_date which is buggy, or unique_together which is no good with DateTimeField)
+# 12:00 <jachetto> b0rsuk because you have to copy all this parameters everytime that you want a detail of an article. If in future you want modify the url you have many line of code to modify. If you use reverse just to have 1 line to modify
+# 12:00 <darkstar|> hi again, im following the getting started with tutorial, i'm at the Database section, ive run createdb, i've added dj_database_url.config() as the databases default dict key, but when i run python manage.py runserver i get im getting File "manage.py", line 8, in <module> from django.core.management import execute_from_command_line
+# 12:00 <darkstar|> nvm i didnt have the virtualenv activated
+# 12:00 <darkstar|> apologies
+# 12:15 <b0rsuk> Yesss !!@@!!!!!!!!!! I got these 'Read More' links working !!@@!
+# 12:15 <mussumgrafix> Guys can someone please explain to me where the __get__ and __set__ for the FieldFile work?
+# 12:15 <mussumgrafix> I can't understand how a value is associated with that Field
+# 12:15 <mussumgrafix> or better, how it's "delegated" to the proxy and descriptor classes.
+# 12:15 <mussumgrafix> https://github.com/django/django/blob/master/django/db/models/fields/files.py#L206
+# 12:15 <Jygga> hi, for some reason request.POST does not contain the name of my submit button in one environment but it does on another
+# 12:15 <Jygga> is there any known quirk i have never heard of?
+# 12:15 <b0rsuk> Why do "View on site" links redirect to http://www.iana.org/domains/example ?
+# 12:15 <kezabelle> b0rsuk: because you've not set your Site in the database
+# 12:15 <kezabelle> (or, more specifically, you have left it wrong, as the default points to example.org/com)
+# 12:15 <mussumgrafix> anyone?
+# 12:15 <mussumgrafix> surely someone knows what I'm talking about + has skills?
+# 12:15 <BakaKuna> Does anyone know if the contex_processors have been removed from the default settings.py? I.e. django-admin startproject newproject gives me a settings.py where no such thing as TEMPLATE_CONTEXT_PROCESSORS = [] has been defined. It seems like a strange thing to have to manually add context processors like media and static. Am I missing an option here or has something done changed in this respect since 1.4?
+# 12:15 <kezabelle> er, TEMPLATE_CONTEXT_PROCESSORS certainly never used to be in the default settings
+# 12:15 <BakaKuna> that should be a tuple off course :)
+# 12:15 <kezabelle> if there aren't any, it falls back to the default ones
+# 12:15 <darkstar|> heroku logs is giving me "App Crashed" trying to deploy postgres to heroku, again working through the getting started with django tutorial
+# 12:15 <darkstar|> ive comitted the changes to requirements.txt adding dj-database-url and psycopg2
+# 12:15 <Jygga> the input is rendered as <input class="step0" type="submit" name="step0a" value="Continue"> and does not show up in POST data when used to submit the form
+# 12:30 <Jygga> could it be that, because there is no value for it, there is a difference between python 2.6 and 2.7 ? this happens only on 2.6
+# 12:30 <DjangoNewBee> ffg
+# 12:30 <Jygga> oh well, ill just add another hidden input for now
+# 12:30 <mussumgrafix> darkstar|: looks like u've made some progres
+# 12:30 <mussumgrafix> darkstar: did u get the postgresql url from heroku?
+# 12:30 <darkstar|> mussumgrafix: very slightly i keep getting into these errors
+# 12:30 <mussumgrafix> darkstar|: into ur settings.py ?
+# 12:30 <darkstar|> mussumgrafix: i've got a base.py file and a local.py file
+# 12:30 <mussumgrafix> darkstar|: so u've broken down ur settings.py into 2 ?
+# 12:30 <darkstar|> mussumgrafix: that's correct
+# 12:30 <mussumgrafix> darkstar|: that's so unnecessary at an early stage...
+# 12:30 <darkstar|> mussumgrafix: this is what the tutorial suggested, im assuming its trying to teach best practices, but its very confusing especially to a beginner
+# 12:45 <mussumgrafix> darkstar|: YES it totally is
+# 12:45 <BakaKuna> kezabelle: I would have sworn, but thanks anyway
+# 12:45 <mussumgrafix> darkstar|: gotta keep it uber simple at first
+# 12:45 <mussumgrafix> darkstar|: u using postgresql on ur pc as well?
+# 12:45 <darkstar|> mussumgrafix: yes on the vm
+# 12:45 <mussumgrafix> darkstar|: have u tried running the django app with "Foreman" ?
+# 12:45 <b0rsuk> Does anyone else have a kind of love/hate relationship with programming ? I find it somewhat hard to start early in the morning, but then I don't want to stop.
+# 12:45 <snuggl> maybe youre just not a morning person
+# 12:45 <snuggl> i cant write code before lunch time
+# 12:45 <snuggl> or do anything, really
+# 12:45 <mussumgrafix> b0rsuk there have been studies showing why people code late at night
+# 12:45 <mussumgrafix> b0rsuk: its DEF love/hate for me. I get so frustrated by "magic" code
+# 12:45 <mussumgrafix> b0rsuk: and "smart" ways to do things that are unintelligible to the next person. I think programmers who do shit like that need to be shot.
+# 13:00 <darkstar|> im just finding it difficult to start....
+# 13:00 <mussumgrafix> Guys anyone wanna lend me a hand with FileFiled and understanding Python Magic / Inheritance ?
+# 13:00 <b0rsuk> mussumgrafix: I live next to a 3 way street, I really wish I could do my stuff at night and be fresh at 08:00.
+# 13:15 <b0rsuk> snuggl: I think it has more to do with my warm-up period. http://blog.ninlabs.com/2013/01/programmer-interrupted/
+# 13:15 <tga> is there a way to do translation inside a tag call?
+# 13:15 <tga> I want to do something like {% include "foo.html" with bar=_("baz") %} without involving the view
+# 13:15 <sect2k> hi everyone, a quick question: is it possible to trick the ORM to lookup as charfield as it were a floatfield for example (to have the '' omitted from the lookup value)
+# 13:15 <tga> sect2k: I don't think so, that wouldn't make much sense
+# 13:15 <tga> sect2k: the sql would be invalid
+# 13:30 <bmispelon> tga: have you tried this syntax?
+# 13:30 <bmispelon> it should work according to https://docs.djangoproject.com/en/1.5/topics/i18n/translation/#other-tags
+# 13:30 <sect2k> tga: no not really, mysql is quite forgiving
+# 13:30 <sect2k> tga: i only need this behavior when doing lookups
+# 13:30 <tga> bmispelon: doh, got me on that one
+# 13:30 <tga> bmispelon: weird, I would have bet the template language would balk at that
+# 13:30 <DjangoNewBee> how should i use the user model?
+# 13:30 <snuggl> DjangoNewBee: depends on what result you want
+# 13:30 <drager> Is there some easy way to let users change their usernames?
+# 13:30 <snuggl> sure, just add a form for it and go
+# 13:30 <drager> Alright :)
+# 13:30 <drager> snuggl: But what about the validation?
+# 13:30 <sect2k> drager: implement a clean_username (or whatever your filed for new username is named) on the form and do the validation there
+# 13:45 <drager> sect2k: Yeah, but couldn't I just import the one from djangos UserCreationForm
+# 13:45 <drager> Maybe I could just copy that validation
+# 13:45 <sect2k> drager: yes, you could do that
+# 13:45 <Mindiell> Hi there, how can I use the content of a block twice in a template ?
+# 13:45 <Mindiell> I mean, I would like to use twice the same block name in fact
+# 13:45 <flowolf> anyone using some kind of facebook integration?
+# 13:45 <sect2k> flowolf: what kind you need
+# 13:45 <sect2k> Mindiell: nope, only one occurance of block in template, what exactly do you want to achieve?
+# 13:45 <flowolf> mmm, register/login, account connection/disconnection with django user profiles, timeline sharing
+# 13:45 <flowolf> I'm taking a look on django-facebook but there is a serious lack of documentation, I guess it would be easier to just translate the php examples -.-
+# 13:45 <sect2k> flowolf: i'm not familliar with django-facebook, I've developed some of my own, but as with django-facebook it's lacking docs
+# 13:45 <flowolf> is it an open project?
+# 13:45 <flowolf> can I see it?
+# 13:45 <Douglish> flowolf: What about using this: http://django-social-auth.readthedocs.org/en/latest/
+# 13:45 <flowolf> Douglish, I guess that is just for authentication
+# 13:45 <sect2k> flowolf: have a look here https://www.djangopackages.com/grids/g/facebook-authentication/
+# 13:45 <Douglish> flowolf: Yes, you're right, sorry.
+# 13:45 <mussumgrafix> Guys anyone wanna lend me a hand with FileFiled and understanding Python Magic / Inheritance ?
+# 14:00 <Mindiell> sect2k, I would like to use the content twice, for example page title and section title
+# 14:00 <sect2k> flowolf: also have a look at fb.py https://github.com/andreypopp/fb.py i bult my solution on top of it
+# 14:00 <flowolf> thank you
+# 14:00 <sect2k> Mindiell: try {% include %} tag, or maybe template inheritance could work
+# 14:00 <Douglish> If I want a class like a Couple in django. Where I add two random persons from model. So I have something like couple = Couple(person1, person2). Where is suitable to put such class? Into view?
+# 14:00 <FunkyBob> Douglish: it's all just Python
+# 14:00 <Douglish> FunkyBob: I know, but djnago-related. And I don't know if there is any guideline for this.
+# 14:00 <mussumgrafix> Douglish: why don't u make a Person model
+# 14:00 <mussumgrafix> Douglish: then in the Person model, have a ForeignKey to the same model.
+# 14:00 <FunkyBob> if it's not a model... put it somewhere it makes sense
+# 14:00 <mussumgrafix> call that "partner" or something
+# 14:00 <FunkyBob> if it is a model, put it in a models.py
+# 14:00 <Douglish> mussumgrafix: I don't need to store it. It's just for templates.
+# 14:00 <mussumgrafix> Douglish: oh, so yeah like FunkyBob said, it's just Python
+# 14:00 <FunkyBob> in general, Django's very ambivalent as to where you put things
+# 14:00 <FunkyBob> only things it needs to find by itself it cares about
+# 14:00 <mussumgrafix> Douglish: make a list with 2 Person items?
+# 14:00 <snuggl> Douglish: use a dict, list or tuple
+# 14:00 <FunkyBob> yah... is there anything the class does other than hold two people?
+# 14:00 <Douglish> mussumgrafix: I was thinking about that, but I have a list of Persons and Couples and I don't know how to identify a touple in templates, so I was thinking about a Couple class and a method is_couple returning true or something like that.
+# 14:00 <mussumgrafix> Douglish: without assuming where these lists are coming from - u can pass an object, including lists, to a template u know?
+# 14:00 <FunkyBob> what do you mean "identify" a tuple?
+# 14:00 <mussumgrafix> Douglish: u can't however pass a "method"
+# 14:00 <FunkyBob> sure you can
+# 14:00 <FunkyBob> you just can't pass it arguments
+# 14:00 <mussumgrafix> FunkyBob even without it being associated with an object?
+# 14:00 <FunkyBob> it's already associated
+# 14:00 <mussumgrafix> FunkyBob to what? like a class method? If I define "def foo: return 'bar'" in the middle of views.py can I then call it in a template?
+# 14:15 <mussumgrafix> Douglish: Maybe u create a Person class, upon its object creation it reads the couple list and sets the partner to that person?
+# 14:15 <FunkyBob> if you have a class instance, you can pass a reference to its methods and call them.. they're 'bound' to the instance
+# 14:15 <FunkyBob> mussumgrafix: well, no.. you'd have to put it in the Context of course
+# 14:15 <mussumgrafix> Douglish: http://dpaste.org/rZYUj/
+# 14:15 <mussumgrafix> Douglish: could be done a lot better of course
+# 14:15 <sect2k> Douglish: maybe a custom template tag you pass in person1 and person2 and it returns True/False if they are in a couple
+# 14:15 <FunkyBob> mussumgrafix: I mean, if you just want to pass a pair of models... put them in a list or tuple, and put that in the context
+# 14:15 <FunkyBob> no idea why people are suggesting custom tags or methods, or anything
+# 14:15 <Raumkraut> From what I understand, Douglish was saying that he'd have a list like: [<Person>, <Person>, (<Person>, <Person>), <Person>], with singles and couples/pairs displayed differently in the template
+# 14:15 <FunkyBob> erk
+# 14:15 <FunkyBob> in that case, I'd pass them all in lists... and use the length to control behavior
+# 14:15 <Douglish> Raumkraut: That's exactly what I ment.
+# 14:15 <Raumkraut> hmm, you can test length in templates?
+# 14:15 <Douglish> So far I have something like this http://pastebin.com/adjxwdcj
+# 14:15 <FunkyBob> {% if myvar|length == 1 %} ...
+# 14:15 <Douglish> And if a object is not a tuple it returns 1 no matter what type of object it is?
+# 14:15 <Raumkraut> well, that would depend on the object's implementation
+# 14:15 <Raumkraut> as long as a <Person> doesn't have a length, you should be fine though
+# 14:15 <FunkyBob> Douglish: not sure... my point was to pass everyone as tuples.... couples and singles
+# 14:15 <LordVan> hi
+# 14:15 <LordVan> Just been wondering: is there any good bookmark manager app for django already?
+# 14:15 <LordVan> (I know I can write it myself but I am at least interested if/how someone else did it laready ;)
+# 14:15 <FunkyBob> LordVan: no... but I could use one
+# 14:15 <Douglish> FunkyBob: I see. I didn't notice that. That might work for me, thanks.
+# 14:15 <LordVan> FunkyBob, yeah I use xmarks plugin for firefox at the moment
+# 14:15 <LordVan> but
+# 14:15 <LordVan> big downside is the syncing takes a while and I don't really like the xmarks page
+# 14:15 <LordVan> also I'd prefer it on my own server of course hehe
+# 14:15 <FunkyBob> yah
+# 14:15 <FunkyBob> having never really used a web based one... what features would you want?
+# 14:15 <LordVan> FunkyBob, I suppose it'd be a nice little project to learn django with since it shouldn'T be too hard (except a plugin for firefox maybe since I have no clue whatsoever about that ;))
+# 14:30 <LordVan> FunkyBob, well keywords, good search, maybe short descriptions, favicons would be nice too + maybe some metadata [[maybe make it mult-user and sharing between users based on "folders"/keywords
+# 14:30 <LordVan> but that's going further than what I need now hehe
+# 14:30 <FunkyBob> :)
+# 14:30 <LordVan> FunkyBob, xmarks isn'T bad, but well
+# 14:30 <FunkyBob> well, I think I have enough to write one, then...
+# 14:30 <vsrao> Hi, what is the method to do something like this in templates? "listvariable.{{ forloop.counter }}.index"
+# 14:30 <FunkyBob> vsrao: there isn't one
+# 14:30 <FunkyBob> vsrao: why can't you just iterate over that list?
+# 14:30 <vsrao> FunkyBob: Well, the listvariable sort of indexes variables that correspond to a different list's items. I guess I'll have to code a better way to pass those variables.
+# 14:30 <FunkyBob> yeah... time to invest in better data structures and more work in the view
+# 14:30 <vsrao> FunkyBob: Yep. Thanks for the help.
+# 14:30 <mussumgrafix> wow, was reading "A Guide to Magic Methods" about Python
+# 14:30 <mussumgrafix> the amount of magic is absurd
+# 14:30 <mussumgrafix> the idea of a Descriptor class is so strange to me
+# 14:45 <LordVan> FunkyBob, ^^ does that mean you intend to write one? hehe
+# 14:45 <FunkyBob> LordVan: I do now
+# 14:45 <FunkyBob> anyway... sleep time
+# 14:45 <LordVan> FunkyBob, ;) ok nite
+# 15:00 <DjangoNewBee> how to use a checkbox in a form .. is there any widget for using a checkbox instead of fileds?
+# 15:00 <snuggl> forms doesnt care about html, the widgets does
+# 15:00 <snuggl> and fields have default widgets
+# 15:00 <snuggl> so the trick is to change widget to the checkboxes
+# 15:00 <snuggl> basically do http://stackoverflow.com/questions/1268209/django-modelform-checkbox-widget
+# 15:15 <tuxcanfly> `/quit
+# 15:15 <WARATH> hi all... hope i'm in the right spot... is this a good place to ask a coding question about how to do something in Django (i'm trying to learn it)?
+# 15:15 <marcosmoyano> yes
+# 15:15 <WARATH> cool! here goes
+# 15:15 <WARATH> i'm using an exisiting database so did manage.py inspectdb to get the model
+# 15:30 <WARATH> the issue i'm having is accessing data from a related table; i have the ForeignKey set and working, but django does a seperate query when I access the key rather than a join when I pull records from the table
+# 15:30 <WARATH> how do I get it to grab both tables data in a single join query?
+# 15:30 <WARATH> ?
+# 15:30 <EdwardIII> i'm looping through fields in an inline fieldset, struggling to pull the image url out
+# 15:30 <WARATH> ok... well docs are good, but hard to find answers ... think I solved my issue by doing a objects.select_related().filter..., rather than just using .filter(...) then referencing the FK attribute
+# 15:30 <bullicon> EdwardIII: you need to access the image object to get the image url
+# 15:30 <bullicon> if I can remember correctly
+# 15:30 <bullicon> so image_field.image.url or similar
+# 15:45 <EdwardIII> think i'm getting mixed up because it's an image field, on an instance, on a field, on a form, on a formset
+# 15:45 <EdwardIII> hrm, field.instance.image returns a relative image url, but field.instance.image.url returns "The 'image' attribute has no file associated with it."
+# 15:45 <EdwardIII> i guess that's because of extra=3 being set, those don't yet have an instance
+# 15:45 <InvidFlower> I don't suppose anyone here is good with rest_framework's serializers and perhaps also metaclasses?
+# 15:45 <EdwardIII> ah, field.initial.image.url yields better results
+# 15:45 <snuggl> InvidFlower: why not use tastypie like everyone else? =)
+# 15:45 <InvidFlower_> Got disconnected
+# 15:45 <InvidFlower_> I didn't decide on the framework... though I'd never heard of tastypie. I'm a newbie..
+# 15:45 <snuggl> InvidFlower: most use tastypie for APIs so thats the easiest to find help with
+# 15:45 <EdwardIII> InvidFlower_: your best bet is probably to ask the question
+# 15:45 <snuggl> i guess django-rest-framework works fine to, but i never used it
+# 15:45 <InvidFlower_> EdwardIII: Good point.. ok let's see
+# 16:00 <InvidFlower_> So basically I have a menu type structure. The model has a foreignkey with self for parent.. and related_name of items
+# 16:00 <code18> morning
+# 16:00 <InvidFlower_> For the serializers, pretty much you just inherit from ModelSerializer and specify a Meta class for what fields you want to serialize.
+# 16:00 <code18> i have a string that contains escaped html, is there a way to unescape the html in said string a django template? "Patterened Shirt from &lt;a href=&quot;http://www.anntaylor.com/&quot;&gt;Ann Taylor&lt;/a&gt;,"
+# 16:00 <Siecje> I am trying to only show quiz information if you created the quiz but where do I put the logic for a class based view http://bpaste.net/show/P1t7IMmWdqBkxTiVhkX6/
+# 16:00 <InvidFlower_> Then if you have a related field.. in the serlializer you can go: items = serializers.RelatedField(many=True)
+# 16:00 <snuggl> code18: strvar|safe
+# 16:00 <snuggl> code18: read up on marking stuff safe in the manual
+# 16:00 <code18> tried that snuggl - no love
+# 16:00 <snuggl> code18: so {{ htmlthings|safe }} will skip the escape
+# 16:00 <code18> thats how it comes back from the data set
+# 16:00 <snuggl> code18: then your text includes the actual &gt; sequence etc.
+# 16:00 <code18> correct
+# 16:00 <snuggl> so its not HTML at all
+# 16:00 <InvidFlower_> But the problem is that serializers.RelatedField is basic. They recommend if you want full features to actually put a custom serializer there. But if I put items = MenuItemSerializer(many=True), it errors because MenuItemSerializer doesn't exist yet because it is the class I'm currently defining
+# 16:00 <code18> ever run into anything like that before?
+# 16:00 <snuggl> code18: from HTMLParser import unescape; unescape("&gt;")
+# 16:00 <snuggl> or any of the other unescapes that do the same thing, guess each xml/html lib have one each
+# 16:00 <code18> so import that in my view against the returned context
+# 16:00 <code18> *and run it against the returned context
+# 16:00 <snuggl> or when you save it if you only want to do it once per model
+# 16:00 <snuggl> once per row*
+# 16:00 <code18> thanks, i'll give it a shot
+# 16:00 <redondo> is this a good way to delete items from a queryset: http://dpaste.org/OSjML/ ?? Is there a better one?
+# 16:15 <kezabelle> yes, just pass the values list (flat=True? maybe)
+# 16:15 <kezabelle> to the exclude directly
+# 16:15 <kezabelle> (sorry, hit enter too soon :p)
+# 16:15 <EdwardIII> grr
+# 16:15 <EdwardIII> i just want to customise the <input type="file"> field on a particular form, can't get the name and ID into the template heh
+# 16:15 <redondo> kezabelle, sorry, not sure if I get it. to pass the values list?
+# 16:15 <joshuajonah> redondo: qs.exclude(id__in=[i in qs.values_list('id') if verify_condition(i)])
+# 16:15 <joshuajonah> lol
+# 16:15 <joshuajonah> sry: qs.exclude(id__in=[i for i in qs.values_list('id') if verify_condition(i)])
+# 16:15 <joshuajonah> EdwardIII: Add a class with wdget attributes, then use that css class.
+# 16:15 <redondo> joshuajonah, great, thanks.
+# 16:15 <joshuajonah> no worries. List comprehensions are fucking awesome
+# 16:15 <ehmatthes> I have an object, "school", that I want to clone. After copying the school to new_school and setting pk and id to None, I lose the reference to the original school. How do I keep that reference? http://dpaste.org/wpoFo/
+# 16:15 <joshuajonah> ehmatthes: By giving the previous one a varuiable name, then casting the new one to a new variable name.
+# 16:15 <joshuajonah> http://dpaste.com/1052425/
+# 16:15 <tbaxter> Siecje: don't use templateView. It's not what you want at all. Most likely you want a quiz detail view. If so, you probably want to use get_object() to determine if the current user has a quiz or not. Alternately, you may want a list view of quiz questions. Either way, I suggest you spend a lot of time with http://ccbv.co.uk. It's your best friend for CBVs
+# 16:15 <joshuajonah> its down right now lol.
+# 16:30 <timini> HI I'm trying to migrate all data from one mysqldb to another but encountering problems. I have been using a manage.py dumpdata to get the data but then there are various errors when I try to load it into the new database. Is there a better way?
+# 16:30 <dan_johnsin> timini, both mysql?
+# 16:30 <timini> yep
+# 16:30 <dan_johnsin> why not use mysql's dump feature
+# 16:30 <timini> ah yes maybe that's the way to go
+# 16:30 <dan_johnsin> That's probably the best way to go
+# 16:30 <dan_johnsin> haha :)
+# 16:30 <timini> Is there a django management command for that?
+# 16:30 <timini> :)
+# 16:30 <miwa> Does anyone know if there's a way to make Grappelli work with django.contrib.auth?
+# 16:30 <kaneda^> hey all
+# 16:30 <kaneda^> i have a really whacky set up thanks to the previous admin that goes nginx -> apache -> django
+# 16:30 <kaneda^> i've tried both "ip = request.META.get('REMOTE_ADDR', None)" and some other things, and i still cant seem to get the IP of the user
+# 16:30 <kaneda^> i have a feeling that this is because i do some internal forwarding, how do i fix this?
+# 16:30 <bullicon> timini: use mysqldump
+# 16:30 <kaneda^> http://pastie.org/7386480 <-- i'm using this right now as well
+# 16:30 <kaneda^> any ideas guys?
+# 16:30 <kaneda^> the IP is always empty, but the attribute exists (an exception isn't thrown trying to get it)
+# 16:30 <mlavin> kaneda^: there is nothing particular wacky about that setup. you just need to ensure that Nginx sets the proxy headers http://wiki.nginx.org/HttpProxyModule
+# 16:30 <kaneda^> mlavin, ty :)
+# 16:30 <kaneda^> let me look into that quickly
+# 16:45 <kaneda^> ooooh yah!
+# 16:45 <kaneda^> i'm sure this is it, thanks again
+# 16:45 <EdwardIII> joshuajonah: the file download field outputs a link to download the image too, i just want the input without 'here's the link to download it' bit
+# 16:45 <kaneda^> mlavin, nvm, i have this set already: http://pastie.org/7386637
+# 16:45 <kaneda^> mlavin, what do you think?
+# 16:45 <jachetto> kaneda^ http://wiki.nginx.org/HttpRealipModule
+# 16:45 <kaneda^> jachetto, no comprende, this looks like i would use it to change the IP instead of forwarding it on
+# 16:45 <kaneda^> which my settings imply should happen
+# 16:45 <Siecje> I am trying to use the email as the username and not have a username http://bpaste.net/show/knPO43XRBWdKfbx0xqHO/ When I syncdb and create the super user and log in to admin that user can't edit anything
+# 16:45 <jachetto> kaneda^ with the realip module enabled, just include http://www.snipzone.com/12ab3289e in your nginx settings for the right site
+# 16:45 <kaneda^> ty, i'll check it out
+# 16:45 <kaneda^> jachetto, this is exactly what i have now -_-
+# 16:45 <kaneda^> did you see my earlier pastei?
+# 16:45 <Washu> could it be true that running mysql/postgresql only creates overhead from them being servers and full of features as opposed to sqlite3 when it comes to anything smaller than a hugely popular site that probably won't use any of those DB-specific features?
+# 16:45 <jachetto> ok Kaneda^ then if your are using apache you need rpaf module
+# 16:45 <jachetto> http://supportex.net/2012/03/apache-remote-ip-behind-nginx/
+# 16:45 <kaneda^> k, ty
+# 16:45 <kaneda^> ok, rpaf enabled, going to add it to my sites file now, one sec
+# 17:00 <dan_johnsin> Is there a functional reason for changing the {% url %} tag in 1.5?
+# 17:00 <kaneda^> jachetto, the header directive is bad, it looks like i'm suposed to remove it
+# 17:00 <kaneda^> jachetto, and after restarting apache, still nothing -_-
+# 17:00 <cdunklau> dan_johnsin: you mean with the view quoted?
+# 17:00 <kaneda^> it's suggested that it's an old rpaf mod
+# 17:00 <dan_johnsin> cdunklau, yeah
+# 17:00 <cdunklau> dan_johnsin: it's explained here: https://docs.djangoproject.com/en/dev/releases/1.5/#overview
+# 17:00 <ticketbot> https://docs.djangoproject.com/en/stable/releases/1.5/#overview
+# 17:00 <cdunklau> shut up ticketbot
+# 17:00 <cdunklau> dan_johnsin: basicially, it's for consistancy and it allows you to use a template context variable for the view name
+# 17:00 <fvdjango> Hi guys, is there a way to make something occur in a Django template every x-iterations of a for loop? In building out a table, I want a left-border in the second column.
+# 17:00 <cdunklau> fvdjango: {% cycle %}
+# 17:00 <fvdjango> cdunklau: Thanks!
+# 17:00 <kaneda^> :| no backports for it
+# 17:00 <ehmatthes> joshuajonah: I've been playing with what you posted. I keep access to the old object, but I can't do anything with the new object. The new object saves as None, rather than a new object with a new pk and id: http://dpaste.org/BXkYx/ What am I doing wrong?
+# 17:00 <Washu> is 'url' required for urlpatterns? the commented out defaults have url(... but my tutorial(based on django1.1) doesn't have url at the start, it works just wondering if it's new convention
+# 17:00 <kaneda^> not required, it seems
+# 17:00 <ehmatthes> joshuajonah: Since school is not a subclass, I tried just setting the pk to None and leaving id alone, but I still find that the new object is None, not a copy of the old model.
+# 17:00 <lanken> I'm having trouble with a query
+# 17:15 <lanken> I have a Driver model and a Car model, with "Driver.car = models.ForeignKey(Car)"
+# 17:15 <kaneda^> jachetto, i'm really not sure :|
+# 17:15 <kaneda^> i'm using 0.5, shoudl be new enough for this
+# 17:15 <kaneda^> i checked the conf and mod load
+# 17:15 <lanken> Car has "manufacturer = models.CharField()"
+# 17:15 <lanken> I need a QuerySet that includes all Drivers who own a Car with manufacturer="Ford"
+# 17:15 <lanken> oh shoot
+# 17:15 <ineedarobot> are mixins evil? I am subclassing both forms.widgets.Select and forms.widgets.SelectMultiple. I am finding I have a lot of duplicate code between my two subclasses.
+# 17:15 <lanken> my ForeignKey definition there is backwards...Car has a field driver=models.ForeignKey(Driver)
+# 17:15 <kaneda^> Driver.objects.filter(car=Car.objects.get(manufacturer="foo")) ?
+# 17:15 <kaneda^> oh, i assumed driver has a car...
+# 17:15 <kaneda^> mmm, cod
+# 17:15 <kaneda^> jachetto, any ideas?
+# 17:15 <lanken> kaneda^: I meant to say that each driver has multiple cars
+# 17:15 <lanken> kaneda^: and I want to choose the set of drivers for whom at least one car is a ford
+# 17:15 <DjangoNewBee> hi guys
+# 17:15 <dan_johnsin> cdunklau: thanks. I guess that makes some since
+# 17:15 <DjangoNewBee> how to use a checkbox in a form .. is there any widget for using a checkbox instead of fileds? in a "normalform"
+# 17:15 <mlavin> DjangoNewBee: yes there is are single and multiple checkbox widgets you can use in your forms https://docs.djangoproject.com/en/1.5/ref/forms/widgets/
+# 17:15 <ineedarobot> DjangoNewBee: forms have fields and fields have default widgets. You can override the default widget by using a Meta class within your form or by specifying it as a param when you define the field see http://dpaste.org/AR7CD/ for examples of both
+# 17:15 <Rohaq> hello all!
+# 17:15 <Rohaq> I'm starting out with Django 1.5.1, and I'm trying to use django.contrib.auth to allow users to log in
+# 17:15 <Rohaq> that's not the problem, that works without a problem
+# 17:15 <jachetto> kaneda^ check your apache logs. If the ip logged are not 127.0.0.1 then your server configuration is right
+# 17:15 <kaneda^> jachetto, ah, right, let's see
+# 17:15 <Rohaq> I redirect users trying to access certain views to the login page, and want to redirect them afterwards
+# 17:15 <Rohaq> I keep trying to find more info, but as far as I can see, django should do this automatically
+# 17:15 <kaneda^> jachetto, ok it's not right -_-
+# 17:30 <Rohaq> I've even got the ?next=/foo/bar parameter in the URL
+# 17:30 <Rohaq> but alas, it's not working :S
+# 17:30 <jachetto> well something is went wrong then. Dpaste your nginx site configuration and your apache site configuration
+# 17:30 <kaneda^> jachetto, one sec, i'm going to fool around with the config for a sec
+# 17:30 <kaneda^> jachetto, ok, i fixed the apache conf, i see the right IP now
+# 17:30 <kaneda^> jachetto, we have several interfaces, i added all of their public facing IPs to the list
+# 17:30 <kaneda^> jachetto, but i still dont see it in django ;_;
+# 17:30 <jachetto> client_address = request.META['HTTP_X_FORWARDED_FOR']
+# 17:30 <kaneda^> jachetto, let me show you waht i'm doing now, i tried a bunch of things that i saw on stack overflow
+# 17:30 <kaneda^> http://pastie.org/7386480
+# 17:30 <kaneda^> that one seemed the most general ^
+# 17:30 <jachetto> ok, so if the ip is logged right from apache, you must be able to get the right ip from django. The code you dpaste should be works fine
+# 17:30 <kaneda^> jachetto, and yet it tells me the IP is empty when i go to print it
+# 17:30 <kaneda^> i tried taking it from the request AND putting it directly int he template
+# 17:30 <kaneda^> no error, but blank IP
+# 17:30 <jachetto> dpaste your django code
+# 17:30 <kaneda^> k
+# 17:30 <Rohaq> http://dpaste.org/5S0ST/ - if that helps
+# 17:30 <DjangoNewBee> +
+# 17:30 <kaneda^> jachetto, http://pastie.org/private/8emqonygguvget7ogqla
+# 17:30 <Rohaq> ah wait, sorry
+# 17:30 <ehmatthes> joshuajonah: this is what i found that works: http://dpaste.com/1052481/
+# 17:30 <Washu> is the SECRET_KEY randomly generated when you run startproject?
+# 17:30 <kaneda^> jachetto, just noticed a huge error -_-
+# 17:30 <kaneda^> jachetto, but it doesnt solve my problem
+# 17:30 <jachetto> just a sec
+# 17:30 <kaneda^> jachetto, assume that the urllib2 open line actually formats everything correctly
+# 17:30 <kaneda^> and taht the IP is empty
+# 17:30 <Rohaq> http://dpaste.org/04pRJ/ there
+# 17:30 <jachetto> 1st of all you have not right indent
+# 17:30 <kaneda^> jachetto, what line?
+# 17:30 <jachetto> just a sec
+# 17:30 <kaneda^> or was that directed to Rohaq?
+# 17:30 <jachetto> kaneda^ this works http://www.snipzone.com/479ed897d
+# 17:30 <kaneda^> let me double check
+# 17:30 <Rohaq> if anyone has any idea why it's not redirecting, I'd love to know!
+# 17:30 <Rohaq> I have the feeling it's something simple and dumb.
+# 17:45 <jachetto> and anyway to check where your error is you can just http://www.snipzone.com/e6284643d
+# 17:45 <kaneda^> jachetto, oh, i awsnt capturing the error beore
+# 17:45 <kaneda^> jachetto, when i capture it i see my city is 'unknown'
+# 17:45 <kaneda^> and the lat/lon are empty
+# 17:45 <kaneda^> nothing to do with the IP now, ty
+# 17:45 <kaneda^> jachetto, thanks again, i'll take it from here
+# 17:45 <kaneda^> jachetto, which is strange, i have no problem looking it up manually -_-
+# 17:45 <darkstar|> i've added the was_published_recently.boolean = True, but still hasn't taken effect for some reason
+# 17:45 <Siecje> I am trying to make sure that the answer choice is available in the choices http://bpaste.net/show/IqcqlW4ss5GTDClbzd5u/
+# 17:45 <Siecje> I am getting the error " needs to have a value for field "question" before this many-to-many relationship can be used"
+# 17:45 <joshuajonah> Siecje: super call the save() first.
+# 17:45 <lduros> i have a Product base model, and a few other model classes inheriting from it. When saving (def save) one of the submodels in the admin, but I need to figure out which kind of submodel it is. Any way I can do that from the Product save method? :)
+# 17:45 <joshuajonah> Siecje: http://bpaste.net/show/tSjFblgkCvCOIAipZe2O/
+# 17:45 <jamov> any tips where to look at when my django install runs fine from shell with ./index.fcgi, but browser access gives ISE 500. apache logs shows only "(104)Connection reset by peer: mod_fcgid: error reading data from FastCGI server" and "Premature end of script headers: index.fcgi"
+# 17:45 <jachetto> lduros, something like: the_type = ContentType.objects.get_for_model(the_obj) ?
+# 17:45 <csotelo> hi people..
+# 17:45 <lduros> jachetto: yeh I suppose :)
+# 17:45 <csotelo> I am starting with django
+# 17:45 <jachetto> try and lemme know if works
+# 17:45 <jamov> this is just a vanilla django install, where i haven't managed to get it run a single time.
+# 17:45 <lduros> jachetto: would self.__class__.__name__ work?
+# 17:45 <csotelo> and I have some issue s when I deplloy the django app
+# 17:45 <Siecje> if self.answer not in self.choices.all(): self.choices.add(self.answer) This is not ensuring that the answer is in choices
+# 17:45 <csotelo> the main issue is on static and template dirs on setting
+# 17:45 <csotelo> and I am using git as repo
+# 17:45 <csotelo> how coudl I avoit pths issues on template and statics confing on setting.py file
+# 17:45 <darkstar|> how can i access the django source code, if installed django under a virtualenv
+# 17:45 <Siecje> darkstar|: python -c "import sys sys.path = sys.path[1:] import django print (django.__path__)"
+# 17:45 <outspan> Do custom management commands automatically begin and end a transaction?
+# 17:45 <darkstar|> Siecje: SyntaxError: invalid syntax at sys.path
+# 18:00 <darkstar|> kk import django, and then typing django worked Siecje
+# 18:00 <darkstar|> thanks
+# 18:00 <rdeguy> hey
+# 18:00 <rdeguy> I have a model with a models.CharField() field named path, values given to it are like "/home/foo/file/filename"
+# 18:00 <lduros> is the save method of a parent model called at all in a submodel inheriting from it? Provided it doesn't have a custom save of its own?
+# 18:00 <rdeguy> how can I filter doing something like mymodel.objects.filter(os.path.basename(filename) == somefilename) ?
+# 18:00 <Siecje> lduros: super(Model, self).save(*args, **kwargs) ??
+# 18:00 <lduros> Siecje: but if you are definind def save(self, ...) from the parent model
+# 18:00 <lduros> is it then called when submodels are saved?
+# 18:00 <Siecje> rdeguy: replace os.path.basename(filename) with path
+# 18:00 <lduros> e.g. You define a "save" method in Vehicle, and then you create a subclass Car inheriting from Vehicle, would Car call Vehicle.save() by default?
+# 18:00 <kaneda^> hmm, anyone know of any free service that's better than hostip.info?
+# 18:00 <kaneda^> it doesnt seem to know my coordinates, even though other services do
+# 18:00 <Siecje> lduros: it would until you create your own save method then you need to do it
+# 18:00 <lduros> right ok :)
+# 18:00 <lduros> so I'm going to try it :)
+# 18:00 <rdeguy> Siercje : yes i meant os.path.basename(path)
+# 18:00 <lduros> Siecje: yeh it works! Awesome :)
+# 18:00 <csotelo> ?
+# 18:00 <Siecje> rdeguy: you want to access an object that has a given path right?
+# 18:00 <Siecje> mymodel.objects.filter(path == GIVEN_PATH)
+# 18:00 <kaneda^> path=path, not ==
+# 18:00 <rdeguy> Siecje i want to filter objects to get those with their path ending with filename
+# 18:00 <Siecje> I think you can use string methods
+# 18:00 <Siecje> like find the last slash and get everything after that
+# 18:00 <Siecje> rdeguy: do you know how to do that/
+# 18:00 <rdeguy> mymodel.objects.filter(os.path.basename(path)=filename)
+# 18:00 <Siecje> it is a CharField though
+# 18:00 <rdeguy> i know right
+# 18:00 <Siecje> not an os.path object
+# 18:00 <rdeguy> but path__endswith=filename wouldn't be precise enough to me
+# 18:15 <Siecje> file_name = path[path.rfind('/')+1:]
+# 18:15 <sprezzatura> did the webfaction guys remove their irc channel?
+# 18:15 <sprezzatura> it was #webfaction, AFAIK
+# 18:15 <Siecje> The save method is not adding the answer choice into the choices field http://bpaste.net/show/Z6IXNXckIW9mTJqpgdJN/
+# 18:15 <rdeguy> >>> os.path.basename('/home/rxdazn/test/hello.txt')
+# 18:15 <rdeguy> 'hello.txt'
+# 18:15 <thnee> In a custom auth backend, I would like to store/cache some user data in session. But neither authenticate or get_user get's a request parameter.. How can I store the user data in session?
+# 18:15 <rdeguy> i don't need to use a slice
+# 18:15 <kaneda^> jachetto, mlavin thanks for the help, it's all fixed
+# 18:15 <Siecje> thnee: request.session['VAR'] = VALUE
+# 18:15 <Siecje> request.session.modified = True
+# 18:15 <thnee> Siecje: that does not answer my question at all
+# 18:15 <thnee> request is not available in auth backends
+# 18:15 <Siecje> what are you trying to store?
+# 18:15 <thnee> Siecje: an email address
+# 18:15 <justhamade> swills: start here https://docs.djangoproject.com/en/dev/releases/1.4/
+# 18:15 <ticketbot> https://docs.djangoproject.com/en/stable/releases/1.4/
+# 18:15 <Siecje> thnee: and request.user does not have it?
+# 18:15 <thnee> Siecje: I don't think you understand what an auth backend is
+# 18:15 <EvilDMP> if ChildModel inherits from ParentModel (which is not abstract), what will happen to ParentModel when ChildModel is deleted?
+# 18:30 <Siecje> I can't figure out why this save is not working from the shell the code works http://bpaste.net/show/r5ypmi0VUrabYlspGudY/
+# 18:30 <henryk_> hi
+# 18:45 <fission6> does from django.test.client import Client get static files?
+# 18:45 <EdwardIII> fission6: what, via file://?
+# 18:45 <fission6> this is weird
+# 18:45 <fission6> c.get('/static/jquery.js')
+# 18:45 <fission6> doesn't work
+# 18:45 <EdwardIII> fission6: but it works from the web browser in the development server?
+# 18:45 <fission6> yep
+# 18:45 <fission6> why wold this be
+# 18:45 <EdwardIII> that is weird
+# 18:45 <fission6> very
+# 18:45 <EdwardIII> could you pastebin your test case?
+# 18:45 <fission6> http://testserver/static
+# 18:45 <fission6> whoops http://testserver/static/js/angular.js
+# 18:45 <fission6> yea
+# 18:45 <fission6> i get the typical django url requested not found
+# 18:45 <EdwardIII> can you pastebin the source code for your client request?
+# 18:45 <mlavin> fission6: the test suite runs with DEBUG off and static files aren't served with DEBUG off
+# 18:45 <EdwardIII> the test suite runs with debug off?
+# 18:45 <fission6> mlavin ok so then what?
+# 18:45 <fission6> why am i getting debug messages then for url can't be found
+# 18:45 <mlavin> fission6: what are you trying to test?
+# 19:00 <fission6> mavin, i am parsing my sitemap.xml and for each location, i am fetching it and searching the page for broken links
+# 19:00 <fission6> obviously i can do this all out side of django
+# 19:00 <fission6> but the test client is "faster"
+# 19:00 <mlavin> EdwardIII: yes the default test runner sets DEBUG=False https://github.com/django/django/blob/master/django/test/simple.py#L243
+# 19:00 <EdwardIII> mmm how about that
+# 19:00 <outspan> Do custom management commands automatically "BEGIN;" and "END;" a transaction?
+# 19:00 <outspan> or do I have to do it manually? Can't find it stated in the docs.
+# 19:00 <mlavin> fission6: the LiveServerTestCase would serve the static resources for you or you could change your url conf to force the static files to server with DEBUG=False
+# 19:00 <fission6> grrr
+# 19:00 <murr4y> hi! why is there a |title filter, when you can call the method with ".title" ?
+# 19:00 <tbaxter> murr4y: the title filter is for strings
+# 19:00 <murr4y> yes.. and strings have a title method too
+# 19:00 <tbaxter> in templates? Don't think so.
+# 19:15 <adamsilver> Is this the correct command to upgrade Django: pip install Django==1.4.4 or it will install two versions?
+# 19:15 <tbaxter> adamsilver: do you explicitly want 1.4.4?
+# 19:15 <adamsilver> tbaxter: yes
+# 19:15 <tbaxter> then that should be fine, I think.
+# 19:15 <murr4y> tbaxter: well, this does seem to work: {{ some_string.title }}, when some_string is a str literal ('test') - doesn't that mean that the title method is called?
+# 19:15 <tbaxter> murr4y: Then I stand corrected, and the best answer I have is that django's title filter is attempting to be a bit more sophisticated than python's built-in title(): https://github.com/django/django/blob/master/django/template/defaultfilters.py#L250
+# 19:15 <murr4y> tbaxter: ahh, i see! thanks
+# 19:30 <jacksmith> please suggest which web server is good with django; apache , ngnix or lighttpd
+# 19:30 <lduros> you can't create a slug like: subfolder/myslug
+# 19:30 <lduros> for some reason it seems "subfolder/" makes the whole thing fail
+# 19:30 <apollo13> jacksmith: use what you know
+# 19:30 <justhamade> jacksmith: nginx
+# 19:30 <Z_A_M> anyone have experience with mysqlworkbench
+# 19:30 <jacksmith> yes
+# 19:30 <jacksmith> <Z_A_M> what you want ?
+# 19:30 <Z_A_M> jacksmith: I'm trying to drop a table, and the app just hangs forever.
+# 19:30 <jacksmith> can you paste the query ?
+# 19:30 <Z_A_M> jacksmith: even for a simple SELECT * FROM trackr_db.`trackr_test.trackr_part`; it still hangs
+# 19:45 <jacksmith> have you tested you connect with mysql-server ?
+# 19:45 <Z_A_M> jacksmith: No, what would that do differently?
+# 19:45 <svvitch> it's normal to save every tag in new db record with foreignkey to a model ?... i'm trying to make a search through haystack
+# 19:45 <jacksmith> may be you are unable to connect to the mysql-server; and in somecases mysqlworkbench behaves like that if timeout for server is big
+# 19:45 <jacksmith> btw which version of mysqlworkbench you are using and on which OS ?
+# 19:45 <Z_A_M> it's weird because the database itself doesn't even show when I just try the command line client
+# 19:45 <Z_A_M> MSQLWB - 5.2.42 OS - Mac os X 10.5.8
+# 19:45 <jacksmith> then may be there is some issue with you mysql-server
+# 19:45 <jamov> guys, any ideas why ./manage.py runfcgi works just fine. but browser gives 500 ISE? i'm out of fresh ideas how to fix it
+# 19:45 <jacksmith> which is creating hurdles for mysqlwrokbech
+# 19:45 <Z_A_M> jacksmith: I stopped then started it again.
+# 19:45 <Hazel-> how can i schedule something to be done 3 hours after some event?
+# 19:45 <Z_A_M> jacksmith: then nothing
+# 19:45 <jacksmith> *mysqlworkbench
+# 19:45 <apollo13> jamov: that question is way to unspecific
+# 19:45 <apollo13> Hazel-: taskqueue
+# 19:45 <apollo13> they usually support some cron-style stuff
+# 19:45 <jamov> apollo13, i know :|
+# 19:45 <Hazel-> thanks apollo13
+# 19:45 <jacksmith> can you check that mysql-server is on port no 3306 listening
+# 19:45 <Hazel-> apollo13: so do i have something like celery?
+# 19:45 <apollo13> most likely yeah
+# 19:45 <Hazel-> alright
+# 19:45 <Hazel-> i was searching for a built-in mechanism
+# 19:45 <Z_A_M> jacksmith: Sure I'll try to look that up I don't know how to check that.
+# 19:45 <Hazel-> something already included in django
+# 19:45 <apollo13> Hazel-: that's completly outside the scope of django
+# 19:45 <Hazel-> ok
+# 19:45 <jacksmith> try netstat -l -- p
+# 19:45 <jacksmith> on your terminal
+# 20:00 <darkstar|> working on the polls app, i cant seem to customize the admin look and feel, i created in mysite/templates/admin and pasted base.html and this is '/Users/walid/mysite/templates', in my TEMPLATES_DIRS what could be the problem
+# 20:00 <darkstar|> base_site.html **
+# 20:00 <pupil> darkstar|: let me try to help
+# 20:00 <pupil> r U using Linux?
+# 20:00 <darkstar|> mac
+# 20:00 <darkstar|> unix...
+# 20:00 <pupil> i don't about mac, but in linux, it's /user not /User
+# 20:00 <pupil> * don't know
+# 20:00 <Z_A_M> jacksmith: This is all the output that contain mysql. http://dpaste.org/kFB6f/ I'm not sure what to make of it.
+# 20:00 <pupil> darkstar|: i hope the problem is that simple
+# 20:00 <nanonyme> meh, /User in OSX though it's possible filesystem is case-insensitive
+# 20:00 <darkstar|> pupil: i'd cd'ed into the directory, typed in pwd and pasted that output in for template_dirs, let me try lowercase
+# 20:00 <jamov> apollo13, care to look if you can spot anything fishy about these? http://pastebin.com/f0cyVPEV
+# 20:00 <jacksmith> its shows that your mysql-server is listening
+# 20:00 <jacksmith> can you tell me what exactly happens when you try connect via command line
+# 20:00 <Z_A_M> jacksmith: After executing "/usr/local/mysql/bin/mysql" it successfully connects.
+# 20:00 <jacksmith> and are you able to execute your queries on commandline
+# 20:00 <darkstar|> ok my bad i was trying to change the trans 'Django site admin' as opposed to the branding part, but no its not case sensitive jamov
+# 20:00 <darkstar|> anyway thanks on to part 3
+# 20:00 <nanonyme> darkstar|, I still stress that OSX ships with case-insensitive filesystem unless you haven't done anything special
+# 20:00 <jamov> or anyone else, does these look valid configurations to you? http://pastebin.com/f0cyVPEV
+# 20:00 <Z_A_M> jacksmith: showdatabases; gives me the info_schema and a test db as well. What the weird thing is my django db isn't showing up on the commandline. But my test shows up on my mysqlwb client.
+# 20:00 <Z_A_M> jacksmith: I can't query against anything because the db doesn't exist ^ refer to above :)
+# 20:00 <bigobony> hi is class based views work with xhtml2pdf lib
+# 20:00 <jacksmith> can you see other databases ?
+# 20:00 <jacksmith> that is when you execute show databases; do you get and DB list ?
+# 20:00 <Z_A_M> jacksmith: Yes. I get this http://dpaste.org/bMy5Z/
+# 20:00 <jacksmith> there should be one more DB
+# 20:00 <jacksmith> called mysql
+# 20:00 <jacksmith> its a meta data Db use by mysql for self management; did you removed it explicitly ?
+# 20:15 <Z_A_M> jacksmith: No, not that I know of at least.
+# 20:15 <jacksmith> can you run create database query, if not please try one and try creating a dummy db
+# 20:15 <jacksmith> *once
+# 20:15 <darkstar|> ok nanonyme ill bear that in mind thanks
+# 20:15 <pupil> darkstar|: problem solved?
+# 20:15 <darkstar|> yup
+# 20:15 <pupil> so, it's should be lowercase?
+# 20:15 <nanonyme> pupil, /User is specified to begin with caps but it's a case-insensitive filesystem so what you said works too
+# 20:15 <Z_A_M> jacksmith: Just for laughs I tried to drop the database via the WB and it says it can't drop it because the db doesn't exist.
+# 20:15 <jacksmith> can you try on command line
+# 20:15 <darkstar|> pupil: it didn't really matter, but nanonyme says osx is case-sensitive, it had been working, all along but i wasn't concentrating, i was chaning the block title as opposed to the block branding, stupid mistake
+# 20:15 <Z_A_M> jacksmith: create a new db then drop it?
+# 20:15 <jacksmith> first just create it
+# 20:15 <jacksmith> via command line
+# 20:15 <pupil> nanonyme: i don't know, i have litle experience in OSX :)
+# 20:15 <Z_A_M> jacksmith: then check if the WB sees it?
+# 20:15 <jacksmith> no just work on command line, for now
+# 20:15 <Z_A_M> jacksmith: okay just did that
+# 20:15 <Z_A_M> created a dummy db
+# 20:15 <jacksmith> should tell you the query if you are not familiar with it ?
+# 20:15 <Z_A_M> jacksmith: should just be "create database dummy" no?
+# 20:15 <jacksmith> yes
+# 20:15 <Z_A_M> yeah i did that
+# 20:15 <jacksmith> can you now check the list of databases; using "show databases "
+# 20:15 <drager> How should I compare datetimes? I want to compare if a field from the database is less than 30 days from now
+# 20:15 <Z_A_M> jacksmith: that's so weird... i got my mysql back http://dpaste.org/Lw0Jz/
+# 20:15 <jacksmith> have you created the database right now with name "testing" ?
+# 20:15 <Z_A_M> yeah i just did that like you said :)
+# 20:15 <jacksmith> cool
+# 20:15 <jacksmith> can you now check it in you WB
+# 20:15 <tbaxter> drager: something like this: http://dpaste.org/5QzOe/
+# 20:15 <Z_A_M> jacksmith: it sees it now. and my other django db is not there anymore.
+# 20:15 <Z_A_M> I have NO idea how that happened.
+# 20:15 <drager> tbaxter: Looks good, thanks
+# 20:15 <jacksmith> was is there ? before we started this conversation
+# 20:15 <Z_A_M> my django db was there before, and now it's not. which is what I kinda wanted to happen. I really just wanted to drop a table but the whole db is fine too :)
+# 20:15 <darkstar|> oh i asked this question earlier but didn't get a reply, pupil would you by any chance know why im not getting the check marks in the column of was recently published? i've added was_published_recently.boolean = True but doesnt appear to be working
+# 20:30 <pupil> darkstar|: is that in your model atribute?
+# 20:30 <tbaxter> darkstar|: well, what are you getting?
+# 20:30 <darkstar|> yes pupil
+# 20:30 <darkstar|> tbaxter: just true as opposed to the green checkmark
+# 20:30 <tbaxter> paste the relevant bit of the model
+# 20:30 <pupil> darkstar|: i don't think that's the right syntax to add atribute
+# 20:30 <tbaxter> should be
+# 20:30 <jamov> hey, what's the unix style new line? [CR][LF]?
+# 20:30 <darkstar|> tbaxter: http://pastebin.com/3JX6kMh2
+# 20:30 <aavikkojootti> jamov: \n ?
+# 20:30 <tbaxter> beginning to share apollo13's hatred of pastebin.com
+# 20:30 <jamov> what's wrong with pastebin?
+# 20:30 <Z_A_M> jacksmith: now I just gotta figure out why I can't syncdb anymore :/ the whole point of this was just to delete everything i had (since my django db was filled with dummy values anyway) and use south.
+# 20:30 <Z_A_M> jacksmith: And I *think* I should be good to go from here on out.
+# 20:30 <jacksmith> i didn't get your last statement ?
+# 20:30 <jacksmith> is problem solved ?
+# 20:30 <tbaxter> darkstar|: you had an indentation problem, and a couple other little things: http://dpaste.org/8CVXG/
+# 20:30 <bigobony> Hi help please I have created app when we post something it will be rendered in html and when we click on print the rendered html should convert it into pdf
+# 20:30 <tbaxter> apollo13: I have a higher tolerance than you do.
+# 20:30 <apollo13> hrhr
+# 20:30 <bigobony> all the text in html is not rendering in pdf
+# 20:30 <tbaxter> jamov: there's just other, nicer alternatives to pastebin that work as well or better, and aren't assaulting you with ads. Support the folks who are trying to do better.
+# 20:30 <pupil> tbaxter: everybody hate ads (except the ads publisher) :)
+# 20:30 <Z_A_M> jacksmith: I think so...
+# 20:30 <jacksmith> cool, have fun
+# 20:30 <Z_A_M> jacksmith: thanks again!!!
+# 20:30 <jamov> tbaxter, sure
+# 20:30 <jacksmith> i m pleased
+# 20:30 <jamov> i'm just used to not seeing ads on sites. well.. let's try the dpaste.
+# 20:30 <jamov> here we go: http://dpaste.com/1052648/
+# 20:30 <jamov> i just converted to all line ends to unix style, but still no help.
+# 20:30 <apollo13> why are you even using fcgi?
+# 20:30 <darkstar|> tbaxter: thanks
+# 20:30 <tbaxter> fcgi is some painful stuff
+# 20:45 <atula> so I am trying to make some model/db migration with south. I am trying to: remove 2 attributes to convert their data into another 2 attributes for a model (different object/foreignkey). Here's what I am thinking 1) add two new attributes 2( then do the data migration in a separate migration script 3) remove the old attributes.--- but here's the problem: it complains that the fields aren't there when I do data migration on another machine because the old attribu
+# 20:45 <atula> are removed in the model but the data migration still relies on them. What do I do here?
+# 20:45 <atula> I was thinking of dynamically setattr for the model when I do the datamigraiton
+# 20:45 <lduros> hi, i have a "product" model, and a submodel "jewels". Both of them have a get_price() method defined. In another app (cart), I have a cart_item.product.get_price() and I expected it to call the Jewels.get_price() automatically when the object is a jewel, but instead it calls the parent get_price(). Is this the expected behavior? Is there a way to call the submodel method?
+# 20:45 <jamov> apollo13, i'm just in the beginning of the learning curve of django, and for the fcgi my shell provider had a tutorial for
+# 20:45 <jamov> tbaxter, so it seems
+# 20:45 <apollo13> jamov: you wanna use mod_wsgi ;) django docs has examples too you know?
+# 20:45 <jamov> do i have other options on (sort of) shared hosting without root rights?
+# 20:45 <jamov> hmm alright, mod_wsgi.. let's have a look
+# 20:45 <abyss42> Is there any way to set a expiry time on the password reset email link sent by django?
+# 20:45 <david89> Hello. I'm just getting into web developement and django seems interesting. Could anyone provide me with some information on the current status of django/python3 porting?
+# 20:45 <lduros> looks like this answers my question:
+# 20:45 <lduros> http://stackoverflow.com/questions/11893713/how-to-access-method-of-sub-model-in-django
+# 20:45 <haukur> If I want to look up a an item in a model as quickly as possible does the field have to be the primary key?
+# 20:45 <apollo13> jamov: probably not :/
+# 20:45 <jamov> yeah, just discovered on the forums. everyone's sharing the same apache process etc.
+# 20:45 <nkuttler> david89: django has python3 support, labeled experimental. many 3rd party apps aren't compatible
+# 20:45 <mattmcc> haukur: No, it could be any field. You probably want to index that field, depending on the nature of your data.
+# 20:45 <jamov> what bothers me most right now, is that few days i had the django running on the server. then i did some experimenting with the virtualenv, which did not work at all. in the process i lost my original install, and haven't been able to make django work since.
+# 20:45 <jamov> i made the install on OSX, so now my best guess is that i have some windows stuff on the files
+# 20:45 <haukur> mattmcc: alright, thanks
+# 20:45 <haukur> mattmcc: is it as simple as specifying db_index=True in the model?
+# 20:45 <haukur> in the field args I mean
+# 21:00 <mattmcc> Yes, but that counts as a schema change, so if the table exists already, you'll need to either use a migration tool or add the index yourself.
+# 21:00 <lduros> anyone uses the django-model-utils to be more efficient with model inheritance? :)
+# 21:00 <lduros> just curious about your experience
+# 21:00 <foist> If I create a named group of choices, is there any way to get all of the members of a group by name?
+# 21:00 <Siecje> Is this possible models.ManyToManyField(models.CharField)
+# 21:00 <tigerbreath> ?
+# 21:00 <lduros> anyone used django-model-utils. I'm just wondering what they mean by id=some_id in the argument: place = Place.objects.get_subclass(id=some_id)
+# 21:00 <tigerbreath> Siecje: the argument is to another model
+# 21:00 <tigerbreath> what are you ttrying to accomplish?
+# 21:00 <Siecje> http://dpaste.org/nKvZg/
+# 21:00 <tbaxter> Siecje: no, because manytomany establishes a relationship to a model, not a field https://docs.djangoproject.com/en/dev/ref/models/fields/#manytomanyfield
+# 21:00 <ticketbot> https://docs.djangoproject.com/en/stable/ref/models/fields/#manytomanyfield
+# 21:00 <tbaxter> Beat to it by tiger breath. Damn
+# 21:00 <Siecje> tigerbreath: basically that, I want to have a list of all the guesses for that quiz
+# 21:00 <Siecje> but if a choice model instance is already in that M2M relationship another is not added
+# 21:00 <tbaxter> lduros: they mean you already have an id assigned to the variable 'some_id'
+# 21:00 <lduros> heh, like pk=myObj.pk?
+# 21:00 <lduros> that's what I did, seems to work
+# 21:00 <lduros> the primary seems to be the best to use in this case
+# 21:00 <Siecje> the 1.5 tutorial uses id
+# 21:00 <tbaxter> Siecje: and M2M field allows one instance to be related to many other. For example, if I have a Book model and an Author field, I might want Author to have an M2M to Book, allowing me to assign many books to that author.
+# 21:00 <Siecje> tbaxter: http://dpaste.org/P1YSo/ how come it still contains two elements?
+# 21:00 <tbaxter> how come what contains two elements?
+# 21:00 <nanonyme> darkstar|, actually the filesystem itself supports both case-sensitive and case-insensitive modes but historically Apple has put it to case-insensitive. If they have started putting it to case-sensitive, yay
+# 21:15 <Siecje> tbaxter: I do this twice q.questions.all()[0].guesses.add(c) but c is only in there once
+# 21:15 <tbaxter> probably because of .all()[0] which is going to be the first instance in the questions list. add() is not going to add the same thing to the M2M twice, because that would be dumb. You probably need to iterate through questions, but I suspect there is a better way.
+# 21:15 <Siecje> in my code I am not using [0]
+# 21:15 <ticketbot> https://code.djangoproject.com/changeset/0
+# 21:15 <Siecje> http://dpaste.org/sSHS0/#L67
+# 21:15 <Siecje> tbaxter: if I don't have the first one I get the error "QUIZ [new] needs to have a value for field "question" before this many-to-many relationship can be used."
+# 21:15 <Siecje> which I don't really understand because it is a CharField
+# 21:15 <tbaxter> Siecje: if i can make the suggestion, you might want to look at some examples of solid working quizzes. For example, this one: https://bitbucket.org/funkybob/simple-quiz/src/94b57fb91237/quiz?at=default
+# 21:15 <haukur> Is there a reason why I might not want to just index every field in a model that I'm going to look items up by?
+# 21:15 <tbaxter> Siecje: also, to answer your last question, you're attempting add() before the parent object has been created. That's why you were getting the error you found. Generally, you wouldn't add() in a model save(). That's kind of weird. Then again, generally you'd just use a form to handle this stuff.
+# 21:15 <mattmcc> haukur: It could waste space, since indexes aren't always needed, particularly on fields that aren't frequently used for lookups, or fields with low selectivity.
+# 21:15 <Siecje> tbaxter: well my problem is that the answer and the choices field of Question both use the model Choice so if you add a choice for the answer field it won't show up in the choices field
+# 21:15 <Siecje> that is in the admin, hmm maybe I can edit the admin form that is being used?
+# 21:15 <haukur> mattmcc: low selectivity?
+# 21:15 <mattmcc> haukur: Not a lot of unique values.
+# 21:15 <haukur> mattmcc: thanks :)
+# 21:30 <tbaxter> Does anyone know of an app sort of like the built-in messages framework, only I want to register when certain events happen and show them to everyone?
+# 21:30 <Z_A_M> Does south work with mysql?
+# 21:30 <tbaxter> Z_A_M: yes
+# 21:30 <Z_A_M> for some reason it's not working for me. after I create the edit to my model, then create the schemamigration the migrate it throws an error
+# 21:30 <Z_A_M> i followed the tutorial and everything :/
+# 21:30 <Siecje> tbaxter: you can assign multiple books to an author but can you assign the same book multiple times, that is what I am trying to do
+# 21:30 <Siecje> Z_A_M: and you call migrate at the end? What is the error?
+# 21:30 <tbaxter> Siecje: You're going to have a quiz with the same question more than once?
+# 21:30 <Z_A_M> Siecje: http://dpaste.org/PIIxb/
+# 21:30 <Siecje> no I am trying to have a list of user 'answers' which are really just Choice options,
+# 21:30 <Siecje> but I want to be able to see how many times each one was chosen
+# 21:30 <Siecje> Z_A_M: not sure there is always the manual way
+# 21:30 <Z_A_M> Siecje: instead of using the --auto flag you're saying?
+# 21:30 <Brent> Noob question - Can I import a module from a django package that is in site-packages into a different app that I created in order to modify one of the scripts? I don't want to edit the file directly in the site-packages. Is it possible? thanks
+# 21:30 <nanonyme> Z_A_M, which DBMS is this, btw?
+# 21:30 <nanonyme> Ah, MySQL. Are you using MyISAM or InnoDB?
+# 21:30 <Siecje> Z_A_M: no I mean getting the sql from django and manually executing it
+# 21:30 <mlavin> Z_A_M: the table already exists which you probably created with syncdb. see the docs on migrating an app to use South http://south.readthedocs.org/en/0.7.6/convertinganapp.html
+# 21:30 <Z_A_M> nanonyme: it's mysql, and I'll be honest I don't know what or how those other things relate.
+# 21:30 <nanonyme> Z_A_M, MyISAM and InnoDB are MySQL table types
+# 21:30 <Z_A_M> nanonyme: they're mysql table types then
+# 21:30 <nanonyme> No, I meant you're using one or the other. Do you know which?
+# 21:30 <Z_A_M> mlavin: okay i'll try that, but what if I created the other schemamigrations already? will those affect the convert_to_south?
+# 21:30 <lduros> is there a way to search for a function in the django github pages?
+# 21:30 <lduros> i'm looking for the definition of get_object_or_404
+# 21:30 <nanonyme> lduros, grep sources
+# 21:30 <Z_A_M> mlavin: it says the app is already managed by south now :/
+# 21:45 <lduros> nanonyme: yeh, i thought that's what I'd do. Just thought github might have a way
+# 21:45 <Z_A_M> this should've been a built in feature with django I know they're working on it but cmon....
+# 21:45 <nanonyme> lduros, sure it does. I'm using it right now. It involves cloning the repo and grepping
+# 21:45 <mlavin> Z_A_M: converttosouth expects to create the first migration. you can fake the initial migration assuing that that the current tables match the first migration state.
+# 21:45 <lduros> nanonyme: well, yeh but that's not from the web interface. anyway yeh :) that works
+# 21:45 <nanonyme> lduros, in case you didn't find it yet, __init__.py of django.shortcuts
+# 21:45 <lduros> yeh found it :)
+# 21:45 <lduros> thanks
+# 21:45 <Siecje> Is there a way to not create .pyc files?
+# 21:45 <joshuajonah> Siecje: Use the dev server
+# 21:45 <nanonyme> Why would you not want to create .pyc files?
+# 21:45 <Z_A_M> mlavin: I tried faking it and it still won't work.
+# 21:45 <mlavin> Z_A_M: "won't work" is not descriptive enough to help
+# 21:45 <Z_A_M> mlavin: http://dpaste.org/8ksLw/
+# 21:45 <mlavin> those are warnings not errors
+# 21:45 <Z_A_M> mlavin: o derp :/ the new field/colum isn't added to my table anway.
+# 21:45 <Z_A_M> anyway
+# 21:45 <mlavin> Z_A_M: you faked both migrations not just the initial which creates the table
+# 21:45 <jimfmunro> I keep failing to get my settings.py to import environment variables as in this example http://drumcoder.co.uk/blog/2010/jun/25/using-environment-variables-django-settingspy/
+# 21:45 <hetii> Hey :)
+# 21:45 <jimfmunro> This seems like it should just work. I am using bash, mod_wsgi, apache, and django 1.5, python 2.7.3
+# 21:45 <jimfmunro> except I always get a KeyError exception
+# 21:45 <hetii> Did some of you did some django orm integration and MultiAutoCompleteTextView in android ?
+# 21:45 <Z_A_M> mlavin: I still have no idea, I'm just going to convert it from scratch again
+# 21:45 <BHSPiMonkey> Can someone give me some tips figuring out how I should structure a git repository for a django app I'll be sharing?
+# 21:45 <BHSPiMonkey> I'm very much missing the right way to do this
+# 21:45 <umc> anyone override their user model ? I'm curious what happens with the custom model when the user is not logged in. how is that handled ? do you have to define a class for that as well ?
+# 21:45 <Siecje> What controls how long you are logged in for?
+# 21:45 <andre_pl> I'm having some trouble getting datetimes and timezones correct. i have USE_TZ enabled and the timezone set to US/Eastern. I create a datetime using the date and time chosen by the user and assign it timezone.get_current_timezone() but the time stored in the database (in utc) is one hour ahead of what it should be, so when I get_current_timezone().normalize() the value back, its 1h ahead of what i originally entered. :(
+# 22:00 <Siecje> andre_pl: there is no 'US/EASTERN' use 'America/New_York'
+# 22:00 <mlavin> umc: the middleware will still set request.user to AnonymousUser even with a custom user model. it does not look like it can be customized
+# 22:00 <jimfmunro> BHSPiMonkey what are you confused about? There is a good outline of how to set up a project in the 2 scoops of django book, but can you just do git init in your project directory?
+# 22:00 <Z_A_M> yeah i give up on south
+# 22:00 <mlavin> umc: see https://github.com/django/django/blob/master/django/contrib/auth/middleware.py#L14 and https://github.com/django/django/blob/master/django/contrib/auth/__init__.py#L122
+# 22:00 <andre_pl> there is a US/Eastern in pytz and in wikipedias listing
+# 22:00 <umc> mlavin: well... that's not good...
+# 22:00 <cdunklau> andre_pl: those are deprecated iirc
+# 22:00 <umc> mlavin: I want some extra methods on my user model. until now I used a proxy model and some monkey patching to make sure I always have request.user as my model direcly
+# 22:00 <cdunklau> andre_pl: use America/New_York
+# 22:00 <andre_pl> Same results anyhow
+# 22:00 <andre_pl> with America/New_York
+# 22:00 <cdunklau> andre_pl: as it should be. but America/New_York is the preferred spelling
+# 22:00 <umc> mlavin: and I wanted to have my custom stuff on the AnonymousUser as well... but it seems I still can't do this properly
+# 22:00 <Z_A_M> what I don't get is that after I update a model for instance just remove a field and I generate the schemamigrattion it recognizes the field being removed.
+# 22:00 <cdunklau> andre_pl: it appears that US/Eastern is now just a link to America/New_York
+# 22:00 <Z_A_M> then after i try to migrate it it just blows up on me
+# 22:00 <m8> What's the best product to make dependant select in django forms?
+# 22:00 <BHSPiMonkey> jimfmunro: it's not so much "how do I version control?" as "how should I be handing my django app to the world so they can run it themselves, in a way that adheres best to convention"
+# 22:00 <mlavin> umc: you could replace AuthenticationMiddleware with your own version to see request.user as you like. or another middleware which replaces AnonymousUser with your own version which runs after the standard middleware
+# 22:00 <BHSPiMonkey> jimfmunro: for instance, should my public repo be a folder with a readme/license, containing a django project folder (with a manage.py, settings.py, etc) containing an app folder (with urls.py/models.py/etc)
+# 22:00 <jorvis> I'm going through the Django tutorial here (https://docs.djangoproject.com/en/dev/intro/tutorial01/) and already on the first page my app isn't doing what the tutorial says it should. Specifically, adding the __unicode__ defs on my classes doesn't seem to change anything when you print them.
+# 22:00 <ticketbot> https://docs.djangoproject.com/en/stable/intro/tutorial01/)
+# 22:00 <jimfmunro> BHSPiMonkey: I don't think that would be confusing if you did.
+# 22:00 <BHSPiMonkey> or should it be the project folder or the app folder directly? Should I try to move everything into the app and ditch the project altogether in my distribution format?
+# 22:00 <andre_pl> cdunklau: this is what I'm trying http://pastie.org/7391967 i put the input date/time in a comment at the top, and the output from checking the results from the shell
+# 22:00 <jimfmunro> BHSPiMonkey: I would do the former, in a parent folder, not the app folder.
+# 22:00 <jimfmunro> at least that's how I've seen it most often
+# 22:00 <cdunklau> andre_pl: ok
+# 22:00 <cdunklau> apollo13: problem?
+# 22:00 <cdunklau> err
+# 22:00 <cdunklau> andre_pl: problem?
+# 22:00 <BHSPiMonkey> are people going to want to clone my public repo directly inside their django pythonpath somewhere? or should they clone it somewhere irrelevant and use setup.py to install the app as a python package?
+# 22:00 <andre_pl> i entered 9:00, and its coming out at 10:00
+# 22:00 <jimfmunro> BHSPiMonkey Just check out some django apps that contain example projects and copy that.
+# 22:00 <mlavin> jorvis: are you using Python 3? the tutorial is written from a Python 2 perspective (see #19965)
+# 22:00 <ticketbot> https://code.djangoproject.com/ticket/19965
+# 22:00 <BHSPiMonkey> jimfmunro: off the top of your head, can you think of any shining examples? I've looked around the github django scene a bit and seen a lot of different use cases, done a lot of different ways
+# 22:00 <BHSPiMonkey> all I really care about is that it's not awkward or painful for someone to get the app running on their box
+# 22:00 <BHSPiMonkey> I like conventions
+# 22:00 <umc> mlavin: I could create then a new custom user model, to get rid of the deprecated user profile, and also modify the get_user method from auth to override the AnonymousUser with my proxied model that has the custom methods. should work, right ?
+# 22:00 <jimfmunro> I think the examples are all across the board. I've definitely gone through pains to get some older apps running with 1.4/1.5 django
+# 22:00 <jimfmunro> BHSPiMonkey: ^
+# 22:00 <BHSPiMonkey> jimfmunro: I'm targeting 1.4/1.5, I'd just like to know what the best practice is for app distribution FOR 1.4/1.5
+# 22:00 <jorvis> mlavin: That was it, and I was already trying to replace it with __str__, so it works now. Given the wish to push toward Python3, I wish they'd just note the differences throughout the tutorial rather than saying at the top it just won't work.
+# 22:00 <BHSPiMonkey> before shipping something stupidly
+# 22:00 <jimfmunro> BHSPiMonkey: is this a pluggable app or a project? I assume project. Take a look at this, maybe helpful
+# 22:00 <BHSPiMonkey> I have not been using django long enough to know
+# 22:00 <jimfmunro> http://www.deploydjango.com/django_project_structure/
+# 22:00 <mlavin> umc: yes that would be one way to have your own AnonymousUser
+# 22:00 <BHSPiMonkey> jimfmunro: pretty much a standalone service/project/thingy. Thanks for the link.
+# 22:00 <jimfmunro> BHSPiMonkey Just do git init inside your project directory containing the manage.py etc. and go with that. Anyone with some Django skills will be able to go from there.
+# 22:00 <BHSPiMonkey> jimfmunro: incidentally, all of the django-based projects that I've had to spin up and which were easy to get up and running with were provided as .debs
+# 22:15 <BHSPiMonkey> so I also wonder if there's a standard way of generating those as well
+# 22:15 <Z_A_M> mlavin: okay, I started to convert from scratch. I deleted the migrations folder. then I added south to my installed_apps, and tried to syncdb again (just like converting an app documentation says to do). Which it seems to try to recreate the tables and then throws an error saying the tables already exists. I haven't even made it to the convert_to_south command yet.
+# 22:15 <jimfmunro> BHSPiMonkey: I have never used a .deb and would not bother, personally.
+# 22:15 <mlavin> Z_A_M: paste the errors
+# 22:15 <tbaxter> Z_A_M: I think you need either fake or initial
+# 22:15 <Z_A_M> http://dpaste.org/VjppE/
+# 22:15 <Z_A_M> that's not what the documentation says
+# 22:15 <Z_A_M> i'm not saying you're wrong
+# 22:15 <Z_A_M> im just trying to follow the documentation
+# 22:15 <tbaxter> umc: if you're extending AbstractUser (not replacing and using AbstractBaseUser) then the normal user.is_authenticated and is_anonymous is there, same as always.
+# 22:15 <umc> tbaxter: I extended it, and also made it proxy=True, because I only wanted to add some methods on it
+# 22:15 <tbaxter> umc: that sounds wrong.
+# 22:15 <umc> and I want to use a custom User model for the profile deprecation
+# 22:15 <tbaxter> umc: sure, I get that
+# 22:15 <umc> I want to have the same methods on both the user and anonymous user
+# 22:15 <tbaxter> of course
+# 22:15 <umc> so i don't have to check each time if user is anon or not before calling the methods on it
+# 22:15 <umc> I have things like get_preference(...) which work on both (for AnonymousUsers it will get the default values for example)
+# 22:15 <tbaxter> sure. that all makes sense
+# 22:15 <umc> then what's wrong with my aproach ?
+# 22:15 <tbaxter> why proxy=True, though?
+# 22:15 <umc> indeed, maybe Anonymous doesn't need it since it's not saved in the db
+# 22:15 <tbaxter> Not only do I think you don't need it, I don't think you want it.
+# 22:15 <umc> for the user I used proxy for obvious reasons, I wanted the django tables and everything, since I only added some methods on the model
+# 22:15 <tbaxter> I think it's going to jack up your user object
+# 22:15 <umc> but now if I merge it with the profile model, I can't use proxy anymore
+# 22:15 <umc> it worked fine so far
+# 22:15 <Z_A_M> mlavin: any idea?
+# 22:15 <abyss42> what is the default expiry date for reset password emails sent by django?
+# 22:15 <tbaxter> umc: your old profile model? It should be going away.
+# 22:30 <tbaxter> Replaced by a new one subclassing abstractuser
+# 22:30 <umc> tbaxter: yes, that's why I'm trying to update my code, to use a custom user model, so I can get rid of the profile model
+# 22:30 <mattmcc> abyss42: 3 days.
+# 22:30 <umc> I just wasn't sure what will happen to the anonymous users
+# 22:30 <tbaxter> umc: maybe paste your model?
+# 22:30 <mlavin> Z_A_M: no I don't see why syncdb is trying to create a table which already exists
+# 22:30 <abyss42> mattmcc, i need it to be 2days, how can i override it?
+# 22:30 <umc> tbaxter: I didn't do it yet. the old proxy user only had some methods (like get_preference) added to it and a user profile
+# 22:30 <Z_A_M> mlavin: okay cool at least it's not just me
+# 22:30 <kklimonda> hmm, any idea why would isinstance(user, get_user_model()) fail in Django 1.5 with South?
+# 22:30 <Z_A_M> mlavin: I just wanted some clarification before I started scouring the internet.
+# 22:30 <mattmcc> abyss42: https://docs.djangoproject.com/en/1.5/ref/settings/#password-reset-timeout-days
+# 22:30 <svvitch> i'm trying to implement django-taggit and get this error at syncdb: http://dpaste.org/6A7Q3/
+# 22:30 <tbaxter> umc: I think you just want something like this. No proxy involved: http://dpaste.org/dwyr9/
+# 22:30 <svvitch> somebody met something like this ?
+# 22:30 <mlavin> Z_A_M: perhaps you are hitting #9116
+# 22:30 <ticketbot> https://code.djangoproject.com/ticket/9116
+# 22:30 <umc> tbaxter: that's correct. and it seems straight forward from the docs. I just wanted to have get_theme when user is Anonymous as well, and with that I wasn't sure how to proceed
+# 22:30 <umc> but for that I can leave my custom Anonymous model that extends the django AnonymousUser (and remove proxy)
+# 22:30 <Z_A_M> mlavin: you know what...that is happening. some of my tables are caps only and others are not.
+# 22:30 <Z_A_M> mlavin: at least that's what I'm seeing in mysqlworkbench
+# 22:30 <mattmcc> Windows? :P
+# 22:30 <Z_A_M> me?
+# 22:30 <Z_A_M> Yeah this is happening... http://dpaste.org/KVODC/
+# 22:30 <mattmcc> Yeah, I thought Windows was the only OS where MySQL was dumb enough to mix case in table names.
+# 22:30 <Z_A_M> that's what the ticket says
+# 22:30 <Z_A_M> but i'm not on a windows machine
+# 22:30 <Z_A_M> then I see "Resolution set to wontfix" in the ticket
+# 22:30 <mattmcc> Because nobody could figure out a straightforward solution to MySQL's behavior.
+# 22:30 <Z_A_M> fair enough
+# 22:30 <umc> tbaxter: btw, shouldn't your example subclass models.AbstractBaseUser instead of AbstractUser ?
+# 22:30 <tbaxter> umc: no, because I'm not replacing user, I'm extending it.
+# 22:30 <umc> tbaxter: and you set AUTH_PROFILE_MODULE to this new class ?
+# 22:30 <tbaxter> yup
+# 22:30 <tbaxter> no.. AUTH_USER_MODEL
+# 22:30 <umc> tbaxter: yeah, sorry, got the wrong copy paste. AUTH_PROFILE_MODULE is/will be deprecated
+# 22:30 <umc> tbaxter: why not extend User directly ? why AbstractUser ?
+# 22:30 <tbaxter> Because the docs say to extend AbstractUser
+# 22:45 <umc> indeed, found it: https://docs.djangoproject.com/en/1.5/topics/auth/customizing/#extending-django-s-default-user
+# 22:45 <umc> thanks for the tips tbaxter. hopefully it should work
+# 22:45 <tbaxter> Yeah, that's the link. It's kind of buried
+# 22:45 <Z_A_M> mattmcc: what about if i manually create the tables so the CAPS issue vanishes. would syncdb still create everything else?
+# 22:45 <abyss42> when i set {%csrf_token%} {{form}} it works, but when i do {%csrf_token%} {{form.username}} it gives me a csrf 403 error. any ideas how i should correctly set it in the form?
+# 22:45 <mattmcc> Z_A_M: No, once the table exists, syncdb won't touch it.
+# 22:45 <Z_A_M> mattmcc: mhmm i wonder if I could get away with just creating the tables manually and use south to create everything else on it's first schema migration.
+# 22:45 <mattmcc> That's probably an option.
+# 22:45 <mattmcc> Me, I'd just run away from MySQL.
+# 22:45 <Z_A_M> mattmcc: heh yeah that's an option
+# 22:45 <Z_A_M> i'd like to find a hack for this before i throw in the towel
+# 22:45 <Z_A_M> at least i know the reason for south blowing up
+# 23:00 <Z_A_M> but not the reason why some tables are capitalized and some are not.
+# 23:00 <Zer000> So I'd like to create an app that will serve things to a few websites. I want to create groups in such a way that anyone part of that group can only edit or create models that are associated with their own site, and can't touch anyone else's is that possible?
+# 23:00 <tbaxter> Zer000: tag people at the User or Profile level to a site, and things get easy after that. Or you could do it at the group level. Yeah. You have to be careful about things, but it's totally doable.
+# 23:00 <Zer000> tbaxter: should I use django's sites framework?
+# 23:00 <tbaxter> extensively
+# 23:00 <Zer000> so how can I make the built-in group model associate with a Site?
+# 23:00 <tbaxter> on pretty much everything
+# 23:00 <Zer000> and section question, how do I modify the admin view that lists all the objects to only list objects associated with the user's site?
+# 23:00 <tbaxter> Zer000: I think group would present some problems. I'd do it at the User level, which won't be that bad.
+# 23:00 <tbaxter> For content, you'll need a manager on pretty much everything
+# 23:00 <Zer000> tbaxter: I'm not following, what do you mean by needing a manager?
+# 23:00 <ticketbot> https://docs.djangoproject.com/en/stable/topics/db/managers/
+# 23:00 <Zer000> ah. thanks tbaxter
+# 23:15 <tbaxter> and you'll need to be really, really really careful about who you're letting into the admin, if you do. Django's admin is based on the concept of trusted users, so make sure you trust 'em. And then don't trust 'em that much and continue to be careful.
+# 23:15 <happyface> Can I use StreamingHttpResponse to stream text/event-stream data (aka retrieve an EventSource in javascript)?
+# 23:30 <happyface> Yes you can, I answered my own question - such an awesome feature
+# 23:30 <rlrosa> hi. i'm trying to get csrf control working but failing. i have a GET that does not carry any csrf cookies nor tokens. on django i have the middlerware class django.middleware.csrf.CsrfViewMiddleware at the top of the MIDDLEWARE_CLASSES section in my settings.py and the requires_csrf_token decorator in my view. (also tried csrf_protect)
+# 23:30 <rlrosa> my problem is that my server answers 200 OK to requests that should be refused because of the lack of csrf cookies
+# 23:30 <Back2Basics> rirosa: and in your template do you have {% csrf_token %}
+# 23:30 <Back2Basics> in your form?
+# 23:45 <Back2Basics> rlrosa: isn't csrf only supposed to be used with post or put data?
+# 23:45 <emperorcezar> I'm ocassionally getting the following when running tests, "ConnectionDoesNotExist: The connection __destroy_test_db__ doesn't exist". Any ideas? Googling for it gets me nothing.
+# 23:45 <Back2Basics> emperorcezar: are you inheriting django.test.TestCase in your testing classes?
+# 23:45 <Back2Basics> emperorcezar: or are you using transactions?
+# 23:45 <emperorcezar> Back2Basics: Not sure, a lot of the tests aren't mine. I can go look at them though.
+# 23:45 <emperorcezar> Back2Basics: Would it be an issue of transactions left open?
+# 23:45 <happyface> how bad is keeping StreamingHttpResponse threads open on performance?
+# 23:45 <Back2Basics> emperorcezar: I was wondering what was closing the connection early.
+# 23:45 <Back2Basics> emperorcezar: I would look for places where you specifically called for a close or end to a transaction.
+# 23:45 <emperorcezar> Back2Basics: Hmm. Thanks. That gives me a direction to go in.
+# 23:45 <bumbar> how can i make each model have n ImageFields?
+# 23:45 <mattmcc> bumbar: You might find inlines useful.
