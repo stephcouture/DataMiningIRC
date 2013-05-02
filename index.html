@@ -1,87 +1,176 @@
-<?php
-
-// the IRC data file to use
-$file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
-$realfile = dirname(__FILE__) . "/logs/$file.txt";
-
-if (isset($_REQUEST['query'])) {
-	header("Content-type: plain/text");
-	$all_lines = file($realfile);
-	$matching_lines = preg_grep("/" . $_REQUEST['query'] . "/i", $all_lines);
-	echo count($all_lines), ":", implode(",", array_keys($matching_lines));
-	$return_lines = array_slice($matching_lines, 0, isset($_REQUEST['limit']) && $_REQUEST['limit'] ? $_REQUEST['limit'] : null);
-	echo str_replace('>', '&gt;', str_replace('<', '&lt;', implode("", $return_lines)));
-	exit;
-}
-else if (isset($_REQUEST['line'])) {
-}
-
-?>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<style>
-		.hi {background-color: yellow;}
-		.histogram {border: thin solid #ccc;}
-		img.fill {background-color: red;}
-		img.fill {background-color: #ccc;}
-		img.fill, img.empty {height: 1em;}
-		</style>
-		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-		<script>
-		var fillQuery = null;
-		function sendQuery(limit) {
-			var query = $("#query").val();
-			$.ajax({
-			  type: "POST",
-			  url: "<?php echo $_SERVER['PHP_SELF']; ?>",
-			  data: { query: query, file: $("#file").val(), limit: limit}
-			}).done(function( response ) {
-				var output = "";
-				var lines = response.split(/\n/);
-				var data = lines.shift();
-				var parts = data.split(':');
-				var total = parts[0];
-				var positions = parts[1].split(',');
-				var lastPosition = 0;
-				output+="<div><span class='histogram'>";
-				for (var i=0, len=positions.length; i<len; i++) {
-					output += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="empty" style="width: '+ 1+parseInt(Math.log(positions[i]-lastPosition)) +'px;">';
-					output += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="fill" style="width: 1px;">';
-					lastPosition = positions[i];
-				}
-				output+="</span></div>";
-				var re = new RegExp("("+query+")", 'gi');
-				for (var i=0; i<lines.length;i++) {
-					output += "<span class='line' id='l"+i+"'>" + lines[i].replace(re, "<span class='hi'>$1</span>") + "</span>\n";
-				}
-				if (limit) {
-					output += "\n…";
-					fillQuery = setTimeout(function() {sendQuery();}, 1000);
-				}
-				$('#lines').html(output);
-			});
-		}
-		$(document).ready(function() {
-			$('#query').keyup(function() {
-				sendQuery(20);
-			});
-		});
-		</script>
-	</head>
+        <head>
+                <meta charset="utf-8">
+            <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+            <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+            <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+                <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+                <script src="https://raw.github.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
+                <script>
+
+                var fill = d3.scale.category20(); // for word cloud
+
+
+                var format = /^# (\d+)\:(\d+) (<.+?>) (.+?)$/;
+                var logs = [];
+                var users = {};
+                function getLogs(source, max) {
+                        var lines = source.split(/\n+/);
+                        var logs = [];
+                        for (var i=0, len=(max<lines.length ? max : lines.length); i<len; i++) {
+                                var match = format.exec(lines[i]);
+                                if (match) {
+                                        logs.push({time: new Date(0,0,0,match[1],match[2]), user: match[3].substring(1,match[3].length-1), text: match[4]})
+                                }
+                        }
+                        return logs;
+                }
+                function getLogsTable(logs) {
+                        var html = '<table><thead><tr><td>Time</td><td>User</td><td>Text</td></tr></thead><tbody>';
+                        var hasSelectedUsers = $('#users .ui-selected').length>0;
+                        var timeValue = $("#time").val();
+                        var timeMatch = /^\s*(\d+)\:(\d+)\s*-\s*(\d+)\:(\d+)\s*$/.exec(timeValue);
+                        if (timeMatch) {
+                                timeStart = new Date(0,0,0,timeMatch[1],timeMatch[2]);
+                                timeEnd = new Date(0,0,0,timeMatch[3],timeMatch[4]);
+                        }
+                        for (var i=0;i<logs.length;i++) {
+                                if (hasSelectedUsers && !users[logs[i].user]) {continue;} // skip for filtered users
+                                if (timeMatch && (logs[i].time < timeStart || logs[i].time > timeEnd)) {continue;}
+                                html+='<tr><td>'+logs[i].time.getHours()+':'+(logs[i].time.getMinutes()<10 ? '0' : '')+logs[i].time.getMinutes()+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
+                        }
+                        html+='</tbody></table>';
+                        return html;
+
+                }
+                $(document).ready(function() {
+                        $('#source').keyup(function() {
+                                var source = $('#source').val();
+                                var logs = getLogs(source, 5);
+                                $('#preview').html(getLogsTable(logs));
+                        });
+                });
+                function loadLogs() {
+                        var source = $('#source').val();
+                        logs = getLogs(source, Number.MAX_VALUE);
+                        var users = {};
+                        for (var i=0;i<logs.length;i++) {
+                                if (users[logs[i].user]) {users[logs[i].user]++;}
+                                else {users[logs[i].user]=1}
+                        }
+
+                        // first sort
+                        var tmpUsers = [];
+                        for (user in users) {
+                                tmpUsers.push({text: user, size: users[user], freq: users[user]});
+                        }
+                        tmpUsers.sort(function(a,b) {return a.text.toLowerCase() > b.text.toLowerCase()});
+
+                        // now build list
+                        var html='';
+                        for (var i=0;i<tmpUsers.length;i++) {
+                                var user = tmpUsers[i].text;
+                                html+="<li class='ui-widget-content' id='user_"+user+"'><span class='name'>"+user+'</span> ('+users[user]+")</li>";
+                        }
+
+                        d3.layout.cloud().size([300, 300])
+                              .words(tmpUsers)
+                              .rotate(function() { return ~~(Math.random() * 5) * 30 - 60; })
+                              .font("Impact")
+                              .fontSize(function(d) { return d.size; })
+                              .on("end", function() {
+                                          d3.select("#users_cloud").append("svg")
+                                                  .attr("width", 300)
+                                                  .attr("height", 300)
+                                                .append("g")
+                                                  .attr("transform", "translate(150,150)")
+                                                .selectAll("text")
+                                                  .data(tmpUsers)
+                                                .enter().append("text")
+                                                                  .on("click", function(d) {
+                                                                          var user = $("#users #user_"+d.text);
+                                                                          // FIXME: this isn't working
+                                                                          /*
+                                                                          if (user) {
+                                                                                  if (user.hasClass("ui-selected")) {
+                                                                                          user.removeClass("ui-selected").addClass("ui-selecting")
+                                                                                  }
+                                                                                  else {
+                                                                                          user.addClass("ui-selecting");
+                                                                                  }
+                                                                                  console.warn($("#users").data("selectable"))
+                                                                                 $("#users").data("selectable")._mouseStop(null);
+                                                                         }
+                                                                          */
+                                                                  })
+                                                  .style("font-size", function(d) { return d.size + "px"; })
+                                                  .style("font-family", "Impact")
+                                                  .style("fill", function(d, i) { return fill(i); })
+                                                  .attr("text-anchor", "middle")
+                                                  .attr("transform", function(d) {
+                                                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                                                  })
+                                                  .text(function(d) { return d.text; });
+                              })
+                              .start();
+
+                        $('#users').html(html);
+                        $('#loading').hide();
+                        updateLogs();
+                }
+
+
+
+                function updateLogs() {
+                        $("#logs").html(getLogsTable(logs));
+                }
+            $(function() {
+              $( "#users" ).selectable({
+                stop: function() {
+                                users = {};
+                  $( ".ui-selected", this ).each(function() {
+                                  users[$('.name', this).text()]=true;
+                  });
+                          updateLogs();
+                }
+              });
+                  $("#time").keyup(function() {
+                          updateLogs();
+                  })
+            });
+                </script>
+                <style>
+            .selectable .ui-selecting { background: #FECA40; }
+            .selectable .ui-selected { background: #F39814; color: white; }
+            .selectable { list-style-type: none; margin: 0; padding: 0; }
+                #controls {float: left;}
+                #users {font-size: smaller;}
+                #time {width: 7em;}
+            /*.selectable li { margin: 3px; padding: 0.4em; }*/
+                </style>
+        </head>
 <body>
-<div>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" onsubmit="return updateQuery()">
-		Source: <select name="file" id="file"><?php
-		foreach(glob(dirname(__FILE__) . "/logs/*txt") as $source) {
-			$filename = substr(basename($source), 0, -4);
-			echo "<option value='$filename'", ($file==$filename ? ' selected="selected"' : ''), ">$filename</option>";
-		}
-		?></select>
-		Query: <input type="query" id="query" />
-	</form>
-</div>
-<pre id="lines">
-</pre>
+        <div id="load">
+        <div id="loading">
+                <div>Paste in logs and specify format:
+                        <input type="button" onclick="loadLogs()">
+                </div>
+                <textarea style="width: 100%; height: 5em;" id="source"># 00:00 <w00tner> hello
+# 00:00 <w00tner> good monday for everyone
+# 00:00 <w00tner> q: if i want to use css styles in my django template do i have to register the directory ? i set it in the same folder "templates" is and call it "static" (inside css,js,img). but in console im getting "no style for this element" ... my code: http://pastie.org/7376601
+# 00:00 <sigpipe> w00tner: you need to serve your css as a static file. see the static files app for help with that
+# 00:00 <w00tner> ok
+# 00:00 <w00tner> thanks
+</textarea>
+                <div id="preview"></div>
+        </div>
+        <div id="panel">
+                <div id="controls">
+                        <div>Time: <input id="time" value="0:00-23:59"></div>
+                        <ol id="users" class="selectable"></ol>
+                </div>
+                <div id="users_cloud"></div>
+                <div id="logs"></div>
+        </div>
 </body>
 </html>
