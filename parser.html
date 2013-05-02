@@ -1,0 +1,132 @@
+<html>
+<head>
+            <meta charset="utf-8">
+            <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+            <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+            <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	    <script src="parser_normal.js"></script>         
+	    <script src="parser_irssi.js"></script>
+            <script>
+		/* var parser_normal = {};
+		parser_normal.normal = /^# (.+?) (<.+?>) (.+?)$/; */
+		var parsers = [];
+ 		parsers["normal"] = parser_normal;
+ 		parsers["irssi"] = new Parser_irssi();
+		the_parser = parsers["irssi"]
+         
+                var logs = [];
+		function getLogs(source,max) {
+		    return the_parser.parse_logs(source,max);
+                }
+/*                function getLogs(source, max) {
+                        var lines = source.split(/\n+/);
+                        var logs = [];
+                        for (var i=0, len=(max<lines.length ? max : lines.length); i<len; i++) {				
+                                var match = the_parser.parse_line(lines[i]);
+                                if (match) {
+                                        logs.push({time: match[1], user: match[2].substring(1,match[2].length-1), text: match[3]})
+                                }
+                        }
+                        return logs;
+                }
+*/
+                function getLogsTable(logs) {
+                        var html = '<table><thead><tr><td>Time</td><td>User</td><td>Text</td></tr></thead><tbody>';
+                        for (var i=0;i<logs.length;i++) {
+                                html+='<tr><td>'+logs[i].time+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
+                        }
+                        html+='</tbody></table>';
+                        return html;
+
+                }
+		
+		function displayLogs() {
+                      var source = $('#source').val();
+                      var logs = getLogs(source, 25);
+		      $('#preview').html(getLogsTable(logs));
+                }
+
+                $(document).ready(function() {
+                        $('#source').keyup(function() {
+                                var source = $('#source').val();
+                                var logs = getLogs(source, 5);
+                                $('#preview').html(getLogsTable(logs));
+                        });
+                });
+                function loadLogs() {
+                        var source = $('#source').val();
+                        logs = getLogs(source, 5);
+                        var users = {};
+                        for (var i=0;i<logs.length;i++) {
+                                if (users[logs[i].user]) {users[logs[i].user]++;}
+                                else {users[logs[i].user]=1}
+                        }
+                        var html='';
+                        for (user in users) {
+                                html+="<li class='ui-widget-content'>"+user+"</li>";
+                        }
+                        $('#users').html(html);
+                }
+                function filterUsers() {
+                        $("#users ui-selected").each(function() {
+                                console.warn(this.text());
+                        })
+
+                }
+            $(function() {
+              $( "#users" ).selectable({
+                stop: function() {
+                  $( ".ui-selected", this ).each(function() {
+                    var index = $( "#selectable li" ).index( this );
+                    result.append( " #" + ( index + 1 ) );
+                  });
+                }
+              });
+            });
+                </script>
+                <style>
+            .selectable .ui-selecting { background: #FECA40; }
+            .selectable .ui-selected { background: #F39814; color: white; }
+            .selectable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+            /*.selectable li { margin: 3px; padding: 0.4em; }*/
+                </style>
+        </head>
+<body>
+        <div id="loading">
+                <div>Paste in logs and specify format:
+                        <input type="button" value="display logs" onclick="displayLogs()">
+                </div>
+                <textarea style="width: 100%; height: 5em;" id="source">
+11:47 -!- Sargath [~Sargath@89-73-152-177.dynamic.chello.pl] has joined #drupal-support
+11:48 -!- TwstdElf [~TwstdElf@rrcs-76-79-242-50.west.biz.rr.com] has joined #drupal-support
+11:48 < flezen> billyroebuck: yes i need a context. filter to show all subpages
+11:49 < flezen> i got it working now, with a php-snippet, filtering for plid, parent-link-id, but then i don´t get any results for this one parent page, obviously ;)
+11:49 -!- HAPPYFUNBALL [~FUNKMASTA@c-174-63-120-5.hsd1.ma.comcast.net] has quit [Quit: ( www.nnscript.com :: NoNameScript 4.22 :: www.esnation.com )]
+11:49 -!- boze [~boze@unaffiliated/boze] has joined #drupal-support
+11:49 -!- ryanclemens [~Ryan@149-169-233-167.nat.asu.edu] has quit [Quit: ryanclemens]
+11:50 -!- tanarurkerem [~pp@91-137-131-213.opticon.hu] has quit [Ping timeout: 272 seconds]
+11:50 -!- ryanclemens [~Ryan@149-169-233-167.nat.asu.edu] has joined #drupal-support
+11:50 -!- illmatix [~test@184.71.62.238] has joined #drupal-support
+11:50 < flezen> i need to show a view of links/images of subpages, using slideshow, to use as a navigation, but as mentioned, i need them on this parent-page _and_ on all subpages ...
+11:50 -!- aburrows [~aburrows@host81-139-68-141.in-addr.btopenworld.com] has joined #drupal-support
+11:51 -!- emjayess [~emjayess@65.183.254.222] has joined #drupal-support
+11:51 -!- emjayess [~emjayess@65.183.254.222] has quit [Changing host]
+11:51 -!- emjayess [~emjayess@couchdb/user/emjayess] has joined #drupal-support
+11:52 -!- ddrhythm [~dd_rhythm@173-8-213-38-Oregon.hfc.comcastbusiness.net] has joined #drupal-support
+11:53 -!- spuky [~spuky@HSI-KBW-37-49-91-164.hsi14.kabel-badenwuerttemberg.de] has quit [Ping timeout: 272 seconds]
+11:53 -!- dob_ [~dob@2002:5fd0:e73d:0:cdef:c594:e9af:df2c] has quit [Remote host closed the connection]
+11:53 -!- pearlbear [~pearlbear@198.45.153.34] has joined #drupal-support
+11:55 -!- spuky [~spuky@HSI-KBW-37-49-91-164.hsi14.kabel-badenwuerttemberg.de] has joined #drupal-support
+11:55 -!- oadaeh [~jason@wsip-24-234-160-51.lv.lv.cox.net] has quit [Quit: Quitting]
+11:55 -!- jerbob92-away is now known as jerbob92
+11:55 -!- webflo1 [~Adium@gateway.digi-info.de] has joined #drupal-support
+11:55 -!- BootcampChris [~chatzilla@host81-149-81-68.in-addr.btopenworld.com] has joined #drupal-support
+11:56 < flezen> what i got is this:
+</textarea>
+                <div id="preview"></div>
+        <div>
+        <div id="panel">
+                <ol id="users" class="selectable"></ol>
+        </div>
+</body>
+</html>
