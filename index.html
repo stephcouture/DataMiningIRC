@@ -73,6 +73,15 @@
         		
                             
                 $(document).ready(function() {
+					// load default data
+		            $.ajax({ 
+		                type: "GET", 
+		                url: "logs/django-2013-04-09.txt",//get response from this file
+		                success: function(response){ 
+ 
+		                 $("#source").val(response);//send response to textarea
+		  			}
+		  	    });
                         $('#source').keyup(function() {
                                 var source = $('#source').val();
                                 var logs = getLogs(source, 5);
