@@ -45,21 +45,37 @@
                                 timeEnd = new Date(0,0,0,timeMatch[3],timeMatch[4]);
                         }
 						var tmpUsers = {};
+						var tmpWords = {};
+						var simpleWordsRegex = /\W+/
                         for (var i=0;i<logs.length;i++) {
 							// we will build the word cloud with all users mentioned for selected time
 							if (timeMatch && (logs[i].time < timeStart || logs[i].time > timeEnd)) {continue;}
 							if (!tmpUsers[logs[i].user]) {tmpUsers[logs[i].user]=0}
 							tmpUsers[logs[i].user]++
+							var tokens = logs[i].text.toLowerCase().split(simpleWordsRegex);
+							for (var j=0, len=tokens.length; j<len; j++) {
+								if (stopwords[tokens[j]]) {continue} // skip over stopwords
+								if (!tmpWords[tokens[j]]) {tmpWords[tokens[j]]=0}
+								tmpWords[tokens[j]]++;
+							}
                             if (hasSelectedUsers && !users[logs[i].user]) {continue;} // skip for filtered users
                             html+='<tr><td>'+logs[i].time.getHours()+':'+(logs[i].time.getMinutes()<10 ? '0' : '')+logs[i].time.getMinutes()+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
                         }
 						
-						// show word cloud
+						// show word cloud for users
 						var data = [];
 						for (user in tmpUsers) {
 							data.push({text: user, size: tmpUsers[user]})
 						}
 						drawWordCloud("#users_cloud", data);
+
+						// show word cloud for words
+						console.warn(tmpWords)
+						var data = [];
+						for (word in tmpWords) {
+							data.push({text: word, size: tmpWords[word]})
+						}
+						drawWordCloud("#words_cloud", data);
 						
                         html+='</tbody></table>';
                         return html;
@@ -84,8 +100,9 @@
 				}		
         		
                             
+	            var stopwords = {}
                 $(document).ready(function() {
-					// load default data
+					// load default logs data
 		            $.ajax({ 
 		                type: "GET", 
 		                url: "logs/drupal-support.log",//get response from this file
@@ -94,6 +111,25 @@
 		                 $("#source").val(response);//send response to textarea
 		  			}
 		  	    });
+
+				// load default logs data
+				$.ajax({ 
+	                type: "GET", 
+	                url: "logs/stopwords.txt",//get response from this file
+	                success: function(response){ 
+						var tokens = response.split(/\n+/);
+						for (var i=0, len=tokens.length; i<len; i++) {
+							stopwords[tokens[i]]=true;
+							if (tokens[i].indexOf("'")>0) { // apostrophes
+								var parts = tokens[i].split("'");
+								for (var j=0, lenj=parts.length; j<lenj; j++) {
+									stopwords[parts[j]]=true;
+								}
+							}
+						}
+	  			}
+	  	    });
+
                         $('#source').keyup(function() {
                                 var source = $('#source').val();
                                 var logs = getLogs(source, 5);
@@ -203,7 +239,7 @@
         <div id="panel">
 			<div id="viz">
                 <div id="users_cloud"></div>
-                <div id="word_cloud"></div>
+                <div id="words_cloud"></div>
 			</div>
                 <div id="controls">
                         <div>Time: <input id="time" value="0:00-23:59"></div>
