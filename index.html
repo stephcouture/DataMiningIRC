@@ -55,12 +55,12 @@
 
                 }
                           
-                // Function to get Logs table to display user, etc
+                // Function to get Logs table to display time, etc. To be as a test
     			function getLogsTableNormal(logs) {
     				var html = '<table><thead><tr><td>Hour</td><td>Minute</td><td>User</td><td>Text</td></tr></thead><tbody>';
-    				for (var i=0;i<logs.length;i++) {
-    					html+='<tr><td>'+logs[i].time.getHours()+'</td><td>'+logs[i].time.getMinutes()+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
-    				}
+    				for (var i=0;i<logs.length;i++) 
+    					if (logs[i].type == "message")
+    						html+='<tr><td>'+logs[i].time.getHours()+'</td><td>'+logs[i].time.getMinutes()+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
     					html+='</tbody></table>';
     					return html;
 
@@ -68,7 +68,7 @@
                 
         		function displayLogsNormal() {
                     var source = $('#source').val();
-                    var logs = getLogs(source, 25);
+                    var logs = getLogs(source, 100);
 		   		    $('#preview').html(getLogsTableNormal(logs));
 				}		
         		
@@ -151,9 +151,10 @@
 
 
 
-                function updateLogs() {
+		   function updateLogs() {
                         $("#logs").html(getLogsTable(logs));
-                }
+           }
+		   
             $(function() {
               $( "#users" ).selectable({
                 stop: function() {
