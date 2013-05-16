@@ -79,6 +79,7 @@
                                 var logs = getLogs(source, 5);
                                 $('#preview').html(getLogsTable(logs));
                         });
+						$('#source-button').hide();
                 });
                 function loadLogs() {
                         var source = $('#source').val();
@@ -145,6 +146,7 @@
                               .start();
 
                         $('#users').html(html);
+                        $('#source-button').show();
                         $('#loading').hide();
                         updateLogs();
                 }
@@ -178,10 +180,12 @@
                 #users {font-size: smaller;}
                 #time {width: 7em;}
             /*.selectable li { margin: 3px; padding: 0.4em; }*/
+			#source-button {text-align: right;}
                 </style>
         </head>
 <body>
         <div id="load">
+			<div id="source-button"><input type="button" value="Source" onclick="$('#loading').show(); $('#source-button').hide()"/></div>
         <div id="loading">
                 <div>Paste in logs and specify format:
                         <input type="button" value="display user time" onclick="loadLogs()">
