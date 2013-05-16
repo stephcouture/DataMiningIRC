@@ -1,3 +1,7 @@
+// assumes D3 and layout are loaded
+// <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+// <script src="https://raw.github.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
+
 var fill = d3.scale.category20();
 function drawWordCloud(selector, data) {
 	d3.layout.cloud().size([300, 300])
