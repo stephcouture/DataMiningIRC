@@ -53,7 +53,7 @@ Parser.prototype.parse_logs = function(i_source, max) {
 	for (var i=0, len=(max<lines.length ? max : lines.length); i<len; i++) {				
 		var match = this.parse_line(lines[i]);
 		if (match) {
-		   this.logs.push({time: match[1], user: match[2].substring(1,match[2].length-1), text: match[3]})
+		   this.logs.push({time: new Date(0,0,0,match[1],match[2]), user: match[3].substring(1,match[3].length-1), text: match[4]})
                 }
 	}
 	this.parsed = true;
@@ -72,10 +72,10 @@ Parser_irssi.prototype = new Parser();
 // correct the constructor pointer because it points to Person
 Parser_irssi.prototype.constructor = Parser_irssi;
 Parser_irssi.prototype.parse_line = function (i_line) {
-	if (matches = i_line.match(/^(.+?) (< .+?>) (.+?)$/))  // normal line
+	if (matches = i_line.match(/^(.+?):(.+?) (< .+?>) (.+?)$/))  // normal line
 		return matches;
-	else if (matches = i_line.match(/^(.+?) -!- (.+?\S+) \[\S+\] has joined [#&!+]\S+$/)) { // joined line
-		matches[3] = "join"
+	else if (matches = i_line.match(/^(.+?):(.+?) -!- (.+?\S+) \[\S+\] has joined [#&!+]\S+$/)) { // joined line
+		matches[4] = "join"
 		return matches;
 	}
 	else

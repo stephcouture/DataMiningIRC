@@ -6,15 +6,25 @@
             <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
                 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
                 <script src="https://raw.github.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
+			    <script src="parser_normal.js"></script>         
+        	    <script src="parser_irssi.js"></script>        	  
                 <script>
+        		var parsers = [];
+         		parsers["normal"] = parser_normal;
+         		parsers["irssi"] = new Parser_irssi();
+        		the_parser = parsers["irssi"]
+        		var logs = [];
 
                 var fill = d3.scale.category20(); // for word cloud
 
+                /* var format = /^# (\d+)\:(\d+) (<.+?>) (.+?)$/;
+                
+                var users = {}; */
 
-                var format = /^# (\d+)\:(\d+) (<.+?>) (.+?)$/;
-                var logs = [];
-                var users = {};
+                
                 function getLogs(source, max) {
+        		    return the_parser.parse_logs(source,max);
+        	    /*
                         var lines = source.split(/\n+/);
                         var logs = [];
                         for (var i=0, len=(max<lines.length ? max : lines.length); i<len; i++) {
@@ -23,8 +33,9 @@
                                         logs.push({time: new Date(0,0,0,match[1],match[2]), user: match[3].substring(1,match[3].length-1), text: match[4]})
                                 }
                         }
-                        return logs;
+                        return logs; */
                 }
+                
                 function getLogsTable(logs) {
                         var html = '<table><thead><tr><td>Time</td><td>User</td><td>Text</td></tr></thead><tbody>';
                         var hasSelectedUsers = $('#users .ui-selected').length>0;
@@ -43,6 +54,25 @@
                         return html;
 
                 }
+                          
+                // Function to get Logs table to display user, etc
+    			function getLogsTableNormal(logs) {
+    				var html = '<table><thead><tr><td>Hour</td><td>Minute</td><td>User</td><td>Text</td></tr></thead><tbody>';
+    				for (var i=0;i<logs.length;i++) {
+    					html+='<tr><td>'+logs[i].time.getHours()+'</td><td>'+logs[i].time.getMinutes()+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
+    				}
+    					html+='</tbody></table>';
+    					return html;
+
+               }                
+                
+        		function displayLogsNormal() {
+                    var source = $('#source').val();
+                    var logs = getLogs(source, 25);
+		   		    $('#preview').html(getLogsTableNormal(logs));
+				}		
+        		
+                            
                 $(document).ready(function() {
                         $('#source').keyup(function() {
                                 var source = $('#source').val();
@@ -153,14 +183,35 @@
         <div id="load">
         <div id="loading">
                 <div>Paste in logs and specify format:
-                        <input type="button" onclick="loadLogs()">
+                        <input type="button" value="display user time" onclick="loadLogs()">
+                        <input type="button" value="display logs normal" onclick="displayLogsNormal()">
                 </div>
-                <textarea style="width: 100%; height: 5em;" id="source"># 00:00 <w00tner> hello
-# 00:00 <w00tner> good monday for everyone
-# 00:00 <w00tner> q: if i want to use css styles in my django template do i have to register the directory ? i set it in the same folder "templates" is and call it "static" (inside css,js,img). but in console im getting "no style for this element" ... my code: http://pastie.org/7376601
-# 00:00 <sigpipe> w00tner: you need to serve your css as a static file. see the static files app for help with that
-# 00:00 <w00tner> ok
-# 00:00 <w00tner> thanks
+                <textarea style="width: 100%; height: 20em;" id="source"># 00:00 <w00tner> hello
+11:47 -!- Sargath [~Sargath@89-73-152-177.dynamic.chello.pl] has joined #drupal-support
+11:48 -!- TwstdElf [~TwstdElf@rrcs-76-79-242-50.west.biz.rr.com] has joined #drupal-support
+11:48 < flezen> billyroebuck: yes i need a context. filter to show all subpages
+11:49 < flezen> i got it working now, with a php-snippet, filtering for plid, parent-link-id, but then i don´t get any results for this one parent page, obviously ;)
+11:49 -!- HAPPYFUNBALL [~FUNKMASTA@c-174-63-120-5.hsd1.ma.comcast.net] has quit [Quit: ( www.nnscript.com :: NoNameScript 4.22 :: www.esnation.com )]
+11:49 -!- boze [~boze@unaffiliated/boze] has joined #drupal-support
+11:49 -!- ryanclemens [~Ryan@149-169-233-167.nat.asu.edu] has quit [Quit: ryanclemens]
+11:50 -!- tanarurkerem [~pp@91-137-131-213.opticon.hu] has quit [Ping timeout: 272 seconds]
+11:50 -!- ryanclemens [~Ryan@149-169-233-167.nat.asu.edu] has joined #drupal-support
+11:50 -!- illmatix [~test@184.71.62.238] has joined #drupal-support
+11:50 < flezen> i need to show a view of links/images of subpages, using slideshow, to use as a navigation, but as mentioned, i need them on this parent-page _and_ on all subpages ...
+11:50 -!- aburrows [~aburrows@host81-139-68-141.in-addr.btopenworld.com] has joined #drupal-support
+11:51 -!- emjayess [~emjayess@65.183.254.222] has joined #drupal-support
+11:51 -!- emjayess [~emjayess@65.183.254.222] has quit [Changing host]
+11:51 -!- emjayess [~emjayess@couchdb/user/emjayess] has joined #drupal-support
+11:52 -!- ddrhythm [~dd_rhythm@173-8-213-38-Oregon.hfc.comcastbusiness.net] has joined #drupal-support
+11:53 -!- spuky [~spuky@HSI-KBW-37-49-91-164.hsi14.kabel-badenwuerttemberg.de] has quit [Ping timeout: 272 seconds]
+11:53 -!- dob_ [~dob@2002:5fd0:e73d:0:cdef:c594:e9af:df2c] has quit [Remote host closed the connection]
+11:53 -!- pearlbear [~pearlbear@198.45.153.34] has joined #drupal-support
+11:55 -!- spuky [~spuky@HSI-KBW-37-49-91-164.hsi14.kabel-badenwuerttemberg.de] has joined #drupal-support
+11:55 -!- oadaeh [~jason@wsip-24-234-160-51.lv.lv.cox.net] has quit [Quit: Quitting]
+11:55 -!- jerbob92-away is now known as jerbob92
+11:55 -!- webflo1 [~Adium@gateway.digi-info.de] has joined #drupal-support
+11:55 -!- BootcampChris [~chatzilla@host81-149-81-68.in-addr.btopenworld.com] has joined #drupal-support
+11:56 < flezen> what i got is this:
 </textarea>
                 <div id="preview"></div>
         </div>

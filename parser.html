@@ -7,17 +7,15 @@
 	    <script src="parser_normal.js"></script>         
 	    <script src="parser_irssi.js"></script>
             <script>
-		/* var parser_normal = {};
-		parser_normal.normal = /^# (.+?) (<.+?>) (.+?)$/; */
 		var parsers = [];
  		parsers["normal"] = parser_normal;
  		parsers["irssi"] = new Parser_irssi();
 		the_parser = parsers["irssi"]
          
-                var logs = [];
+        var logs = [];
 		function getLogs(source,max) {
 		    return the_parser.parse_logs(source,max);
-                }
+        }
 /*                function getLogs(source, max) {
                         var lines = source.split(/\n+/);
                         var logs = [];
@@ -30,21 +28,21 @@
                         return logs;
                 }
 */
-                function getLogsTable(logs) {
-                        var html = '<table><thead><tr><td>Time</td><td>User</td><td>Text</td></tr></thead><tbody>';
-                        for (var i=0;i<logs.length;i++) {
-                                html+='<tr><td>'+logs[i].time+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
-                        }
-                        html+='</tbody></table>';
-                        return html;
+			function getLogsTable(logs) {
+				var html = '<table><thead><tr><td>Time</td><td>User</td><td>Text</td></tr></thead><tbody>';
+				for (var i=0;i<logs.length;i++) {
+					html+='<tr><td>'+logs[i].time+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
+				}
+					html+='</tbody></table>';
+					return html;
 
-                }
+           }
 		
 		function displayLogs() {
                       var source = $('#source').val();
                       var logs = getLogs(source, 25);
 		      $('#preview').html(getLogsTable(logs));
-                }
+		}
 
                 $(document).ready(function() {
                         $('#source').keyup(function() {
