@@ -8,14 +8,13 @@
                 <script src="https://raw.github.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
 			    <script src="parser_normal.js"></script>         
         	    <script src="parser_irssi.js"></script>        	  
-                <script>
+				<script src="word-cloud.js"></script>
+			    <script>
         		var parsers = [];
          		parsers["normal"] = parser_normal;
          		parsers["irssi"] = new Parser_irssi();
         		the_parser = parsers["irssi"]
         		var logs = [];
-
-                var fill = d3.scale.category20(); // for word cloud
 
                 /* var format = /^# (\d+)\:(\d+) (<.+?>) (.+?)$/;
                 
@@ -74,11 +73,21 @@
         		
                             
                 $(document).ready(function() {
+					// load default data
+		            $.ajax({ 
+		                type: "GET", 
+		                url: "logs/django-2013-04-09.txt",//get response from this file
+		                success: function(response){ 
+ 
+		                 $("#source").val(response);//send response to textarea
+		  			}
+		  	    });
                         $('#source').keyup(function() {
                                 var source = $('#source').val();
                                 var logs = getLogs(source, 5);
                                 $('#preview').html(getLogsTable(logs));
                         });
+						$('#source-button').hide();
                 });
                 function loadLogs() {
                         var source = $('#source').val();
@@ -103,48 +112,10 @@
                                 html+="<li class='ui-widget-content' id='user_"+user+"'><span class='name'>"+user+'</span> ('+users[user]+")</li>";
                         }
 
-                        d3.layout.cloud().size([300, 300])
-                              .words(tmpUsers)
-                              .rotate(function() { return ~~(Math.random() * 5) * 30 - 60; })
-                              .font("Impact")
-                              .fontSize(function(d) { return d.size; })
-                              .on("end", function() {
-                                          d3.select("#users_cloud").append("svg")
-                                                  .attr("width", 300)
-                                                  .attr("height", 300)
-                                                .append("g")
-                                                  .attr("transform", "translate(150,150)")
-                                                .selectAll("text")
-                                                  .data(tmpUsers)
-                                                .enter().append("text")
-                                                                  .on("click", function(d) {
-                                                                          var user = $("#users #user_"+d.text);
-                                                                          // FIXME: this isn't working
-                                                                          /*
-                                                                          if (user) {
-                                                                                  if (user.hasClass("ui-selected")) {
-                                                                                          user.removeClass("ui-selected").addClass("ui-selecting")
-                                                                                  }
-                                                                                  else {
-                                                                                          user.addClass("ui-selecting");
-                                                                                  }
-                                                                                  console.warn($("#users").data("selectable"))
-                                                                                 $("#users").data("selectable")._mouseStop(null);
-                                                                         }
-                                                                          */
-                                                                  })
-                                                  .style("font-size", function(d) { return d.size + "px"; })
-                                                  .style("font-family", "Impact")
-                                                  .style("fill", function(d, i) { return fill(i); })
-                                                  .attr("text-anchor", "middle")
-                                                  .attr("transform", function(d) {
-                                                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                                                  })
-                                                  .text(function(d) { return d.text; });
-                              })
-                              .start();
+						drawWordCloud("#users_cloud", tmpUsers);
 
                         $('#users').html(html);
+                        $('#source-button').show();
                         $('#loading').hide();
                         updateLogs();
                 }
@@ -178,10 +149,12 @@
                 #users {font-size: smaller;}
                 #time {width: 7em;}
             /*.selectable li { margin: 3px; padding: 0.4em; }*/
+			#source-button {text-align: right;}
                 </style>
         </head>
 <body>
         <div id="load">
+			<div id="source-button"><input type="button" value="Source" onclick="$('#loading').show(); $('#source-button').hide()"/></div>
         <div id="loading">
                 <div>Paste in logs and specify format:
                         <input type="button" value="display user time" onclick="loadLogs()">
