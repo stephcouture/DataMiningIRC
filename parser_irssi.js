@@ -37,6 +37,7 @@
 function Parser() {
     this.logs = [];
     this.parsed = false;
+    this.user_list = [];
 }
 
 Parser.prototype.parse_line = function (i_line) {
@@ -58,6 +59,30 @@ Parser.prototype.parse_logs = function(i_source, max) {
 	}
 	this.parsed = true;
         return this.logs;
+}
+
+Parser.prototype.get_logs = function() {
+	console.warn("Parser::parse_logs");
+	
+	if (this.parsed) 
+	 	return this.logs;
+	else return; 
+}
+
+Parser.prototype.get_user_list = function() {
+	console.warn("Parser::get_user_names");
+	
+	if (this.users_list)
+		return this.users_list;
+	else {
+	    for (var i=0;i<this.logs.length;i++) {
+	    	if (this.user_list[this.logs[i].user])
+	    		this.user_list[this.logs[i].user]++;
+	    	else
+	    		this.user_list[this.logs[i].user] = 1;
+	    }
+	    return this.user_list; 
+	}	 
 }
 
 function Parser_irssi() {
