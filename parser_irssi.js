@@ -110,6 +110,8 @@ Parser_irssi.prototype.parse_line = function (i_line) {
 	  console.warn("no matches");
 }
 
-
+///////////////////////
+// Autres fonctions
+///////////////////////
 
 
