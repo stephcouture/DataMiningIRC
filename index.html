@@ -17,15 +17,7 @@
         		the_parser = parsers["irssi"]
         		var logs = [];
 
-                /* var format = /^# (\d+)\:(\d+) (<.+?>) (.+?)$/;
-                
-                var users = {}; */
-
-                
-                function getLogs(source, max) {
-        		    return the_parser.parse_logs(source,max);
-               }
-                
+           
                 function getLogsTable(logs) {
                         var html = '<table><thead><tr><td>Time</td><td>User</td><td>Text</td></tr></thead><tbody>';
                         var hasSelectedUsers = $('#users .ui-selected').length>0;
@@ -73,8 +65,6 @@
 
                 }
                               
-               
-
                
         		function displayLogsNormal() {
                     var source = $('#source').val();
@@ -147,7 +137,7 @@
 
                         $('#source').keyup(function() {
                                 var source = $('#source').val();
-                                var logs = getLogs(source, 5);
+                                var logs = the_parser.parse_logs(source,5);
                                 $('#preview').html(getLogsTable(logs));
                         });
 						$('#source-button').hide();
@@ -155,7 +145,7 @@
 	            
                 function loadLogs() {
                         var source = $('#source').val();
-                        logs = getLogs(source, Number.MAX_VALUE);
+                        logs = the_parser.parse_logs(source,Number.MAX_VALUE);
                         var users = {};
                         for (var i=0;i<logs.length;i++) {
                                 if (users[logs[i].user]) {users[logs[i].user]++;}
