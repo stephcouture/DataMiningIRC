@@ -87,6 +87,32 @@ function displayLogsDiv(check) {
 	}
 }
 
+function displayToolResult() {
+	console.log ("displayToolResult");
+
+	visualizer_name = $('#tool_selector').val();
+	html = the_visulizers[visualizer_name].show();
+	$('#preview').html(html);
+	
+	console.log ("displayToolResult"+visualizer_name);
+	
+}
+
+function displayToolSelector() {
+	console.log ("displayToolSelector");
+	html = '<select id="tool_selector" onchange="displayToolResult()">';
+	html += '<option></option>';
+	
+	for (a_visualizer in the_visulizers) {
+		console.log (a_visualizer);
+	    html += '<option>'+a_visualizer+'</option>';	
+	}
+ 						
+    html += '<option>Google Chrome</option>';
+	html += '</select>';
+	return html;
+}
+
 function displayPanel() { 
 	$('#loading').hide();
 	$('#panel').show();
@@ -97,5 +123,12 @@ function displayPanel() {
 	html_functions += '<input type="button" value="display logs table" onclick="displayLogsTable()">';
 	html_functions += '<input type="button" value="display user list" onclick="displayUserList()">';
 	$('#functionButtons').html(html_functions);
+	
+	// Display the tool selector
+	html = displayToolSelector();
+	console.log(html);
+	$('#toolselector').html(displayToolSelector());
+	
+	
 }
 
