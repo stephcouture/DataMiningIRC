@@ -2,9 +2,10 @@
         <head>
                 <meta charset="utf-8">
             <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+            <link type="text/css" rel="stylesheet" href="style.css"" />
             <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
             <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-                <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+            <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
                 <script src="https://raw.github.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
 			    <script src="parser_normal.js"></script>         
         	    <script src="parser_irssi.js"></script>        	  
@@ -66,10 +67,14 @@
 
                 }
                               
-               
-        		                        
+                       		                       
 	            var stopwords = {}
+	            
                 $(document).ready(function() {
+                	
+                	// hide the panel
+                	$('#panel').hide()
+                	
 					// load default logs data
 		            $.ajax({ 
 		                type: "GET", 
@@ -151,22 +156,14 @@
                           updateLogs();
                 }
               });
-                  $("#time").keyup(function() {
+
+             $("#time").keyup(function() {
                           updateLogs();
                   })
-            });
+             });
+            
                 </script>
-                <style>
-            .selectable .ui-selecting { background: #FECA40; }
-            .selectable .ui-selected { background: #F39814; color: white; }
-            .selectable { list-style-type: none; margin: 0; padding: 0; }
-                #controls {float: left;}
-                #users {font-size: smaller;}
-                #time {width: 7em;}
-            /*.selectable li { margin: 3px; padding: 0.4em; }*/
-			#source-button {text-align: right;}
-			#viz {float: right;}
-                </style>
+                
         </head>
 <body>
         <div id="load">
@@ -204,9 +201,20 @@
 11:55 -!- BootcampChris [~chatzilla@host81-149-81-68.in-addr.btopenworld.com] has joined #drupal-support
 11:56 < flezen> what i got is this:
 </textarea>
-                <div id="preview"></div>
+<input type="button" value="Load logs" onclick="displayPanel()">
+                <div id="preview2"></div>
         </div>
-        <div id="panel">
+        <div id = "panel"</div>
+            <div id ="restrict-panel">
+               <input type="checkbox" name="hide-notice" value="1" onClick="console.log('this.checked : '+this.checked); this.checked ? displayLogsDiv(true) : displayLogsDiv(false)"> Hide Notices   
+			   <input type="button" value="Source" onclick="$('#loading').show(); $('#source-button').hide(); $('#panel').hide()"/>
+		    </div>
+        	<div id="displaylogtable"></div>
+        	<div id="functionButtons"></div>
+        	<div id="preview"></div>
+        </div>
+        <div id="panel2">
+        	<div id="logtable"></div>
 			<div id="viz">
                 <div id="users_cloud"></div>
                 <div id="words_cloud"></div>
