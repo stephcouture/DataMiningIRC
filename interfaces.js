@@ -9,21 +9,21 @@
 
 function gethtml_LogsDiv(hide_notices) {
     var source = $('#source').val();
-    var logs = the_parser.parse_logs(source,100);
+    the_logs = new irc_logs(the_parser.parse_logs(source,100));
     // var user_list = the_parser.get_user_list();
     
     var html = '<table class="logstable" cellpadding="0" cellspacing="0">';
-	for (var i=0;i<logs.length;i++) {
-		if (logs[i].type == "message") {    						
-			if (is_question(logs[i].text))    							
+	for (var i=0;i<the_logs.lines.length;i++) {
+		if (the_logs.lines[i].type == "message") {    						
+			if (is_question(the_logs.lines[i].text))    							
 				html+='<tr class= "logsrow-question">';
 			else
 				html+='<tr class= "logsrow-message">';
-			html+='<td class= "logscolumn">'+logs[i].full_line+'</td></tr>'
+			html+='<td class= "logscolumn">'+the_logs.lines[i].full_line+'</td></tr>'
 
 		}
 		else if (!hide_notices){
-			html+='<tr div class= "logsrow-notice"><td class= "logscolumn">'+logs[i].full_line+'</td></tr>';
+			html+='<tr div class= "logsrow-notice"><td class= "logscolumn">'+the_logs.lines[i].full_line+'</td></tr>';
 		}
 	}
 		
@@ -34,20 +34,20 @@ function gethtml_LogsDiv(hide_notices) {
 
 function gethtml_LogsTable() {
     var source = $('#source').val();
-    var logs = the_parser.parse_logs(source,100);
-    var user_list = the_parser.get_user_list();
+    // var logs = the_parser.parse_logs(source,100);
+    // var user_list = the_parser.get_user_list();
     
     var html = 'Display only message line<br><table><thead><tr><td>type</td><td>Hour</td><td>Minute</td><td>User</td><td>Text</td></tr></thead><tbody>';
 	for (var i=0;i<logs.length;i++) 
-		if (logs[i].type == "message") {    						
-			if (is_question(logs[i].text))    							
+		if (the_logs.lines[i].type == "message") {    						
+			if (is_question(the_logs.lines[i].text))    							
 				html+='<tr style="background-color: #ff0000;">';
 			else
 				html+='<tr>';
-			html+='<td>M</td><td>'+logs[i].time.getHours()+'</td><td>'+logs[i].time.getMinutes()+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
+			html+='<td>M</td><td>'+the_logs.lines[i].time.getHours()+'</td><td>'+the_logs.lines[i].time.getMinutes()+'</td><td>'+the_logs.lines[i].user+'</td><td>'+logs[i].text+"</td></tr>";
 		}
 		else {
-			html+='<tr style="background-color: #C0C0C0;"><td>Join</td><td>'+logs[i].time.getHours()+'</td><td>'+logs[i].time.getMinutes()+'</td><td>'+logs[i].user+'</td><td>'+logs[i].text+"</td></tr>";
+			html+='<tr style="background-color: #C0C0C0;"><td>Join</td><td>'+the_logs.lines[i].time.getHours()+'</td><td>'+the_logs.lines[i].time.getMinutes()+'</td><td>'+the_logs.lines[i].user+'</td><td>'+the_logs.lines[i].text+"</td></tr>";
 		}
 		
 		html+='</tbody></table>';
@@ -62,8 +62,8 @@ function displayLogsTable() {
 
 function displayUserList() {
     var source = $('#source').val();
-    var logs = the_parser.parse_logs(source,100);
-    var user_list = the_parser.get_user_list();
+    // var logs = the_logs.parse_logs(source,100);
+    var user_list = the_logs.get_user_list();
 
     // Display a table with users
 	var html = '<table><thead><tr><td>user name</td><td>nb lines</td><td></tr></thead><tbody>';

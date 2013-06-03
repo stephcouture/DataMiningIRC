@@ -74,22 +74,6 @@ Parser.prototype.get_logs = function() {
 	else return; 
 }
 
-Parser.prototype.get_user_list = function() {
-	console.warn("Parser::get_user_names");
-	
-	if (this.users_list)
-		return this.users_list;
-	else {
-	    for (var i=0;i<this.logs.length;i++) {
-	    	if (this.user_list[this.logs[i].user])
-	    		this.user_list[this.logs[i].user]++;
-	    	else
-	    		this.user_list[this.logs[i].user] = 1;
-	    }
-	    return this.user_list; 
-	}	 
-}
-
 function Parser_irssi() {
   this.type = "irssi"; 
   Parser.call(this);

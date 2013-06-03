@@ -8,7 +8,7 @@ function display_users() {
 
 display_users.prototype.show = function () {
 	    
-    var user_list = the_parser.get_user_list();
+    var user_list = the_logs.get_user_list();
 
     // Display a table with users
 	var html = '<table><thead><tr><td>user name</td><td>nb lines</td><td></tr></thead><tbody>';
