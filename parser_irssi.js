@@ -54,12 +54,12 @@ Parser.prototype.parse_logs = function(i_source, max) {
 	for (var i=0, len=(max<lines.length ? max : lines.length); i<len; i++) {				
 		var match = this.parse_line(lines[i]);
 		if (match) {
-		   this.logs.push({
-			   time: new Date(0,0,0,match[1],match[2]), 
-			   user: match[3].substring(1,match[3].length-1), 
-			   text: match[4],
-			   type: match[5],
-			   full_line:lines[i]})
+		   this.logs.push(new log_line(
+			   new Date(0,0,0,match[1],match[2]),   // time
+			   match[3].substring(1,match[3].length-1), // user 
+			   match[4],  // text
+			   match[5], // type
+			   lines[i]));  // full line
 		   }
 	}
 	this.parsed = true;

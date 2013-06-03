@@ -15,7 +15,7 @@ function gethtml_LogsDiv(hide_notices) {
     var html = '<table class="logstable" cellpadding="0" cellspacing="0">';
 	for (var i=0;i<the_logs.lines.length;i++) {
 		if (the_logs.lines[i].type == "message") {    						
-			if (is_question(the_logs.lines[i].text))    							
+			if (the_logs.lines[i].is_question())    							
 				html+='<tr class= "logsrow-question">';
 			else
 				html+='<tr class= "logsrow-message">';

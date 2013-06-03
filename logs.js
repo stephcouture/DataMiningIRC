@@ -28,7 +28,24 @@ irc_logs.prototype.get_user_list = function() {
 	}
 }
 	
-////
+/////////////////////////////////////////////
 // logs line object
-///
+/////////////////////////////////////////////
+function log_line(time,user,text,type,full_line) {
+	this.time = time;
+	this.user = user;
+	this.text = text;
+	this.type = type;
+	this.full_line = full_line;
+}
 
+log_line.prototype.is_question = function() {
+	console.log ("logline.is_question")
+	 var user_list = the_logs.get_user_list();
+	 for (a_user in user_list) {
+		if (this.text.contains(a_user)) {
+			return true;
+	    }
+    }
+    return false;
+}
