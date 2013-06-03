@@ -27,6 +27,13 @@
 				<script src="visual_tools/users_wordcloud.js"></script>
 				<script src="visual_tools/display_users.js"></script>
     			<script>
+    			
+        		// Init the selectors
+        		var the_selectors = [];
+        		</script>
+				<script src="selectors/hide_notices_selector.js"></script>
+				<script src="selectors/time_selector.js"></script>
+    			<script>
         		
                 function getLogsTable(logs) {
                         var html = '<table><thead><tr><td>Time</td><td>User</td><td>Text</td></tr></thead><tbody>';
@@ -313,10 +320,7 @@
                 <div id="preview2"></div>
         </div>
         <div id = "panel"</div>
-            <div id ="restrict-panel">
-               <input type="checkbox" name="hide-notice" value="1" onClick="console.log('this.checked : '+this.checked); this.checked ? displayLogsDiv(true) : displayLogsDiv(false)"> Hide Notices
-			   <input type="button" value="Source" onclick="$('#loading').show(); $('#source-button').hide(); $('#panel').hide()"/>
-		    </div>
+            <div id ="restrict-panel"></div>
         	<div id="displaylogtable"></div>
         	<div id="functionButtons"></div>
         	<div id="toolselector"></div>        	

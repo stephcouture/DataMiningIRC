@@ -10,7 +10,7 @@
 function gethtml_LogsDiv(hide_notices) {
     var source = $('#source').val();
     var logs = the_parser.parse_logs(source,100);
-    var user_list = the_parser.get_user_list();
+    // var user_list = the_parser.get_user_list();
     
     var html = '<table class="logstable" cellpadding="0" cellspacing="0">';
 	for (var i=0;i<logs.length;i++) {
@@ -98,8 +98,24 @@ function displayToolResult() {
 	
 }
 
-function displayToolSelector() {
-	console.log ("displayToolSelector");
+function displaySelectors() {
+	console.log ("displaySelectors");
+	
+	var html = '<table border="1"><tr>';
+	for (a_selector in the_selectors) {
+		console.log (a_selector);
+	    html += '<td>'+the_selectors[a_selector].show()+'</td>';
+	}
+	html += '</tr></table>';
+ 				
+//	html += '<input type="button" value="Source" onclick="$(\'#loading\').show(); $('#source-button').hide(); $(\'#panel\').hide()"/>';
+	console.log ("html");
+	return html;
+}
+
+
+function displayVisualizers() {
+	console.log ("displayVisualizers");
 	html = '<select id="tool_selector" onchange="displayToolResult()">';
 	html += '<option></option>';
 	
@@ -116,6 +132,8 @@ function displayToolSelector() {
 function displayPanel() { 
 	$('#loading').hide();
 	$('#panel').show();
+
+	$('#restrict-panel').html(displaySelectors());
 	
 	html = '<div id="panel-scroll">'+gethtml_LogsDiv(false)+'</div>';
 	$('#displaylogtable').html(html);
@@ -125,10 +143,7 @@ function displayPanel() {
 	$('#functionButtons').html(html_functions);
 	
 	// Display the tool selector
-	html = displayToolSelector();
-	console.log(html);
-	$('#toolselector').html(displayToolSelector());
-	
+	$('#toolselector').html(displayVisualizers());
 	
 }
 
