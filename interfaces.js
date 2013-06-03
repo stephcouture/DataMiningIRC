@@ -58,23 +58,6 @@ function displayLogsTable() {
     $('#preview').html(gethtml_LogsTable());
 }
 
-// Function to display the list of users
-
-function displayUserList() {
-    var source = $('#source').val();
-    // var logs = the_logs.parse_logs(source,100);
-    var user_list = the_logs.get_user_list();
-
-    // Display a table with users
-	var html = '<table><thead><tr><td>user name</td><td>nb lines</td><td></tr></thead><tbody>';
-	for (a_user in user_list) {
-			html+='<tr><td>'+a_user+'</td><td>'+user_list[a_user]+'</td><td></tr>';    						
-	}
-		html+='</tbody></table>';
-                        
-	    $('#preview').html(html);
-}
-
 function displayLogsDiv(check) {
 	
 	if (check) {
