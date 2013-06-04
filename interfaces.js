@@ -77,7 +77,8 @@ function displayToolResult() {
 
 	visualizer_name = $('#tool_selector').val();
 	html = the_visulizers[visualizer_name].show();
-	$('#preview').html(html);
+	if (html) 
+		$('#preview').html(html);
 	
 	console.log ("displayToolResult"+visualizer_name);
 	

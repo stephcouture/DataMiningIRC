@@ -7,6 +7,8 @@ function irc_logs(loglines) {
 	this.user_list = [];
 }
 
+
+// Get an array of user lists indicating the number of message
 irc_logs.prototype.get_user_list = function() {
 	console.warn("Parser::get_user_names");
 	
@@ -14,11 +16,14 @@ irc_logs.prototype.get_user_list = function() {
 		return this.users_list;
 	else {
 	    for (var i=0;i<this.lines.length;i++) {
-	    	if (this.user_list[this.lines[i].user])
-	    		this.user_list[this.lines[i].user]++;
-	    	else
-	    		this.user_list[this.lines[i].user] = 1;
+	    	if (this.lines[i].type == "message") {
+	    		if (this.user_list[this.lines[i].user])
+	    			this.user_list[this.lines[i].user]++;
+	    		else
+	    			this.user_list[this.lines[i].user] = 1;
+	    	}
 	    }
+	    
 	    return this.user_list;
 	}
 }
