@@ -8,8 +8,19 @@ function hide_notices_selector() {
 }
 
 hide_notices_selector.prototype.show = function () {
+    return '<input type="checkbox" id="hide-notice" name="hide-notice" value="1" onClick="displayLogsDiv()"> Hide Notices';
+}
 
-    return '<input type="checkbox" name="hide-notice" value="1" onClick="this.checked ? displayLogsDiv(true) : displayLogsDiv(false)"> Hide Notices';
+hide_notices_selector.prototype.restrict = function () {
+	
+	console.log("dans hide_notices_selector.restrict")
+	
+	if ($('#hide-notice').is(":checked")) { 
+		for (var i=0;i<the_logs.lines.length;i++) {
+			if (the_logs.lines[i].type != "message")
+				the_logs.lines[i].deselect();		
+		}
+	}
 }
 
 console.log("avant d'ajouter le hide_notices_selector");

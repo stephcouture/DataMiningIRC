@@ -3,13 +3,8 @@
 //
 
 function irc_logs(loglines) {
-	console.log("logs constructor");
 	this.lines = loglines;
 	this.user_list = [];
-}
-
-irc_logs.prototype.add_line = function () {
-    return 'Time: <input id="time" value="0:00-23:59">';
 }
 
 irc_logs.prototype.get_user_list = function() {
@@ -27,6 +22,11 @@ irc_logs.prototype.get_user_list = function() {
 	    return this.user_list;
 	}
 }
+
+irc_logs.prototype.selectall = function () {
+	for (var i=0;i<this.lines.length;i++)
+		this.lines[i].selected = true;
+}
 	
 /////////////////////////////////////////////
 // logs line object
@@ -37,10 +37,10 @@ function log_line(time,user,text,type,full_line) {
 	this.text = text;
 	this.type = type;
 	this.full_line = full_line;
+	this.selected = true;
 }
 
 log_line.prototype.is_question = function() {
-	console.log ("logline.is_question")
 	 var user_list = the_logs.get_user_list();
 	 for (a_user in user_list) {
 		if (this.text.contains(a_user)) {
@@ -48,4 +48,12 @@ log_line.prototype.is_question = function() {
 	    }
     }
     return false;
+}
+
+log_line.prototype.select = function() {
+    this.selected = true;
+}
+
+log_line.prototype.deselect = function() {
+    this.selected = false;
 }

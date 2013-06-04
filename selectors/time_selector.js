@@ -11,6 +11,10 @@ time_selector.prototype.show = function () {
     return 'Time: <input id="time" value="0:00-23:59">';
 }
 
+time_selector.prototype.restrict = function () {
+    return;
+}
+
 console.log("avant d'ajouter le selector");
 aselector = new time_selector();
 the_selectors[aselector.name] = aselector;

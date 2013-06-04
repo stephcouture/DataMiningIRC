@@ -3,7 +3,6 @@
 // 
 
 function display_users() {
-	this.name = "display_users";
 }
 
 display_users.prototype.show = function () {

@@ -7,25 +7,22 @@
 // DisplayLogsNormal : function to display the logs in a normal way
 //
 
-function gethtml_LogsDiv(hide_notices) {
-    var source = $('#source').val();
-    the_logs = new irc_logs(the_parser.parse_logs(source,100));
-    // var user_list = the_parser.get_user_list();
-    
+function gethtml_LogsDiv() {
     var html = '<table class="logstable" cellpadding="0" cellspacing="0">';
-	for (var i=0;i<the_logs.lines.length;i++) {
-		if (the_logs.lines[i].type == "message") {    						
-			if (the_logs.lines[i].is_question())    							
-				html+='<tr class= "logsrow-question">';
-			else
-				html+='<tr class= "logsrow-message">';
-			html+='<td class= "logscolumn">'+the_logs.lines[i].full_line+'</td></tr>'
-
-		}
-		else if (!hide_notices){
-			html+='<tr div class= "logsrow-notice"><td class= "logscolumn">'+the_logs.lines[i].full_line+'</td></tr>';
-		}
-	}
+    for (var i=0;i<the_logs.lines.length;i++) {
+    	if (the_logs.lines[i].selected) {
+    		if (the_logs.lines[i].type == "message") {
+    			if (the_logs.lines[i].is_question())
+    				html+='<tr class= "logsrow-question">';
+    			else
+    				html+='<tr class= "logsrow-message">';
+    			html+='<td class= "logscolumn">'+the_logs.lines[i].full_line+'</td></tr>'
+    		}
+    		else {
+    			html+='<tr div class= "logsrow-notice"><td class= "logscolumn">'+the_logs.lines[i].full_line+'</td></tr>';
+    		}
+    	}
+    }
 		
 	html+='</table>';
 	return html;	
@@ -58,16 +55,16 @@ function displayLogsTable() {
     $('#preview').html(gethtml_LogsTable());
 }
 
-function displayLogsDiv(check) {
+function displayLogsDiv() {
 	
-	if (check) {
-		console.log("displayLogsDiv : checked");
-		$('#panel-scroll').html(gethtml_LogsDiv(true));
+    the_logs.selectall();
+	
+	// We restrict the selection
+	for (a_selector in the_selectors) {
+		the_selectors[a_selector].restrict();
 	}
-	else {
-		console.log("displayLogsDiv : not checked");
-		$('#panel-scroll').html(gethtml_LogsDiv(false));
-	}
+	
+	$('#panel-scroll').html(gethtml_LogsDiv());
 }
 
 function displayToolResult() {
@@ -115,6 +112,10 @@ function displayVisualizers() {
 function displayPanel() { 
 	$('#loading').hide();
 	$('#panel').show();
+	
+	// load the logs
+    var source = $('#source').val();
+    the_logs = new irc_logs(the_parser.parse_logs(source,100));
 
 	$('#restrict-panel').html(displaySelectors());
 	

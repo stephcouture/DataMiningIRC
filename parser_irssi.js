@@ -45,8 +45,6 @@ Parser.prototype.parse_line = function (i_line) {
 }
 
 Parser.prototype.parse_logs = function(i_source, max) {
-	console.warn("Parser::parse_logs");
-	
 	if (this.parsed) 
 	 	return this.logs;
 
@@ -67,7 +65,6 @@ Parser.prototype.parse_logs = function(i_source, max) {
 }
 
 Parser.prototype.get_logs = function() {
-	console.warn("Parser::parse_logs");
 	
 	if (this.parsed) 
 	 	return this.logs;
@@ -77,7 +74,6 @@ Parser.prototype.get_logs = function() {
 function Parser_irssi() {
   this.type = "irssi"; 
   Parser.call(this);
-  console.warn("parser_irssi created");
 }
 
 // inherit Parser
