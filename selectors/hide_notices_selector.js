@@ -8,7 +8,8 @@ function hide_notices_selector() {
 }
 
 hide_notices_selector.prototype.show = function () {
-    return '<input type="checkbox" id="hide-notice" name="hide-notice" value="1" onClick="displayLogsDiv()"> Hide Notices';
+    // return '<input type="checkbox" id="hide-notice" name="hide-notice" value="1" onClick="displayLogsDiv()"> Hide Notices';
+    return '<input type="checkbox" id="hide-notice" name="hide-notice" value="1"> Hide Notices';
 }
 
 hide_notices_selector.prototype.restrict = function () {
@@ -21,6 +22,10 @@ hide_notices_selector.prototype.restrict = function () {
 				the_logs.lines[i].deselect();		
 		}
 	}
+}
+
+hide_notices_selector.prototype.reset = function () {
+	$('#hide-notice').attr('checked', false);
 }
 
 console.log("avant d'ajouter le hide_notices_selector");

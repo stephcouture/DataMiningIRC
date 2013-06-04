@@ -29,6 +29,7 @@ function gethtml_LogsDiv() {
 }
 
 
+/* 
 function gethtml_LogsTable() {
     var source = $('#source').val();
     // var logs = the_parser.parse_logs(source,100);
@@ -55,14 +56,18 @@ function displayLogsTable() {
     $('#preview').html(gethtml_LogsTable());
 }
 
-function displayLogsDiv() {
+*/
+
+function displayLogsDiv(reset) {
 	
     the_logs.selectall();
-	
-	// We restrict the selection
-	for (a_selector in the_selectors) {
-		the_selectors[a_selector].restrict();
-	}
+    
+    if (!reset) {
+    	// We restrict the selection
+    	for (a_selector in the_selectors) {
+    		the_selectors[a_selector].restrict();
+    	}
+    }
 	
 	$('#panel-scroll').html(gethtml_LogsDiv());
 }
@@ -82,21 +87,37 @@ function displaySelectors() {
 	console.log ("displaySelectors");
 	
 	var html = '<table border="1"><tr>';
+	
 	for (a_selector in the_selectors) {
-		console.log (a_selector);
-	    html += '<td>'+the_selectors[a_selector].show()+'</td>';
+			console.log (a_selector);
+			html += '<td>'+the_selectors[a_selector].show()+'</td>';
 	}
+	
+	html += '<td><input type="button" value="apply" onclick="displayLogsDiv()"></td>';
+	html += '<td><input type="button" value="reset" onclick="resetSelectors()"></td>';
+	onclick = "$('#loading').show(); $('#source-button').hide(); $('#panel').hide()";
+	html += '<td><input type="button" value="Source" onclick="'+onclick+'"/></td>';
+	
 	html += '</tr></table>';
  				
-//	html += '<input type="button" value="Source" onclick="$(\'#loading\').show(); $('#source-button').hide(); $(\'#panel\').hide()"/>';
 	console.log ("html");
 	return html;
 }
 
+function resetSelectors() {
+	
+	// reset every selectors
+	for (a_selector in the_selectors) {
+	    the_selectors[a_selector].reset();
+	}
+	
+	displayLogsDiv(true);
+}
 
 function displayVisualizers() {
 	console.log ("displayVisualizers");
-	html = '<select id="tool_selector" onchange="displayToolResult()">';
+	html = '<p>Tool visualizer : '; 
+	html += '<select id="tool_selector" onchange="displayToolResult()">';
 	html += '<option></option>';
 	
 	for (a_visualizer in the_visulizers) {
@@ -121,10 +142,6 @@ function displayPanel() {
 	
 	html = '<div id="panel-scroll">'+gethtml_LogsDiv(false)+'</div>';
 	$('#displaylogtable').html(html);
-	html_functions = '<input type="button" value="display user time" onclick="loadLogs()">';
-	html_functions += '<input type="button" value="display logs table" onclick="displayLogsTable()">';
-	html_functions += '<input type="button" value="display user list" onclick="displayUserList()">';
-	$('#functionButtons').html(html_functions);
 	
 	// Display the tool selector
 	$('#toolselector').html(displayVisualizers());
