@@ -5,7 +5,7 @@
 var fill = d3.scale.category20();
 function drawWordCloud(selector, data) {
 	d3.select(selector).html('');
-	d3.layout.cloud().size([300, 300])
+	d3.layout.cloud().size([600, 600])
 	      .words(data)
 	      .rotate(function() { return ~~(Math.random() * 5) * 30 - 60; })
 	      .font("Impact")

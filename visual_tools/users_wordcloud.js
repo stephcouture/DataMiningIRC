@@ -25,7 +25,7 @@ users_wordcloud.prototype.show = function () {
 	// Put in the form suitable to draw the cloud
 	var data = [];
 	for (user in tmpUsers) {
-		data.push({text: user, size: tmpUsers[user]})
+		data.push({text: user, size: tmpUsers[user]*10})
 	}
 	
 	console.log("avant draw the cloud: "+data);
