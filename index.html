@@ -46,7 +46,6 @@
                 	
                 	// hide the panel
                 	$('#panel').hide()
-                	console.log ("document ready")
                 	
 					// load default logs data
 		            $.ajax({ 
@@ -142,8 +141,7 @@
         <div id="load">
 			<div id="source-button"><input type="button" value="Source" onclick="$('#loading').show(); $('#source-button').hide()"/></div>
         <div id="loading">
-                <div>Paste in logs and specify format:
-                        <input type="button" value="display user time" onclick="loadLogs()">
+                <div>Paste in logs here :
                 </div>
                 <textarea style="width: 100%; height: 20em;" id="source">
 11:15 -!- stephc [~steph@DigiHum.McGill.CA] has joined #drupal-support
@@ -271,8 +269,10 @@
 12:12 -!- dewdrop_ [~dewdrop@unaffiliated/dewdrop] has joined #drupal-support
 12:12 -!- dewdrop [~dewdrop@unaffiliated/dewdrop] has quit [Read error: Connection reset by peer]
 </textarea>
+
 <input type="button" value="Load logs" onclick="displayPanel()">
-                <div id="preview2"></div>
+
+        <div id="preview2"></div>
         </div>
         <div id = "panel"</div>
             <div id ="restrict-panel"></div>
