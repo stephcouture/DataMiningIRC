@@ -48,8 +48,14 @@ log_line.prototype.is_question = function() {
 	console.log("is question");
 	 var user_list = the_logs.get_user_list();
 	 console.log("is question");
+	 
+
 	 for (a_user in user_list) {
-		if (this.text.contains(a_user)) {
+		console.log("user avant : "+a_user);
+		var reg=new RegExp(a_user+' |@|:',"gi");
+		if (reg.test(this.text)) {
+			console.log("text : "+this.text);
+			console.log("user : "+a_user);
 			return true;
 	    }
     }
