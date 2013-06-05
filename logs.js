@@ -45,13 +45,11 @@ function log_line(time,user,text,type,full_line) {
 }
 
 log_line.prototype.is_question = function() {
-	console.log("is question");
-	 var user_list = the_logs.get_user_list();
-	 console.log("is question");
-	 
 
+	 var user_list = the_logs.get_user_list();
+	
 	 for (a_user in user_list) {
-		console.log("user avant : "+a_user);
+	
 		var reg=new RegExp(a_user+' |@|:',"gi");
 		if (reg.test(this.text)) {
 			console.log("text : "+this.text);
