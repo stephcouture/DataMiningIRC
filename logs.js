@@ -16,16 +16,15 @@ irc_logs.prototype.get_user_list = function() {
 		return this.users_list;
 	else {
 	    for (var i=0;i<this.lines.length;i++) {
-	    	if (this.lines[i].type == "message") {
-	    		if (this.user_list[this.lines[i].user])
+	    	if (typeof this.user_list[this.lines[i].user] == 'undefined')
+    			this.user_list[this.lines[i].user] = 0;
+    		
+	    	if (this.lines[i].type == "message")
 	    			this.user_list[this.lines[i].user]++;
-	    		else
-	    			this.user_list[this.lines[i].user] = 1;
-	    	}
 	    }
+	}
 	    
 	    return this.user_list;
-	}
 }
 
 irc_logs.prototype.selectall = function () {
@@ -46,7 +45,9 @@ function log_line(time,user,text,type,full_line) {
 }
 
 log_line.prototype.is_question = function() {
+	console.log("is question");
 	 var user_list = the_logs.get_user_list();
+	 console.log("is question");
 	 for (a_user in user_list) {
 		if (this.text.contains(a_user)) {
 			return true;
