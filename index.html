@@ -1,6 +1,7 @@
 <html>
         <head>
                 <meta charset="utf-8">
+            <title>Data Mining IRC</title>
             <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
             <link type="text/css" rel="stylesheet" href="style.css"" />
             <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -16,10 +17,10 @@
 			<script>
 			
 				// Init the parser
-        		var parsers = [];
-         		parsers["normal"] = parser_normal;
+        		var parsers = [];         		
          		parsers["irssi"] = new Parser_irssi();
-        		the_parser = parsers["irssi"]
+         		parsers["normal"] = parser_normal;
+         		var the_parser;
         		var logs = [];
         		var the_logs;
         		
@@ -46,6 +47,12 @@
                 	
                 	// hide the panel
                 	$('#panel').hide()
+                	
+                	// Display the different availaible formats
+					console.log ("select format")
+					for (a_parser in parsers) {
+						$('#parser_format').append('<option>'+a_parser+'</option>');	
+					}
                 	
 					// load default logs data
 		            $.ajax({ 
@@ -83,7 +90,8 @@
 						$('#source-button').hide();
                 });
 	            
-                function loadLogs() {
+/*
+			function loadLogs() {
                         var source = $('#source').val();
                         logs = the_parser.parse_logs(source,Number.MAX_VALUE);
                         var users = {};
@@ -118,7 +126,8 @@
                         $("#logs").html(getLogsTable(logs));
            }
 		   
-            $(function() {
+
+		    $(function() {
               $( "#users" ).selectable({
                 stop: function() {
                                 users = {};
@@ -133,6 +142,7 @@
                           updateLogs();
                   })
              });
+*/
             
                 </script>
                 
@@ -269,7 +279,7 @@
 12:12 -!- dewdrop_ [~dewdrop@unaffiliated/dewdrop] has joined #drupal-support
 12:12 -!- dewdrop [~dewdrop@unaffiliated/dewdrop] has quit [Read error: Connection reset by peer]
 </textarea>
-
+Choose log format : <select id="parser_format"></select>
 <input type="button" value="Load logs" onclick="displayPanel()">
 
         <div id="preview2"></div>
