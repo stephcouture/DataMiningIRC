@@ -8,7 +8,7 @@ function time_selector() {
 }
 
 time_selector.prototype.show = function () {
-    return 'Time: <input id="time" value="0:00-23:59">';
+    return 'Time: <input id="time" value="0:00-23:59">	<input type="button" value="apply" onclick="displayLogsDiv()">';
 }
 
 time_selector.prototype.restrict = function () {

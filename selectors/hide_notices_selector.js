@@ -8,8 +8,7 @@ function hide_notices_selector() {
 }
 
 hide_notices_selector.prototype.show = function () {
-    // return '<input type="checkbox" id="hide-notice" name="hide-notice" value="1" onClick="displayLogsDiv()"> Hide Notices';
-    return '<input type="checkbox" id="hide-notice" name="hide-notice" value="1"> Hide Notices';
+    return '<input type="checkbox" id="hide-notice" name="hide-notice" value="1" onClick="displayLogsDiv()"> Hide Notices';
 }
 
 hide_notices_selector.prototype.restrict = function () {

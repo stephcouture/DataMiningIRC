@@ -94,7 +94,6 @@ function displaySelectors() {
 			html += '<td>'+the_selectors[a_selector].show()+'</td>';
 	}
 	
-	html += '<td><input type="button" value="apply" onclick="displayLogsDiv()"></td>';
 	html += '<td><input type="button" value="reset" onclick="resetSelectors()"></td>';
 	onclick = "$('#loading').show(); $('#source-button').hide(); $('#panel').hide()";
 	html += '<td><input type="button" value="Source" onclick="'+onclick+'"/></td>';
