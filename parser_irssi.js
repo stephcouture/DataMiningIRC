@@ -54,7 +54,7 @@ Parser.prototype.parse_logs = function(i_source, max) {
 		if (match) {
 		   this.logs.push(new log_line(
 			   new Date(0,0,0,match[1],match[2]),   // time
-			   match[3].substring(1,match[3].length-1), // user 
+			   match[3].replace(/^\s+/,'').replace(/\+$/,''), // user 
 			   match[4],  // text
 			   match[5], // type
 			   lines[i]));  // full line
@@ -82,11 +82,11 @@ Parser_irssi.prototype = new Parser();
 // correct the constructor pointer because it points to Person
 Parser_irssi.prototype.constructor = Parser_irssi;
 Parser_irssi.prototype.parse_line = function (i_line) {
-	if (matches = i_line.match(/^(.+?):(.+?) (< .+?>) (.+?)$/))  {// normal line
+	if (matches = i_line.match(/^(\d+):(\d+) < (.+?)> (.+?)$/))  {// normal line
 		matches[5] = "message";
 		return matches;
 	}
-	else if (matches = i_line.match(/^(.+?):(.+?) -!- (.+?\S+) \[\S+\] has joined [#&!+]\S+$/)) { // joined line
+	else if (matches = i_line.match(/^(\d+):(\d+) -\!- (.+?) \[.+?\] has joined .+?$/)) { // joined line
 		matches[4] = "join";
 	    matches[5] = "join";
 		return matches;
