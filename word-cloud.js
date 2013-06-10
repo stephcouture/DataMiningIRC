@@ -1,3 +1,5 @@
+/* This is modified from http://www.jasondavies.com/wordcloud/ (BSD License) */
+
 // assumes D3 and layout are loaded
 // <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 // <script src="https://raw.github.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
