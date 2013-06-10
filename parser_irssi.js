@@ -54,7 +54,7 @@ Parser.prototype.parse_logs = function(i_source, max) {
 		if (match) {
 		   this.logs.push(new log_line(
 			   new Date(0,0,0,match[1],match[2]),   // time
-			   match[3].replace(/^\s+/,'').replace(/\+$/,''), // user 
+			   match[3], // user 
 			   match[4],  // text
 			   match[5], // type
 			   lines[i]));  // full line
