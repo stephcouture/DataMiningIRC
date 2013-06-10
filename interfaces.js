@@ -12,7 +12,7 @@ function gethtml_LogsDiv() {
     for (var i=0;i<the_logs.lines.length;i++) {
     	if (the_logs.lines[i].selected) {
     		if (the_logs.lines[i].type == "message") {
-    			if (the_logs.lines[i].is_question())
+    			if (the_logs.is_question(i))
     				html+='<tr class= "logsrow-question">';
     			else
     				html+='<tr class= "logsrow-message">';
