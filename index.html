@@ -3,7 +3,7 @@
                 <meta charset="utf-8">
             <title>Data Mining IRC</title>
             <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-            <link type="text/css" rel="stylesheet" href="style.css"" />
+            <link type="text/css" rel="stylesheet" href="style.css" />
             <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
             <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
             <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -13,6 +13,9 @@
 			<script src="word-cloud.js"></script>
 			<script src="interfaces.js"></script>
 			<script src="logs.js"></script>
+			<!-- this isn't ideal, but it will avoid some security issues for local development without web server -->
+			<script src="logs/default_data.js"></script>
+			<>
 			<script>
 			
 				// Init the parser
@@ -52,42 +55,22 @@
 					for (a_parser in parsers) {
 						$('#parser_format').append('<option>'+a_parser+'</option>');	
 					}
-                	
-					// load default logs data
-		            $.ajax({ 
-		                type: "GET", 
-		                url: "logs/drupal-support.log",//get response from this file
-		                success: function(response){ 
-		                console.log ("response success")
-		                 $("#source").val(response);//send response to textarea
-		  			}
-		  	    });
 
-				// load default logs data
-				$.ajax({ 
-	                type: "GET", 
-	                url: "logs/stopwords.txt",//get response from this file
-	                success: function(response){ 
-						var tokens = response.split(/\n+/);
-						for (var i=0, len=tokens.length; i<len; i++) {
-							stopwords[tokens[i]]=true;
-							if (tokens[i].indexOf("'")>0) { // apostrophes
-								var parts = tokens[i].split("'");
-								for (var j=0, lenj=parts.length; j<lenj; j++) {
-									stopwords[parts[j]]=true;
-								}
+					// load default logs data
+					$("#source").val(getDefaultLogsString().join("\n"))
+
+					// load stopwords
+					var tokens = getDefaultStopWordsList()
+					for (var i=0, len=tokens.length; i<len; i++) {
+						stopwords[tokens[i]]=true;
+						if (tokens[i].indexOf("'")>0) { // apostrophes
+							var parts = tokens[i].split("'");
+							for (var j=0, lenj=parts.length; j<lenj; j++) {
+								stopwords[parts[j]]=true;
 							}
 						}
-	  			}
-	  	    });
-
-                        $('#source').keyup(function() {
-                                var source = $('#source').val();
-                                var logs = the_parser.parse_logs(source,5);
-                                $('#preview').html(getLogsTable(logs));
-                        });
-						$('#source-button').hide();
-                });
+					}
+				});
 	            
 /*
 			function loadLogs() {
