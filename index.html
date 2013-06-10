@@ -2,12 +2,12 @@
         <head>
                 <meta charset="utf-8">
             <title>Data Mining IRC</title>
-            <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+            <link rel="stylesheet" href="d3/jquery-ui.css" />
             <link type="text/css" rel="stylesheet" href="style.css" />
-            <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-            <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-            <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
- 		    <script src="https://raw.github.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
+            <script src="d3/jquery-1.9.1.js"></script>
+            <script src="d3/jquery-ui.js"></script>
+            <script src="d3/d3.v3.min.js" charset="utf-8"></script>
+ 		    <script src="d3/d3.layout.cloud.js"></script>
 			<script src="parser_normal.js"></script>         
  			<script src="parser_irssi.js"></script>        	  
 			<script src="word-cloud.js"></script>
@@ -15,7 +15,7 @@
 			<script src="logs.js"></script>
 			<!-- this isn't ideal, but it will avoid some security issues for local development without web server -->
 			<script src="logs/default_data.js"></script>
-			<>
+
 			<script>
 			
 				// Init the parser
@@ -51,7 +51,6 @@
                 	$('#panel').hide()
                 	
                 	// Display the different availaible formats
-					console.log ("select format")
 					for (a_parser in parsers) {
 						$('#parser_format').append('<option>'+a_parser+'</option>');	
 					}
@@ -72,60 +71,6 @@
 					}
 				});
 	            
-/*
-			function loadLogs() {
-                        var source = $('#source').val();
-                        logs = the_parser.parse_logs(source,Number.MAX_VALUE);
-                        var users = {};
-                        for (var i=0;i<logs.length;i++) {
-                                if (users[logs[i].user]) {users[logs[i].user]++;}
-                                else {users[logs[i].user]=1}
-                        }
-
-                        // first sort
-                        var tmpUsers = [];
-                        for (user in users) {
-                                tmpUsers.push({text: user, size: users[user], freq: users[user]});
-                        }
-                        tmpUsers.sort(function(a,b) {return a.text.toLowerCase() > b.text.toLowerCase()});
-
-                        // now build list
-                        var html='';
-                        for (var i=0;i<tmpUsers.length;i++) {
-                                var user = tmpUsers[i].text;
-                                html+="<li class='ui-widget-content' id='user_"+user+"'><span class='name'>"+user+'</span> ('+users[user]+")</li>";
-                        }
-
-                        $('#users').html(html);
-                        $('#source-button').show();
-                        $('#loading').hide();
-                        updateLogs();
-                }
-
-
-
-		   function updateLogs() {
-                        $("#logs").html(getLogsTable(logs));
-           }
-		   
-
-		    $(function() {
-              $( "#users" ).selectable({
-                stop: function() {
-                                users = {};
-                  $( ".ui-selected", this ).each(function() {
-                                  users[$('.name', this).text()]=true;
-                  });
-                          updateLogs();
-                }
-              });
-
-             $("#time").keyup(function() {
-                          updateLogs();
-                  })
-             });
-*/
-            
                 </script>
                 
         </head>
