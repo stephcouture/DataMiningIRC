@@ -63,3 +63,17 @@ td.selectorCell
   overflow-x:hidden; 
   border:1px solid
 }
+
+.time_nick_join
+{
+	background-color: #C0C0C0;
+	padding-left : 5 px;
+	padding-right : 5 px;
+}
+
+.time_nick_message
+{
+	background-color: #FF0000;
+	padding-left : 5 px;
+	padding-right : 5 px;
+}

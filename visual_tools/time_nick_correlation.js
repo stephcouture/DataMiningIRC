@@ -39,7 +39,6 @@ time_nick_correlation.prototype.get_users_table = function () {
 }
 
 
-
 time_nick_correlation.prototype.show = function () {
 	       
 	users_array = this.get_users_table();
