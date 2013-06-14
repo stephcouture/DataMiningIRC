@@ -95,7 +95,6 @@ function displayVisualizers() {
 	    html += '<option>'+a_visualizer+'</option>';	
 	}
  						
-    html += '<option>Google Chrome</option>';
 	html += '</select>';
 	return html;
 }
