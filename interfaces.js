@@ -107,7 +107,7 @@ function displayPanel() {
 	// load the logs
     var source = $('#source').val();
     the_parser = parsers[$('#parser_format').val()];
-    the_logs = new irc_logs(the_parser.parse_logs(source,100));
+    the_logs = new irc_logs(the_parser.parse_logs(source,1000));
 
 	$('#restrict-panel').html(displaySelectors());
 	
