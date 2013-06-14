@@ -18,7 +18,10 @@ time_nick_correlation.prototype.get_users_table = function () {
 			if (aline.selected) {
 				if (!users_array[aline.user]) {			
 					// Initialize the array
-					users_array[aline.user] = {hours : []};
+					users_array[aline.user] = {hours : [], total : []};
+					users_array[aline.user].total["message"] = 0;
+					users_array[aline.user].total["join"] = 0;
+					users_array[aline.user].total["quit"] = 0;
 					for (var h=0;h<24;h++) {
 						users_array[aline.user].hours[h] = [];
 						users_array[aline.user].hours[h]["message"] = 0;
@@ -29,6 +32,7 @@ time_nick_correlation.prototype.get_users_table = function () {
 				
 				console.log("ligne "+i+":"+aline.user+"type : "+aline.type+" nb :"+users_array[aline.user].hours[aline.time.getHours()][aline.type]);
 				users_array[aline.user].hours[aline.time.getHours()][aline.type]++;
+				users_array[aline.user].total[aline.type]++;
 			}
 		}
 	
@@ -38,18 +42,36 @@ time_nick_correlation.prototype.get_users_table = function () {
 	return this.users_array;
 }
 
-
 time_nick_correlation.prototype.show = function () {
 	       
 	users_array = this.get_users_table();
 	console.log(users_array);
 	
+	// 
+	// first sort the array
+	var aTemp = [];
+	for (var user in users_array)
+		aTemp.push({user_name: user, data:users_array[user]});
+	
+	var sortfunc;
+	if ($('#time_nick_sortby').length && $('#time_nick_sortby').val() != "user name") {// if the controller exist and its not username;
+		sortfunc = function (a,b) {return a.data.total[$('#time_nick_sortby').val()] < b.data.total[$('#time_nick_sortby').val()] };
+	}
+	else {
+		console.log("avant sortfunc user_name");
+		sortfunc = function(a,b) {return a.user_name > b.user_name};
+	}
+		
+	aTemp.sort(sortfunc);
+	
+	//
 	// Display the table
 	var html = '<div class ="time_nick_tool">Legend : <span class = "time_nick_join">join</span> <span class = "time_nick_message">message</span>  ';
 
-	// Sort by selector
-	// html += 'Sort by : <select id="time_nick_sortby" onchange="">';
-	// html += '<option>user name</option><option>join</option><option>message</option><option>message</option></select>  ';
+	// Select sort
+	// var val = $('#time_nick_sortby').length ? $('#time_nick_sortby').val() : "user name";  // this could be cleaner
+	html += 'Sort by : <select id="time_nick_sortby" onchange="time_nick_correlation_sort_trigger()">';
+	html += '<option>user name</option><option>message</option><option>join</option><option>quit</option></select>  ';
 	
 	// Frequency
 	// html += 'Frequency : <select id="time_nick_frequency" onchange="">';
@@ -61,9 +83,10 @@ time_nick_correlation.prototype.show = function () {
 	for (var i=0;i<24;i++) {
 		html += '<td style = "border:1px solid">'+i+'</td>';
 	}
-	html += '</tr></thead><tbody>';
+	html += '<td>total</td></tr></thead><tbody>';
 	
-	for (var auser in users_array) {
+	for (var u=0;u<aTemp.length;u++) {
+		auser = aTemp[u].user_name;
 		html += '<tr style = "border:1px solid"><td style = "border:1px solid">'+auser+'</td>';
 		for (var i=0;i<24;i++) {
 			html += '<td style="border:1px solid">&nbsp;';
@@ -73,7 +96,10 @@ time_nick_correlation.prototype.show = function () {
 				html += '<span class = "time_nick_message">'+users_array[auser].hours[i]["message"]+'</span>';
 			html += '</td>';
 		}
-		html += '</tr>';
+		html += '<td style="border:1px solid">';
+		html += '<span class = "time_nick_message">'+users_array[auser].total["message"]+'</span>';
+		html += '<span class = "time_nick_join">'+users_array[auser].total["join"]+'</span>';
+		html += '</td></tr>';
 	}
 	
 	
@@ -81,6 +107,13 @@ time_nick_correlation.prototype.show = function () {
     $('#preview').html(html);
 	    
 	// return html;
+}
+
+// this is not the cleanest way to do this. We should  
+function time_nick_correlation_sort_trigger() {
+	console.log("time_nick_correlation_sort_trigger");
+	
+	the_visulizers["time nick correlation"].show();
 }
 
 
