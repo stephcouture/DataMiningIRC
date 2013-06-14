@@ -42,8 +42,7 @@ time_nick_correlation.prototype.get_users_table = function () {
 	return this.users_array;
 }
 
-time_nick_correlation.prototype.show = function () {
-	       
+time_nick_correlation.prototype.gettable = function() {
 	users_array = this.get_users_table();
 	console.log(users_array);
 	
@@ -64,56 +63,56 @@ time_nick_correlation.prototype.show = function () {
 		
 	aTemp.sort(sortfunc);
 	
-	//
-	// Display the table
-	var html = '<div class ="time_nick_tool">Legend : <span class = "time_nick_join">join</span> <span class = "time_nick_message">message</span>  ';
-
-	// Select sort
-	// var val = $('#time_nick_sortby').length ? $('#time_nick_sortby').val() : "user name";  // this could be cleaner
-	html += 'Sort by : <select id="time_nick_sortby" onchange="time_nick_correlation_sort_trigger()">';
-	html += '<option>user name</option><option>message</option><option>join</option><option>quit</option></select>  ';
-	
-	// Frequency
-	// html += 'Frequency : <select id="time_nick_frequency" onchange="">';
-	// html += '<option>hour</option><option>30 minutes</option><option>15 minutes</option></select><p>';
-
-	// Display the table
-	html += '<table style = "border:1px solid"><thead>';
-	html += '<tr style = "border:1px solid"><td style="border:1px solid">user name</td>';
+	// 
+	// make html table
+	var htmltable = '<table><thead>';
+	htmltable += '<tr><td>user name</td>';
 	for (var i=0;i<24;i++) {
-		html += '<td style = "border:1px solid">'+i+'</td>';
+		htmltable += '<td>'+i+'</td>';
 	}
-	html += '<td>total</td></tr></thead><tbody>';
+	htmltable += '<td>total</td></tr></thead><tbody>';
 	
 	for (var u=0;u<aTemp.length;u++) {
 		auser = aTemp[u].user_name;
-		html += '<tr style = "border:1px solid"><td style = "border:1px solid">'+auser+'</td>';
+		htmltable += '<tr><td>'+auser+'</td>';
 		for (var i=0;i<24;i++) {
-			html += '<td style="border:1px solid">&nbsp;';
+			htmltable += '<td>&nbsp;';
 			if  (users_array[auser].hours[i]["join"])
-				html += '<span class = "time_nick_join">'+users_array[auser].hours[i]["join"]+'</span>';
+				htmltable += '<div class = "time_nick_join">'+users_array[auser].hours[i]["join"]+'</div>';
 			if  (users_array[auser].hours[i]["message"])
-				html += '<span class = "time_nick_message">'+users_array[auser].hours[i]["message"]+'</span>';
-			html += '</td>';
+				htmltable += '<div class = "time_nick_message">'+users_array[auser].hours[i]["message"]+'</div>';
+			htmltable += '</td>';
 		}
-		html += '<td style="border:1px solid">';
-		html += '<span class = "time_nick_message">'+users_array[auser].total["message"]+'</span>';
-		html += '<span class = "time_nick_join">'+users_array[auser].total["join"]+'</span>';
-		html += '</td></tr>';
+		htmltable += '<td>';
+		htmltable += '<div class = "time_nick_message">'+users_array[auser].total["message"]+'</div>';
+		htmltable += '<div class = "time_nick_join">'+users_array[auser].total["join"]+'</div>';
+		htmltable += '</td></tr>';
 	}
 	
 	
-	html+='</tbody></table></div>';
-    $('#preview').html(html);
-	    
-	// return html;
+	htmltable +='</tbody></table></div></div>';
+	
+	return htmltable;
+}
+
+time_nick_correlation.prototype.show = function () {
+	       
+		var html = '<div class ="time_nick_tool">Legend : <div class = "time_nick_join">join</div> <div class = "time_nick_message">message</div>  ';
+
+		// Select sort
+		// var val = $('#time_nick_sortby').length ? $('#time_nick_sortby').val() : "user name";  // this could be cleaner
+		html += 'Sort by : <select id="time_nick_sortby" onchange="time_nick_correlation_sort_trigger()">';
+		html += '<option>user name</option><option>message</option><option>join</option><option>quit</option></select>  ';
+		html += '<div id = "time_nick_table">'+this.gettable()+'</div></div>';
+		
+		$('#preview').html(html);
 }
 
 // this is not the cleanest way to do this. We should  
 function time_nick_correlation_sort_trigger() {
 	console.log("time_nick_correlation_sort_trigger");
 	
-	the_visulizers["time nick correlation"].show();
+	$('#time_nick_table').html(the_visulizers["time nick correlation"].gettable());
 }
 
 

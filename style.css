@@ -66,14 +66,26 @@ td.selectorCell
 
 .time_nick_join
 {
+	display: inline-block; 
 	background-color: #C0C0C0;
-	padding-left : 5 px;
-	padding-right : 5 px;
+	margin-left:2px;
+	margin-right:2px;
 }
 
 .time_nick_message
 {
+	display: inline-block; 
 	background-color: #FF0000;
-	padding-left : 5 px;
-	padding-right : 5 px;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+#time_nick_table td {
+	 border:1px solid;
+	 border-spacing : 0px;
+}
+
+#time_nick_table thead {
+	 text-align:center;
+	 
 }
