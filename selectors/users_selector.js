@@ -10,7 +10,7 @@ function users_selector() {
 users_selector.prototype.show = function () {
 	
 	html = 'select user : ';
-	html += '<select id="users_selector" onchange="displayLogsDiv()";>';
+	html += '<select id="users_selector" onchange="refresh_page()";>';
 	html += '<option value=""> </option>'
 	
 	users_array = the_logs.get_user_list();

@@ -95,17 +95,23 @@ time_nick_correlation.prototype.gettable = function() {
 	return htmltable;
 }
 
-time_nick_correlation.prototype.show = function () {
-	       
-		var html = '<div class ="time_nick_tool">Legend : <div class = "time_nick_join">join</div> <div class = "time_nick_message">message</div>  ';
-
-		// Select sort
-		// var val = $('#time_nick_sortby').length ? $('#time_nick_sortby').val() : "user name";  // this could be cleaner
-		html += 'Sort by : <select id="time_nick_sortby" onchange="time_nick_correlation_sort_trigger()">';
-		html += '<option>user name</option><option>message</option><option>join</option><option>quit</option></select>  ';
-		html += '<div id = "time_nick_table">'+this.gettable()+'</div></div>';
+time_nick_correlation.prototype.show = function (refresh) {
+	    
+		this.users_array = null; // to make sure we have a refresh each time this function is called. 
 		
-		$('#preview').html(html);
+		if (!refresh) {
+			var html = '<div class ="time_nick_tool">Legend : <div class = "time_nick_join">join</div> <div class = "time_nick_message">message</div>  ';
+
+			// Select sort
+			html += 'Sort by : <select id="time_nick_sortby" onchange="time_nick_correlation_sort_trigger()">';
+			html += '<option>user name</option><option>message</option><option>join</option><option>quit</option></select>  ';
+			html += '<div id = "time_nick_table">'+this.gettable()+'</div></div>';
+		
+			$('#preview').html(html);
+		}
+		else {
+			$('#time_nick_table').html(the_visulizers["time nick correlation"].gettable());
+		}
 }
 
 // this is not the cleanest way to do this. We should  

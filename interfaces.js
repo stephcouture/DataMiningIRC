@@ -28,7 +28,9 @@ function gethtml_LogsDiv() {
 	return html;	
 }
 
-function displayLogsDiv(reset) {
+
+
+function refresh_page(reset) {
 	
     the_logs.selectall();
     
@@ -39,14 +41,18 @@ function displayLogsDiv(reset) {
     	}
     }
 	
+    // refresh the scroll panel
 	$('#panel-scroll').html(gethtml_LogsDiv());
+	
+    // refresh the visualizers
+	displayToolResult(true);
 }
 
-function displayToolResult() {
+function displayToolResult(refresh) {
 	console.log ("displayToolResult");
 
 	visualizer_name = $('#tool_selector').val();
-	html = the_visulizers[visualizer_name].show();
+	html = the_visulizers[visualizer_name].show(refresh);
 	if (html) 
 		$('#preview').html(html);
 	
@@ -81,7 +87,8 @@ function resetSelectors() {
 	    the_selectors[a_selector].reset();
 	}
 	
-	displayLogsDiv(true);
+	refresh_page(true);
+		
 }
 
 function displayVisualizers() {
