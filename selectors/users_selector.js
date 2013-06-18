@@ -9,9 +9,9 @@ function users_selector() {
 
 users_selector.prototype.show = function () {
 	
+	
 	html = 'select user : ';
-	html += '<select id="users_selector" onchange="refresh_page()";>';
-	html += '<option value=""> </option>'
+	html += '<select id="users_selector" multiple="true" style="width:500px;" onchange="refresh_page()">';
 	
 	users_array = the_logs.get_user_list();
 	
@@ -28,19 +28,21 @@ users_selector.prototype.show = function () {
 	}
 	
 	html += '</select>';
+	html += '<script>$("#users_selector").select2({allowClear: true});</script>'
 	
     return html;
 }
 
 users_selector.prototype.restrict = function () {
 	
-	var user_selector = $("#users_selector").val();
+	var selected_users = $("#users_selector").val();
 	
-	if (!user_selector) 
+	console.log(selected_users);
+	if (!selected_users) 
 		return;
 	
 	for (var i=0;i<the_logs.lines.length;i++) {
-		if (the_logs.lines[i].user != user_selector)
+		if (selected_users.indexOf(the_logs.lines[i].user) == -1)
 			the_logs.lines[i].deselect();		
 	}    
 }
