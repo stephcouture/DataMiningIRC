@@ -52,7 +52,8 @@ function displayToolResult(refresh) {
 	console.log ("displayToolResult");
 
 	visualizer_name = $('#tool_selector').val();
-	html = the_visulizers[visualizer_name].show(refresh);
+	if (visualizer_name) 
+		html = the_visulizers[visualizer_name].show(refresh);
 	if (html) 
 		$('#preview').html(html);
 	
