@@ -3,7 +3,6 @@
 // 
 
 function time_selector() {
-	console.log("time_selector");
 	this.name = "time_selector";
 }
 
@@ -30,7 +29,6 @@ time_selector.prototype.reset = function () {
 	$("#time").val("0:00-23:59");
 }
 
-console.log("avant d'ajouter le selector");
 aselector = new time_selector();
 the_selectors[aselector.name] = aselector;
 

@@ -49,7 +49,6 @@ function refresh_page(reset) {
 }
 
 function displayToolResult(refresh) {
-	console.log ("displayToolResult");
 
 	visualizer_name = $('#tool_selector').val();
 	if (visualizer_name) 
@@ -57,17 +56,14 @@ function displayToolResult(refresh) {
 	if (html) 
 		$('#preview').html(html);
 	
-	console.log ("displayToolResult"+visualizer_name);
 	
 }
 
 function displaySelectors() {
-	console.log ("displaySelectors");
 	
 	var html = '<table border="1"><tr>';
 	
 	for (a_selector in the_selectors) {
-			console.log (a_selector);
 			html += '<td>'+the_selectors[a_selector].show()+'</td>';
 	}
 	
@@ -77,7 +73,6 @@ function displaySelectors() {
 	
 	html += '</tr></table>';
  				
-	console.log ("html");
 	return html;
 }
 
@@ -93,15 +88,12 @@ function resetSelectors() {
 }
 
 function displayVisualizers() {
-	console.log ("displayVisualizers");
 	html = '<p>Tool visualizer : '; 
 	html += '<select id="tool_selector" onchange="displayToolResult()">';
 	html += '<option></option>';
 	
-	for (a_visualizer in the_visulizers) {
-		console.log (a_visualizer);
+	for (a_visualizer in the_visulizers)
 	    html += '<option>'+a_visualizer+'</option>';	
-	}
  						
 	html += '</select>';
 	return html;

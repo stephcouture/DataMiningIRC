@@ -20,7 +20,6 @@ irc_logs.prototype.is_question =  function(log_line) {
 
 // Get an array of user lists indicating the number of message
 irc_logs.prototype.get_user_list = function() {
-	console.warn("Parser::get_user_names");
 	
 	if (this.users_list)
 		return this.users_list;

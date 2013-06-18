@@ -30,7 +30,6 @@ time_nick_correlation.prototype.get_users_table = function () {
 					}
 				}
 				
-				console.log("ligne "+i+":"+aline.user+"type : "+aline.type+" nb :"+users_array[aline.user].hours[aline.time.getHours()][aline.type]);
 				users_array[aline.user].hours[aline.time.getHours()][aline.type]++;
 				users_array[aline.user].total[aline.type]++;
 			}
@@ -44,7 +43,6 @@ time_nick_correlation.prototype.get_users_table = function () {
 
 time_nick_correlation.prototype.gettable = function() {
 	users_array = this.get_users_table();
-	console.log(users_array);
 	
 	// 
 	// first sort the array
@@ -57,7 +55,6 @@ time_nick_correlation.prototype.gettable = function() {
 		sortfunc = function (a,b) {return a.data.total[$('#time_nick_sortby').val()] < b.data.total[$('#time_nick_sortby').val()] };
 	}
 	else {
-		console.log("avant sortfunc user_name");
 		sortfunc = function(a,b) {return a.user_name > b.user_name};
 	}
 		
@@ -116,8 +113,6 @@ time_nick_correlation.prototype.show = function (refresh) {
 
 // this is not the cleanest way to do this. We should  
 function time_nick_correlation_sort_trigger() {
-	console.log("time_nick_correlation_sort_trigger");
-	
 	$('#time_nick_table').html(the_visulizers["time nick correlation"].gettable());
 }
 
