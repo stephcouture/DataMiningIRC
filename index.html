@@ -9,7 +9,7 @@
             <script src="d3/jquery-ui.js"></script>
             <script src="d3/d3.v3.min.js" charset="utf-8"></script>
  		    <script src="d3/d3.layout.cloud.js"></script>
- 		    <script src="select2.js"></script>
+ 			<script src="select2.js"></script>
 			<script src="parser_normal.js"></script>         
  			<script src="parser_irssi.js"></script>        	  
 			<script src="word-cloud.js"></script>
@@ -19,7 +19,7 @@
 			<script src="logs/default_data.js"></script>
 
 			<script>
-			
+		    
 				// Init the parser
         		var parsers = [];         		
          		parsers["irssi"] = new Parser_irssi();
@@ -77,17 +77,16 @@
                 
         </head>
 <body>
+        <div id=software-title-header><div id="software-title">Data Mining IRC V.01beta.</div><div id="software-subtile">Please visit us on <a href = "https://github.com/stephcouture/DataMiningIRC/blob/master/README.md" target="_blank">GitHub</a></div></div>
         <div id="load">
         <div id="loading">
-                <div>Paste in logs here :
-                </div>
+                <div>Paste in logs here :</div>
                 <textarea style="width: 100%; height: 20em;" id="source">
 				</textarea>
 				Choose log format : <select id="parser_format"></select>
 		<input type="button" value="Load logs" onclick="displayPanel()">
 		</div>
         <div id = "panel"</div>
-        	<div id="source-button"><input type="button" value="Source" onclick="location.reload(true)"/></div>
             <div id ="restrict-panel"></div>
         	<div id="displaylogtable"></div>
         	<div id="toolselector"></div>        	

@@ -68,8 +68,7 @@ function displaySelectors() {
 	}
 	
 	html += '<td><input type="button" value="reset" onclick="resetSelectors()"></td>';
-	onclick = "$('#loading').show(); $('#source-button').hide(); $('#panel').hide()";
-	html += '<td><input type="button" value="Source" onclick="'+onclick+'"/></td>';
+	html += '<td><input type="button" value="Source" onclick="location.reload(true)"/></td>';
 	
 	html += '</tr></table>';
  				

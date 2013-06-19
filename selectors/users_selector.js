@@ -9,7 +9,7 @@ function users_selector() {
 users_selector.prototype.show = function () {
 	
 	
-	html = 'select user : ';
+	html = 'select user(s) : ';
 	html += '<select id="users_selector" multiple="true" style="width:500px;" onchange="refresh_page()">';
 	
 	users_array = the_logs.get_user_list();
