@@ -51,8 +51,7 @@ function refresh_page(reset) {
 function displayToolResult(refresh) {
 
 	visualizer_name = $('#tool_selector').val();
-	if (visualizer_name) 
-		html = the_visulizers[visualizer_name].show(refresh);
+	html = the_visulizers[visualizer_name].show(refresh);
 	if (html) 
 		$('#preview').html(html);
 	
