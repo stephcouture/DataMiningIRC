@@ -28,7 +28,7 @@ search_selector.prototype.restrict = function () {
 }
 
 search_selector.prototype.reset = function () {
-	
+	var search = $('#search_selector').val('');
 }
 
 aselector = new search_selector();
