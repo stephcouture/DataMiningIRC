@@ -22,9 +22,6 @@ search_selector.prototype.restrict = function () {
 			}
 		}
 	}
-	else {
-		this.reset();
-	}
 }
 
 search_selector.prototype.reset = function () {
