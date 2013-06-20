@@ -27,6 +27,7 @@ users_selector.prototype.show = function () {
 	
 	html += '</select>';
 	html += '<script>$("#users_selector").select2({allowClear: true});</script>'
+	// html += '<script>$("#users_selector").select2('data',null);
 	
     return html;
 }
@@ -45,7 +46,8 @@ users_selector.prototype.restrict = function () {
 }
 
 users_selector.prototype.reset = function () {
-	$("#users_selector").val("");
+	//$("#users_selector").val("");
+	$("#users_selector").select2('data', null);
 }
 
 aselector = new users_selector();
