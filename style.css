@@ -79,6 +79,14 @@ td.selectorCell
   border:1px solid
 }
 
+.time_nick_quit
+{
+	display: inline-block; 
+	background-color: #33FFCC;
+	margin-left:2px;
+	margin-right:2px;
+}
+
 .time_nick_join
 {
 	display: inline-block; 

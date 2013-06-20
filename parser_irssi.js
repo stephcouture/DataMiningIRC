@@ -91,6 +91,12 @@ Parser_irssi.prototype.parse_line = function (i_line) {
 	    matches[5] = "join";
 		return matches;
 	}
+	else if (matches = i_line.match(/^(\d+):(\d+) -\!- (.+?) \[.+?\] has quit .+?$/)) { // joined line
+		matches[4] = "quit";
+	    matches[5] = "quit";
+		return matches;
+	}
+
 	else
 	  console.warn("no matches");
 }

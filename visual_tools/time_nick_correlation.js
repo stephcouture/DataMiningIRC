@@ -74,15 +74,19 @@ time_nick_correlation.prototype.gettable = function() {
 		htmltable += '<tr><td>'+auser+'</td>';
 		for (var i=0;i<24;i++) {
 			htmltable += '<td>&nbsp;';
+			if  (users_array[auser].hours[i]["quit"])
+				htmltable += '<div class = "time_nick_quit">'+users_array[auser].hours[i]["quit"]+'</div>';
 			if  (users_array[auser].hours[i]["join"])
 				htmltable += '<div class = "time_nick_join">'+users_array[auser].hours[i]["join"]+'</div>';
 			if  (users_array[auser].hours[i]["message"])
 				htmltable += '<div class = "time_nick_message">'+users_array[auser].hours[i]["message"]+'</div>';
+			
 			htmltable += '</td>';
 		}
 		htmltable += '<td>';
-		htmltable += '<div class = "time_nick_message">'+users_array[auser].total["message"]+'</div>';
+		htmltable += '<div class = "time_nick_quit">'+users_array[auser].total["quit"]+'</div>';
 		htmltable += '<div class = "time_nick_join">'+users_array[auser].total["join"]+'</div>';
+		htmltable += '<div class = "time_nick_message">'+users_array[auser].total["message"]+'</div>';
 		htmltable += '</td></tr>';
 	}
 	
@@ -97,7 +101,7 @@ time_nick_correlation.prototype.show = function (refresh) {
 		this.users_array = null; // to make sure we have a refresh each time this function is called. 
 		
 		if (!refresh) {
-			var html = '<div class ="time_nick_tool">Legend : <div class = "time_nick_join">join</div> <div class = "time_nick_message">message</div>  ';
+			var html = '<div class ="time_nick_tool">Legend : <div class = "time_nick_quit">quit</div><div class = "time_nick_join">join</div> <div class = "time_nick_message">message</div>  ';
 
 			// Select sort
 			html += 'Sort by : <select id="time_nick_sortby" onchange="time_nick_correlation_sort_trigger()">';
