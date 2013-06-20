@@ -5,17 +5,21 @@
 // <script src="https://raw.github.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
 
 var fill = d3.scale.category20();
+var fontSize;
 function drawWordCloud(selector, data) {
 	d3.select(selector).html('');
+	fontSize = d3.scale.log()
+                    .domain([d3.min(data, function(d) {return d.size}), d3.max(data, function(d) {return d.size})])
+                    .range([6, 100]);;
 	d3.layout.cloud().size([600, 600])
 	      .words(data)
 	      .rotate(function() { return ~~(Math.random() * 5) * 30 - 60; })
 	      .font("Impact")
-	      .fontSize(function(d) { return d.size; })
+	      .fontSize(function(d) { return fontSize(+d.size); })
 	      .on("end", function() {
 	                  d3.select(selector).append("svg")
-	                          .attr("width", 300)
-	                          .attr("height", 300)
+	                          .attr("width", 600)
+	                          .attr("height", 600)
 	                        .append("g")
 	                          .attr("transform", "translate(150,150)")
 	                        .selectAll("text")
