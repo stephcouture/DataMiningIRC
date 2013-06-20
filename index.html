@@ -23,7 +23,7 @@
 				// Init the parser
         		var parsers = [];         		
          		parsers["irssi"] = new Parser_irssi();
-         		parsers["normal"] = parser_normal;
+         		// parsers["normal"] = parser_normal;
          		var the_parser;
         		var logs = [];
         		var the_logs;
@@ -85,6 +85,7 @@
 				</textarea>
 				Choose log format : <select id="parser_format"></select>
 		<input type="button" value="Load logs" onclick="displayPanel()">
+		<br><i>Note : If you want other format, <a href = "https://github.com/stephcouture/DataMiningIRC/issues/new" target="_blank">please submit a new issue</a></i>.
 		</div>
         <div id = "panel"</div>
             <div id ="restrict-panel"></div>
