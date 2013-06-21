@@ -48,13 +48,15 @@
     			<script>
         		
 	            var stopwords = {}
-	            
+	            	            
                 $(document).ready(function() {
                 	
                 	// hide the panel
                 	$('#panel').hide()
+                	$('#AboutDialog').dialog({autoOpen: false, position : {my: "center top", at : "center top"}});
                 	
-                	$('#AboutDialog').dialog({autoOpen: false});
+                	// $('#AboutDialog').position({my: "center top", at : "center top"});
+                	// $('#AboutDialog').position([($(window).width() / 2) - (dialogWidth / 2), 150]);
                 	
                     $("a#about-link").click(function() {                	      
                 	      $("#AboutDialog").dialog('open');
@@ -87,7 +89,16 @@
         </head>
 <body>
         <div id=software-title-header><div id="software-title">DataMiningIRC V.01beta.</div>
-        <div id="software-subtile"><a href = "" id ="about-link">About</a></div></div>        
+        <div id="software-about"><a href = "" id ="about-link">About</a></div>
+		<div id="AboutDialog" title="About">
+		<centrer>
+		<p><b>IRCMine 0.1-beta</b></p>
+		<p>Copyright Stéphane Couture, Stéfan Sinclair, Gabriella Coleman</p>
+		<p>Licenced under GPL v.3</p>
+		<p>Please visit us on GitHub</p>
+		</centrer>
+		</div>
+        </div>        
         <div id="load">
         <div id="loading">
                 <div>Paste in logs here :</div>
@@ -103,13 +114,5 @@
         	<div id="toolselector"></div>        	
         	<div id="preview"></div>
         </div>
-         <div id="AboutDialog" title="About">
-		<centrer>
-		<p><b>IRCMine 0.1-beta</b></p>
-		<p>Copyright Stéphane Couture, Stéfan Sinclair, Gabriella Coleman</p>
-		<p>Licenced under GPL v.3</p>
-		<p>Please visit us on GitHub</p>
-		</centrer>
-		</div>
 </body>
 </html>
