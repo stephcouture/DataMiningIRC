@@ -13,7 +13,13 @@
 #viz {float: right;}
 
 /* For display the logs after loading */
-
+#software-title-header {
+	background-color: #343434;
+	color: white;
+}
+#software-title-header a {
+	color: white;
+}
 #software-title {
 	display: inline-block;
 	font-weight:bold; 
@@ -26,7 +32,8 @@
 }
 
 #software-title-header {
-	padding-bottom : 10px;
+	padding : 5px;
+	margin-bottom: 1em;
 }
 
 td.selectorCell
@@ -82,7 +89,7 @@ td.selectorCell
 .time_nick_quit
 {
 	display: inline-block; 
-	background-color: #33FFCC;
+	color: #33FFCC;
 	margin-left:2px;
 	margin-right:2px;
 }
@@ -90,7 +97,7 @@ td.selectorCell
 .time_nick_join
 {
 	display: inline-block; 
-	background-color: #C0C0C0;
+	color: #C0C0C0;
 	margin-left:2px;
 	margin-right:2px;
 }
@@ -98,18 +105,49 @@ td.selectorCell
 .time_nick_message
 {
 	display: inline-block; 
-	background-color: #FF0000;
+	color: #FF0000;
 	margin-left:2px;
 	margin-right:2px;
 }
 
+#time_nick_table table {
+	border-collapse: collapse !important;
+	border: thin solid #898989;
+}
+
 #time_nick_table td {
-	 border:1px solid;
-	 border-spacing : 0px;
+	 border: none;
+	 border-spacing : 0;
 }
 
 #time_nick_table thead {
-	 text-align:center;
-	 
+	 text-align:center; font-weight: bold;
+	 background-color: #ffd;
+}
+
+#time_nick_table td {
+	min-width: 2em;
+}
+
+#time_nick_table tbody td {
+	border-top: thin solid #898989;
+}
+
+#time_nick_table td {
+	border-right: thin dotted #cdcdcd;
+}
+
+#restrict-panel table {
+	border-collapse: collapse !important;
+	border: none;	
+}
+#restrict-panel td:nth-child(odd) {
+	background-color: #efffef;
+}
+#restrict-panel td:nth-child(even) {
+	background-color: #efefff;
+}
+#restrict-panel td {
+	padding-left: 3px; padding-right: 3px;
 }
 

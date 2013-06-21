@@ -118,6 +118,10 @@ function displayPanel() {
 	
 	// Display the tool selector
 	$('#toolselector').html(displayVisualizers());
+	$('#tool_selector').val('time nick correlation');
+	displayToolResult();
+	
+	
 	
 }
 
