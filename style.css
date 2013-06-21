@@ -151,3 +151,10 @@ td.selectorCell
 	padding-left: 3px; padding-right: 3px;
 }
 
+#AboutDialog {
+	 text-align:center;
+}
+
+#About-SoftwareName {
+	font-weight: bold;
+}
