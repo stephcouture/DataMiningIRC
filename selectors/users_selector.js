@@ -27,7 +27,6 @@ users_selector.prototype.show = function () {
 	
 	html += '</select>';
 	html += '<script>$("#users_selector").select2({allowClear: true});</script>'
-	// html += '<script>$("#users_selector").select2('data',null);
 	
     return html;
 }
