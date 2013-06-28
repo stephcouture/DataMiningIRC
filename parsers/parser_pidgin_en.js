@@ -29,19 +29,18 @@ parser_pidgin_en.prototype.constructor = parser_pidgin_en;
 parser_pidgin_en.prototype.parse_line = function (i_line) {
 	
 	var message_type;
-	if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) (.+?): (.+?)$/))
+	if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) ([a-zA-Z0-9-_]+?): (.+?)$/))
 		message_type = "message";
-	// else if (matches = i_line.match(/^(\d+):(\d+) -\!- (.+?) \[.+?\] has joined .+?$/)) {
-	else if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) (.+?) \[.+?\] entered the room.$/)) { 
-		console.log("join");
+	else if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) ([a-zA-Z0-9-_]+?) \[.+?\] entered the room.$/))
 		message_type = "join";
-	}
-	else if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) (.+?) left the room (.+?) $/))
+	else if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) ([a-zA-Z0-9-_]+?) left the room /)) 
 		message_type = "quit";
-	else {
-		console.warn("no matches");
-		return null;
+	else if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) /)) {
+		matches[5] = "";
+		matches[6] = "";
+		message_type = "unknown";		
 	}	  
+	else return null;
 	
 	// convert the to make it 24-hour (because it is am/pm)
 	var hour = parseInt(matches[1]);
@@ -49,16 +48,16 @@ parser_pidgin_en.prototype.parse_line = function (i_line) {
 		hour += 12;
 	else if (matches[4] == "AM" && hour == 12)
 		hour = 0;
-	console.log(matches);
-	console.log("hour: "+hour);
 	
 	// return the line;
-	return new log_line(
+	alogline =  new log_line(
 			new Date(0,0,0,hour,matches[2],matches[3]),   // time
 			matches[5], // user 
 			matches[6],  // text
 			message_type, // type
 			i_line);  // full line
 	
+	if (debug_mode) console.log(alogline);
+	return alogline;	
 }
 
