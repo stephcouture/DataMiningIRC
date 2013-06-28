@@ -19,8 +19,10 @@ Parser.prototype.parse_logs = function(i_source, max) {
 		var parsed_line = this.parse_line(lines[i]);
 		if (parsed_line)
 		   this.logs.push(parsed_line);
+		else
+			console.warn("parser no matches : " + lines[i]);
 	}
-	
+		
 	this.parsed = true;
 
 	return this.logs;
