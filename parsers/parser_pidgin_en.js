@@ -29,17 +29,18 @@ parser_pidgin_en.prototype.constructor = parser_pidgin_en;
 parser_pidgin_en.prototype.parse_line = function (i_line) {
 	
 	var message_type;
-	if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) (.+?): (.+?)$/)) {
-		console.log(matches);
+	if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) (.+?): (.+?)$/))
 		message_type = "message";
-	}
-	else if (matches = i_line.match(/^(\d+):(\d+) -\!- (.+?) \[.+?\] has joined .+?$/)) 
+	// else if (matches = i_line.match(/^(\d+):(\d+) -\!- (.+?) \[.+?\] has joined .+?$/)) {
+	else if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) (.+?) \[.+?\] entered the room.$/)) { 
+		console.log("join");
 		message_type = "join";
-	else if (matches = i_line.match(/^(\d+):(\d+) -\!- (.+?) \[.+?\] has quit .+?$/)) 
+	}
+	else if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) (.+?) left the room (.+?) $/))
 		message_type = "quit";
 	else {
 		console.warn("no matches");
-		return null
+		return null;
 	}	  
 	
 	// convert the to make it 24-hour (because it is am/pm)
