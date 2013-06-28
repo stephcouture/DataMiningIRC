@@ -12,7 +12,8 @@
  			<script src="libs/select2/select2.js"></script>
  			<link href="libs/select2/select2.css" rel="stylesheet"/>
 			<script src="parsers/parser.js"></script>         
- 			<script src="parsers/parser_irssi.js"></script>        	  
+ 			<script src="parsers/parser_irssi.js"></script>
+ 			<script src="parsers/parser_pidgin_en.js"></script>        	          	  
 			<script src="word-cloud.js"></script>
 			<script src="interfaces.js"></script>
 			<script src="logs.js"></script>
@@ -24,7 +25,7 @@
 				// Init the parser
         		var parsers = [];         		
          		parsers["irssi"] = new Parser_irssi();
-         		// parsers["normal"] = parser_normal;
+         		parsers["pidgin-en"] = new parser_pidgin_en();
          		var the_parser;
         		var logs = [];
         		var the_logs;

@@ -16,18 +16,14 @@ Parser.prototype.parse_logs = function(i_source, max) {
 
 	var lines = i_source.split(/\n+/);
 	for (var i=0, len=(max<lines.length ? max : lines.length); i<len; i++) {				
-		var match = this.parse_line(lines[i]);
-		if (match) {
-		   this.logs.push(new log_line(
-			   new Date(0,0,0,match[1],match[2]),   // time
-			   match[3], // user 
-			   match[4],  // text
-			   match[5], // type
-			   lines[i]));  // full line
-		   }
+		var parsed_line = this.parse_line(lines[i]);
+		if (parsed_line)
+		   this.logs.push(parsed_line);
 	}
+	
 	this.parsed = true;
-        return this.logs;
+
+	return this.logs;
 }
 
 Parser.prototype.get_logs = function() {
