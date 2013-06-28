@@ -21,7 +21,13 @@
 			<script src="logs/default_data.js"></script>
 
 			<script>
-		    				
+		    	
+				var software_name = "IRCMine"				
+				var software_version = "HEAD version"
+			
+				// to put it in debug add "?debug" at the end of the url
+				var debug_mode = (location.href.match(/\?debug/)) ? true : false;
+			
 				// Init the parser
         		var parsers = [];         		
          		parsers["irssi"] = new Parser_irssi();
@@ -51,13 +57,17 @@
 	            var stopwords = {}
 	            	            
                 $(document).ready(function() {
+                	                	
+                	var full_title = software_name + " (" + software_version + ")";
+                	$('#About-SoftwareName').html(full_title);                   
+                	
+                	if (debug_mode)
+                		full_title += " DEBUG MODE";
+                	$('#software-title').html(full_title);                	
                 	
                 	// hide the panel
                 	$('#panel').hide()
-                	$('#AboutDialog').dialog({autoOpen: false, position : {my: "center top", at : "center top"}});
-                	
-                	// $('#AboutDialog').position({my: "center top", at : "center top"});
-                	// $('#AboutDialog').position([($(window).width() / 2) - (dialogWidth / 2), 150]);
+                	$('#AboutDialog').dialog({autoOpen: false, position : {my: "center top", at : "center top"}});                	
                 	
                     $("a#about-link").click(function() {                	      
                 	      $("#AboutDialog").dialog('open');
@@ -89,7 +99,7 @@
                 
         </head>
 <body>
-        <div id=software-title-header><div id="software-title">IRCMine (HEAD version)</div>
+        <div id=software-title-header><div id="software-title"></div>
         <div id="software-about"><a href = "" id ="about-link">About</a></div>
         </div>        
         <div id="load">
@@ -108,7 +118,7 @@
         	<div id="preview"></div>
         </div>
 		<div id="AboutDialog" title="About">
-			<p id="About-SoftwareName">IRCMine (HEAD version)</p>
+			<p id="About-SoftwareName"></p>
 			<p id="About-copyright">Copyright 2013 Stéphane Couture, Stéfan Sinclair, Gabriella Coleman</p>
 			<p id ="About-Credit">This application uses the following librairies : 
 			<a href = "http://jquery.com/" target="_blank">jquery</a>,
