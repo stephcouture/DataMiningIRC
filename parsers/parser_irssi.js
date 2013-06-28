@@ -48,13 +48,13 @@ Parser_irssi.prototype.constructor = Parser_irssi;
 Parser_irssi.prototype.parse_line = function (i_line) {
 	
 	var message_type;
-	if (matches = i_line.match(/^(\d+):(\d+) < (.+?)> (.+?)$/))  {// normal line
+	if (matches = i_line.match(/^(\d+):(\d+) < ([a-zA-Z0-9-_]+?)> (.+?)$/))  {// normal line
 		message_type = "message";
 	}
-	else if (matches = i_line.match(/^(\d+):(\d+) -\!- (.+?) \[.+?\] has joined .+?$/)) { // joined line
+	else if (matches = i_line.match(/^(\d+):(\d+) -\!- ([a-zA-Z0-9-_]+?) \[.+?\] has joined .+?$/)) { // joined line
 		message_type = "join";
 	}
-	else if (matches = i_line.match(/^(\d+):(\d+) -\!- (.+?) \[.+?\] has quit .+?$/)) { // joined line
+	else if (matches = i_line.match(/^(\d+):(\d+) -\!- ([a-zA-Z0-9-_]+?) \[.+?\] has quit .+?$/)) { // quit line
 		message_type = "quit";
 	}
 	else
