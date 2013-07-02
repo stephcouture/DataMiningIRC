@@ -14,6 +14,7 @@
 			<script src="parsers/parser.js"></script>         
  			<script src="parsers/parser_irssi.js"></script>
  			<script src="parsers/parser_pidgin_en.js"></script>        	          	  
+ 			<script src="parsers/parser_xchat_en.js"></script>
 			<script src="word-cloud.js"></script>
 			<script src="interfaces.js"></script>
 			<script src="logs.js"></script>
@@ -32,6 +33,7 @@
         		var parsers = [];         		
          		parsers["irssi"] = new Parser_irssi();
          		parsers["pidgin-en"] = new parser_pidgin_en();
+         		parsers["xchat-en"] = new parser_xchat_en();
          		var the_parser;
         		var logs = [];
         		var the_logs;
