@@ -57,8 +57,15 @@ Parser_irssi.prototype.parse_line = function (i_line) {
 	else if (matches = i_line.match(/^(\d+):(\d+) -\!- ([a-zA-Z0-9-_]+?) \[.+?\] has quit .+?$/)) { // quit line
 		message_type = "quit";
 	}
-	else if (matches = i_line.match(/^(\d+):(\d+) /)) { // quit line
+	else if (matches = i_line.match(/^(\d+):(\d+) /)) { // unknown line
 		message_type = "unknown";
+		matches[3] = "";
+		matches[4] = "";
+	}
+	else if (matches = i_line.match(/^--- Log (.+?) (\d+):(\d+):(\d+) /)) { // log open/close
+		message_type = "log open/close";
+		matches[1] = matches[2];
+		matches[2] = matches[3];
 		matches[3] = "";
 		matches[4] = "";
 	}
