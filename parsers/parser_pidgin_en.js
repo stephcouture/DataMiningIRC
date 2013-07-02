@@ -35,7 +35,9 @@ parser_pidgin_en.prototype.parse_line = function (i_line) {
 		message_type = "join";
 	else if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) ([a-zA-Z0-9-_]+?) left the room /)) 
 		message_type = "quit";
-	else if (matches = i_line.match(/^\((\d+):(\d+):(\d+) (.+?)\) /)) {
+	// here, I remove the ^ at the beginning of regexp because 
+	// it seems that sometime, there is hidden char at the beginning of the file.  
+	else if (matches = i_line.match(/\((\d+):(\d+):(\d+) (.+?)\) /)) { 
 		matches[5] = "";
 		matches[6] = "";
 		message_type = "unknown";		
